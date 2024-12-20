@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { useExperienceStore } from '~/stores/experience';
+
+  const store = useExperienceStore()
   const items = [
     {
       label: 'Work Experience',
@@ -9,21 +12,6 @@
     }
   ]
 
-  const workType = ref()
-
-  const works = [
-    {
-      label: 'Software Dev',
-      slot: 'work',
-      date: 'September 2024 - January 2025',
-      defaultOpen: true,
-    },
-    {
-      label: 'Backend Dev',
-      slot: 'work',
-      date: 'September 2024 - January 2025',
-    }
-  ]
 
   const skills = [
     {
@@ -38,53 +26,80 @@
       level: 'Intermediate',
     }
   ]
+
+  const experience = reactive<Experience>({})
+  const displayWorks = computed(() =>
+    store.workExperience.length > 0
+      ? store.workExperience
+      : [
+        {
+          jobTitle: '',
+          companyName: '',
+          address: '',
+          workType: '',
+          startDate: '',
+          endDate: '',
+          slot: 'work',
+          defaultOpen: true,
+        },
+      ]
+  );
+
+  const workType = ref([
+    { value: 'full-time', label: 'Full-Time' },
+    { value: 'part-time', label: 'Part-Time' },
+    { value: 'contract', label: 'Contract' },
+    { value: 'freelance', label: 'Freelance' },
+    { value: 'intern', label: 'Intern' }
+  ])
 </script>
 
 <template>
   <UAccordion multiple size="lg" color="gray" variant="solid" :items="items">
     <template #experience>
-      <div class=" p-2 flex gap-4 flex-col">
-        <UAccordion :items="works" :ui="{ wrapper: 'flex flex-col gap-2 w-full' }">
-          <template #default="{ item, index, open }">
+      <form @submit.prevent="store.addExperience(experience)" class="p-2 flex gap-4 flex-col">
+        <UAccordion :items="displayWorks" :ui="{ wrapper: 'flex flex-col gap-2 w-full' }">
+          <template #default="{ item, open }">
             <UButton color="gray" variant="ghost" class="border-b border-gray-200 rounded-none dark:border-gray-700"
               :class="[open && 'p-0 border-0']">
-
               <div :class="[open && 'hidden']" class="flex justify-between w-full">
                 <div class="flex flex-col items-start">
-                  <label class="font-bold">{{ item.label }}</label>
-                  <span class="text-gray-500">{{ item.date }}</span>
+                  <label class="font-bold">{{ item.jobTitle || 'New Work Experience' }}</label>
+                  <label class="text-gray-500">
+                    {{ item.startDate || 'Start Date' }} ~ {{ item.endDate || 'End Date' }}
+                  </label>
                 </div>
-                <UButton icon="i-heroicons-trash" @click="console.log('Button clicked')" class="z-50" variant="ghost"
-                  color="gray" />
+                <UButton icon="i-heroicons-trash" @click="console.log('Delete button clicked')" class="z-10"
+                  variant="ghost" color="gray" />
               </div>
             </UButton>
           </template>
-          <template #work>
+          <template #work="{ item }">
             <div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-x-4 gap-y-2">
               <UFormGroup label="Job Title">
-                <UInput placeholder="you@example.com" />
+                <UInput placeholder="Enter a job title" required v-model="item.jobTitle" />
               </UFormGroup>
               <UFormGroup label="Company Name">
-                <UInput placeholder="you@example.com" />
+                <UInput placeholder="Enter a company name" required v-model="item.companyName" />
               </UFormGroup>
               <UFormGroup label="Address">
-                <UInput placeholder="you@example.com" />
+                <UInput placeholder="Enter an address" required v-model="item.address" />
               </UFormGroup>
               <UFormGroup label="Work Type">
-                <USelectMenu v-model="workType" :options="['Full Time', 'Part Time', 'Contract', 'Freelance', 'Intern']"
+                <USelect v-model="item.workType" class="text-white" equired :options="workType"
                   placeholder="Select Work Type" />
               </UFormGroup>
               <UFormGroup label="Start Date">
-                <UInput placeholder="eg. Semptember 2023" />
+                <UInput placeholder="e.g., September 2023" required v-model="item.startDate" />
               </UFormGroup>
               <UFormGroup label="End Date">
-                <UInput placeholder="eg. Semptember 2024" />
+                <UInput placeholder="e.g., September 2024" required v-model="item.endDate" />
               </UFormGroup>
             </div>
           </template>
         </UAccordion>
-        <UButton label="Add work experience" icon="i-heroicons-plus-circle" block variant="soft" />
-      </div>
+        <UButton label="Add Work Experience" type="submit" icon="i-heroicons-plus-circle" block variant="soft" />
+      </form>
     </template>
 
     <template #skills>
@@ -110,7 +125,7 @@
                 <UInput placeholder="e.g. javascript" />
               </UFormGroup>
               <UFormGroup label="Level">
-                <USelectMenu v-model="workType" :options="['Beginner', 'Intermediate', 'Experienced', 'Expert']"
+                <USelectMenu :options="['Beginner', 'Intermediate', 'Experienced', 'Expert']"
                   placeholder="Select Level" />
               </UFormGroup>
             </div>
