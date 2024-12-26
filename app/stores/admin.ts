@@ -11,7 +11,7 @@ export const useAdminStore = defineStore('adminStore', () => {
 	const rows = computed(() => {
 		return users.value.slice(
 			(page.value - 1) * pageCount,
-			page.value * pageCount
+			page.value * pageCount,
 		);
 	});
 
@@ -19,10 +19,7 @@ export const useAdminStore = defineStore('adminStore', () => {
 	async function getUsers() {
 		try {
 			const res = await $fetch('/api/admin/user');
-			users.value = res.map((user: User, index: number) => ({
-				...user,
-				id: index + 1,
-			}));
+			users.value = res.map((user: User) => user);
 		} catch (err) {
 			console.log(err);
 		}

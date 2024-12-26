@@ -1,15 +1,20 @@
 export const useExperienceStore = defineStore('experienceStore', () => {
 	//state
-	const workExperience = ref<Experience[]>([]);
+	const workExperiences = ref<Experience[]>();
 	const skills = ref([]);
 
 	//actions
 	function addExperience(experience: Experience) {
-		workExperience.value.push(experience);
+		workExperiences.value.push(experience);
+	}
+
+	function removeExperience(index: number) {
+		workExperiences.value.splice(index, 1);
 	}
 
 	return {
-		workExperience,
+		workExperiences,
 		addExperience,
+		removeExperience,
 	};
 });

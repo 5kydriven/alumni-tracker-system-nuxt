@@ -2,13 +2,13 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	devtools: { enabled: true },
-	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt'],
+	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-vuefire'],
 	colorMode: {
 		preference: 'dark',
 	},
-	devServer: {
-		port: 3005,
-	},
+	// devServer: {
+	// 	port: 3005,
+	// },
 	future: {
 		compatibilityVersion: 4,
 	},
@@ -31,5 +31,29 @@ export default defineNuxtConfig({
 	typescript: {
 		typeCheck: true,
 		strict: false,
+	},
+	runtimeConfig: {
+		// googleApplicationCredentials: process.env.NUXT_GOOGLE_APPLICATION_CREDENTIALS,
+		projectId: process.env.NUXT_FIREBASE_PROJECT_ID,
+		privateKey: process.env.NUXT_FIREBASE_PRIVATE_KEY,
+		clientEmail: process.env.NUXT_FIREBASE_CLIENT_EMAIL,
+		public: {},
+	},
+	routeRules: {
+		'/auth': { ssr: false },
+	},
+	vuefire: {
+		auth: {
+			enabled: true,
+			sessionCookie: true,
+		},
+		config: {
+			apiKey: 'AIzaSyCsx9rCdcIsbQZf3GEcnrspdRCC7IjDa3Y',
+			authDomain: 'alumni-tracker-d7448.firebaseapp.com',
+			projectId: 'alumni-tracker-d7448',
+			storageBucket: 'alumni-tracker-d7448.firebasestorage.app',
+			messagingSenderId: '970820206424',
+			appId: '1:970820206424:web:f19ab209528edbf7b5ef2d',
+		},
 	},
 });

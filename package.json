@@ -17,10 +17,12 @@
 		"firebase": "^11.1.0",
 		"firebase-admin": "^13.0.1",
 		"nuxt": "^3.13.2",
+		"nuxt-vuefire": "^1.0.5",
 		"papaparse": "^5.4.1",
 		"pinia": "^2.2.7",
 		"vue": "latest",
-		"vue-router": "latest"
+		"vue-router": "latest",
+		"vuefire": "^3.2.1"
 	},
 	"overrides": {
 		"vue": "latest"
