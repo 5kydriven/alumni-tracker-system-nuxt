@@ -7,4 +7,5 @@ export interface Experience {
 	workType: string;
 	startDate: string;
 	endDate: string;
+	slot: string;
 }

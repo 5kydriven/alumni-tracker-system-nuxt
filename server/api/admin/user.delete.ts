@@ -6,12 +6,16 @@ export default defineEventHandler(async (event) => {
 	const { uid } = await readBody(event);
 
 	try {
-		await getAuth().deleteUser(uid?.toString() ?? '');
+		const userDoc = await db.collection('users').doc(uid).get();
 
-		const docRes = await db
-			.collection('users')
-			.doc(uid?.toString() ?? '')
-			.delete();
+		const role = userDoc.data()?.role;
+		const batch = db.batch();
+
+		batch.delete(db.collection(role).doc(uid));
+		batch.delete(db.collection('users').doc(uid));
+		await batch.commit();
+
+		await getAuth().deleteUser(uid);
 
 		return {
 			statusCode: 200,
@@ -19,9 +23,9 @@ export default defineEventHandler(async (event) => {
 		};
 	} catch (err: any) {
 		console.log('userDelete: ', err);
-		return createError({
+		return {
 			statusCode: 400,
 			statusMessage: 'Something went wrong!',
-		});
+		};
 	}
 });

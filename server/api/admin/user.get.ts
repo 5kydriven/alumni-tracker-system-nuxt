@@ -4,16 +4,16 @@ export default defineEventHandler(async (event) => {
 	const db = getFirestore();
 
 	try {
-		const users = db.collection('users');
-		const snapshot = await users.get();
+		const employersSnapshot = await db.collection('employer').get();
+		const registrarsSnapshot = await db.collection('registrar').get();
+		const combinedData = [
+			...employersSnapshot.docs.map((doc) => doc.data()),
+			...registrarsSnapshot.docs.map((doc) => doc.data()),
+		];
 
-		const result = snapshot.docs.map((doc) => ({
-			uid: doc.id,
-			...doc.data(),
-		}));
-
-		return result;
+		return combinedData;
 	} catch (error) {
+		console.log('/admin/user.get: ', error);
 		return error;
 	}
 });
