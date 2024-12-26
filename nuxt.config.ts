@@ -3,9 +3,13 @@ export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	devtools: { enabled: true },
 	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-vuefire'],
+	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-vuefire'],
 	colorMode: {
 		preference: 'dark',
 	},
+	// devServer: {
+	// 	port: 3005,
+	// },
 	// devServer: {
 	// 	port: 3005,
 	// },
