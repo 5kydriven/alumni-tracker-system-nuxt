@@ -1,6 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import type { User } from '~~/types/user';
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);

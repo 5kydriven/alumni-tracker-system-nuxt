@@ -2,17 +2,13 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event) => {
 	const db = getFirestore();
-	const { uid } = await readBody(event);
+	const body = await readBody(event);
 
 	try {
-		const userSnapshot = await db
-			.collection('users')
-			.where('user_id', '==', uid)
-			.get();
+		const docRef = await db.collection('users').doc(body).get();
 
-		const role = userSnapshot.docs[0].data().role;
-		return role;
+		return docRef.data()?.role;
 	} catch (error) {
-		console.log('/role.get: ', error);
+		console.log('/role.post: ', error);
 	}
 });

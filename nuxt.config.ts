@@ -3,13 +3,9 @@ export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	devtools: { enabled: true },
 	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-vuefire'],
-	modules: ['@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-vuefire'],
 	colorMode: {
 		preference: 'dark',
 	},
-	// devServer: {
-	// 	port: 3005,
-	// },
 	// devServer: {
 	// 	port: 3005,
 	// },
@@ -17,10 +13,6 @@ export default defineNuxtConfig({
 		compatibilityVersion: 4,
 	},
 	ssr: true,
-	// routeRules: {
-	// 	// Temporary workaround for prerender regression. see https://github.com/nuxt/nuxt/issues/27490
-	// 	'/': { prerender: true },
-	// },
 	components: [
 		//making every page has dedicated component so navigating them isn't hard
 		{ path: '~/pages/admin/_components' },
@@ -44,12 +36,13 @@ export default defineNuxtConfig({
 		public: {},
 	},
 	routeRules: {
-		'/auth': { ssr: false },
+		// '/': { prerender: true },
+		// '/auth': { ssr: false },
 	},
 	vuefire: {
 		auth: {
 			enabled: true,
-			// sessionCookie: true,
+			sessionCookie: true,
 		},
 		config: {
 			apiKey: 'AIzaSyCsx9rCdcIsbQZf3GEcnrspdRCC7IjDa3Y',

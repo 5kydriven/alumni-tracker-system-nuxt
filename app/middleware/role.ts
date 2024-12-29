@@ -1,3 +1,16 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-	// useFetch('/api/role', { method: 'GET', body: { uid } });
+	const user = await getCurrentUser();
+
+	if (!user) {
+		return navigateTo('/auth');
+	}
+
+	const { data: role } = await useLazyFetch('/api/role', {
+		method: 'POST',
+		body: JSON.stringify(user.uid),
+	});
+	const path = `/${role.value}`;
+	if (role) {
+		return await navigateTo(path.toString());
+	}
 });

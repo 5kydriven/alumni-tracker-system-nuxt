@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import useComposableToast from "~/composables/useToastComposables";
 import { useAdminStore } from "~/stores/admin";
-import type { User } from "~~/types/user";
 
-const toast = useToast();
 const modal = useModal();
 const store = useAdminStore();
+const { toastResponse } = useComposableToast();
 
 const user = reactive({
   name: "",
@@ -16,20 +16,7 @@ const user = reactive({
 const handleSubmit = async (user: User) => {
   const res = await store.createUser(user);
 
-  if (res.statusCode == 200) {
-    toast.add({
-      title: "Success",
-      description: res.statusMessage,
-      icon: "i-heroicons-check-circle",
-    });
-  } else {
-    toast.add({
-      title: "Error",
-      description: res.statusMessage,
-      color: "red",
-      icon: "i-heroicons-exclamation-circle",
-    });
-  }
+  toastResponse(res);
   modal.close();
 };
 </script>

@@ -1,9 +1,42 @@
-const useRegistrarStore = defineStore('registrarStore', () => {
+export const useRegistrarStore = defineStore('registrarStore', () => {
 	//state
-	const alumni = ref([]);
+	const alumni = ref<Alumni[]>([]);
+	const isLoading = ref(false);
 
 	//actions
-	function getAlumni() {}
+	async function getAlumni() {
+		try {
+			const res = await $fetch<Alumni[]>('/api/registrar/alumni', {
+				method: 'GET',
+			});
+			alumni.value = res;
+			return res;
+		} catch (err) {
+			console.log(err);
+		}
+	}
 
-	function createAlumni() {}
+	async function storeAlumni(csv: Alumni[]) {
+		isLoading.value = true;
+		try {
+			const res = await $fetch<H3Response>('/api/registrar/alumni', {
+				method: 'POST',
+				body: csv,
+			});
+			alumni.value = alumni.value.concat(res.body);
+			console.log(res.body);
+			return res;
+		} catch (err) {
+			console.log(err);
+		} finally {
+			isLoading.value = false;
+		}
+	}
+
+	return {
+		alumni,
+		isLoading,
+		getAlumni,
+		storeAlumni,
+	};
 });

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: (_to) => {
-    const store = useAuthStore();
-    if (store.userCredential !== null) {
-      return navigateTo("/");
-    }
-  },
+const router = useRouter();
+const user = useCurrentUser();
+
+onBeforeMount(() => {
+  if (user) {
+    return router.replace("/");
+  }
 });
 </script>
 

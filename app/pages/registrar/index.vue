@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  definePageMeta({
-    layout: 'registrar'
-  })
+definePageMeta({
+  layout: "registrar",
+});
 </script>
 
 <template>

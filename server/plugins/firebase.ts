@@ -7,5 +7,6 @@ export default defineNitroPlugin((nuxtapp) => {
 		private_key: config.privateKey.replace(/\\n/g, '\n'),
 		client_email: config.clientEmail,
 	};
+
 	initFirebase(firebaseConfig);
 });

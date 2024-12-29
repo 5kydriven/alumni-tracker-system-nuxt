@@ -10,12 +10,3 @@ export default function initFirebase(firebaseConfig: any) {
 		});
 	}
 }
-// let app;
-// if (!app) {
-// 	app = initializeApp({
-// 		credential: cert(firebaseConfig as ServiceAccount),
-// 	});
-// 	console.log('init firebaseAdmin');
-// } else {
-// 	console.log('firebaseAdmin not init');
-// }

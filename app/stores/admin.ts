@@ -1,5 +1,3 @@
-import type { User } from '~~/types/user';
-
 export const useAdminStore = defineStore('adminStore', () => {
 	// State
 	const page = ref(1);
