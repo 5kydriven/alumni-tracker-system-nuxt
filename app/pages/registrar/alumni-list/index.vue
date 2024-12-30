@@ -1,36 +1,55 @@
 <script setup lang="ts">
-import { AddStudentModal } from "#components";
+import { AddStudentModal, AsideSlideover } from "#components";
+import useComposableToast from "~/composables/useToastComposables";
 
 definePageMeta({
   layout: "registrar",
 });
 
+const slideOver = useSlideover();
 const modal = useModal();
-
 const store = useRegistrarStore();
+const { toastResponse } = useComposableToast()
+
 const { status, data } = useAsyncData(
   "alumni",
   async () => await store.getAlumni()
 );
-console.log(data.value);
+
+watch(data, () => {
+  console.log(data.value)
+})
+
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "Name" },
   { key: "course", label: "Course" },
   { key: "email", label: "Email" },
+  { key: "password", label: "Password" },
   { key: "batch", label: "Batch" },
   { key: "status", label: "Status" },
+  { key: "actions", label: "" },
 ];
+
 const people = ["Wade Cooper", "Arlene Mccoy", "Devon Webb"];
 
 const selected = ref<Alumni[]>();
+async function handleDelete(uid: string) {
+  const res = await store.deleteAlumni(uid)
+  toastResponse(res)
+}
+
 </script>
 
 <template>
   <div>
     <Navbar>
-      <label class="hidden lg:block">Alumni's</label>
-      <div class="flex items-center gap-4">
+      <div class="flex gap-2 items-center">
+        <UButton @click="slideOver.open(AsideSlideover)" class="md:hidden" icon="i-heroicons-bars-3" variant="ghost"
+          color="white" size="sm" />
+        <label>Alumni's</label>
+      </div>
+      <div class="flex items-center w-full justify-end gap-4">
         <!-- <UInput
           icon="i-heroicons-magnifying-glass-20-solid"
           size="sm"
@@ -39,15 +58,8 @@ const selected = ref<Alumni[]>();
           placeholder="Search..."
           v-model="q"
         /> -->
-        <UButton
-          icon="i-heroicons-pencil-square"
-          size="sm"
-          color="gray"
-          variant="solid"
-          label="Add Alumni"
-          trailing
-          @click="modal.open(AddStudentModal)"
-        />
+        <UButton icon="i-heroicons-pencil-square" size="sm" color="gray" variant="solid" label="Add Alumni" trailing
+          @click="modal.open(AddStudentModal)" />
       </div>
     </Navbar>
     <SubNavbar>
@@ -57,21 +69,33 @@ const selected = ref<Alumni[]>();
       </div>
       <USelectMenu :options="people" multiple placeholder="Display" />
     </SubNavbar>
-    <UTable
-      :loading="status != 'success' ? true : false"
-      :loading-state="{
-        icon: 'i-heroicons-arrow-path-20-solid',
-        label: 'Loading...',
-      }"
-      class="w-full"
-      :empty-state="{
-        icon: 'i-heroicons-circle-stack-20-solid',
-        label: 'No items.',
-      }"
-      :rows="store.alumni"
-      :columns="columns"
-    >
+    <UTable :loading="status != 'success' ? true : false" :loading-state="{
+      icon: 'i-heroicons-arrow-path-20-solid',
+      label: 'Loading...',
+    }" class="w-full" :empty-state="{
+      icon: 'i-heroicons-circle-stack-20-solid',
+      label: 'No items.',
+    }" :rows="store.alumni" :columns="columns">
       <template #id-data="{ index }">{{ index + 1 }}</template>
+      <template #actions-data="{ row }">
+        <UDropdown :items="[
+          [
+            {
+              label: 'Edit',
+              icon: 'i-heroicons-pencil-square-20-solid',
+            },
+            {
+              label: 'Delete',
+              icon: 'i-heroicons-trash-20-solid',
+              click: () => {
+                handleDelete(row.uid);
+              },
+            },
+          ],
+        ]">
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+        </UDropdown>
+      </template>
     </UTable>
   </div>
 </template>

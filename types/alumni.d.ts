@@ -10,10 +10,22 @@ declare global {
 		status?: AlumniStatus;
 		isUpdated?: boolean;
 		createdAt?: string;
-		createdAt?: string;
+		phoneNumber?: number;
+		address?: Address;
+		gender?: Gender;
+		maritalStatus?: string;
+		birthDate?: string;
+		birthPlace?: string;
 	}
 
 	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';
+	type Gender = 'female' | 'male';
+
+	interface Address {
+		province?: string;
+		city?: string;
+		zipCode?: number;
+	}
 }
 
-export { Alumni, AlumniStatus };
+export { Alumni, AlumniStatus, Address, Gender };

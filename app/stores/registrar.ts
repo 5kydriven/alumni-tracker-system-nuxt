@@ -33,9 +33,24 @@ export const useRegistrarStore = defineStore('registrarStore', () => {
 		}
 	}
 
+	async function deleteAlumni(uid: string) {
+		isLoading.value = true;
+		const res = await $fetch<H3Response>(`/api/registrar/alumni`, {
+			method: 'DELETE',
+			body: JSON.stringify(uid),
+		});
+		console.log(res);
+		alumni.value = alumni.value.filter((item) => item.uid !== uid);
+
+		isLoading.value = false;
+
+		return res;
+	}
+
 	return {
 		alumni,
 		isLoading,
+		deleteAlumni,
 		getAlumni,
 		storeAlumni,
 	};

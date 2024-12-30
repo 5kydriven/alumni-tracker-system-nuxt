@@ -1,3 +1,4 @@
+import { camelize } from '@vueuse/core';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
@@ -17,33 +18,33 @@ export default eventHandler(async (event) => {
 					scrambledLastName.toLowerCase() + item.batch
 				}cpsu@example.com`;
 
-				// const userCreds = await getAuth().createUser({
-				// 	email,
-				// 	password,
-				// 	displayName: item.name,
-				// });
+				const userCreds = await getAuth().createUser({
+					email,
+					password,
+					displayName: item.name,
+				});
 
-				// const docRef = db.collection('alumni').doc(userCreds.uid);
-				// batch.set(docRef, {
-				// 	...item,
-				// 	email,
-				// 	uid: userCreds.uid,
-				// 	is_updated: false,
-				// 	created_at: Timestamp.now(),
-				// });
+				const docRef = db.collection('alumni').doc(userCreds.uid);
+				batch.set(docRef, {
+					...item,
+					email,
+					password,
+					uid: userCreds.uid,
+					isUpdated: false,
+					createdAt: Timestamp.now(),
+				});
 
-				// const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
-				// batch.set(accountRolesDocRef, {
-				// 	role: 'alumni',
-				// 	created_at: Timestamp.now(),
-				// });
+				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
+				batch.set(accountRolesDocRef, {
+					role: 'alumni',
+					created_at: Timestamp.now(),
+				});
 
-				// await batch.commit();
-
-				return { ...item, email };
+				return { ...item, email, password, uid: userCreds.uid };
 			}),
 		);
 
+		await batch.commit();
 		return {
 			status: 200,
 			message: 'Successfully created alumni',

@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('authStore', () => {
 	const error = ref(null);
 	const loading = ref(false);
 	const isAuthenticated = ref(false);
+	const router = useRouter();
 
 	// Getters
 
@@ -27,7 +28,7 @@ export const useAuthStore = defineStore('authStore', () => {
 				method: 'POST',
 				body: { uid: userCredential.value.user.uid },
 			});
-
+			router.push('/');
 			// const token = await getIdToken(userCredential.value.user);
 
 			// const res = await $fetch('/api/auth', {
@@ -37,17 +38,17 @@ export const useAuthStore = defineStore('authStore', () => {
 			// user.value = credentials.user;
 			// isAuthenticated.value = true;
 			// if (res.statusCode == 200) {
-			if (res == 'admin') {
-				await navigateTo('/admin');
-			} else if (res == 'registrar') {
-				await navigateTo('/registrar');
-			} else if (res == 'employer') {
-				await navigateTo('/employer');
-			} else if (res == 'alumni') {
-				await navigateTo('/alumni');
-			} else {
-				await navigateTo('/');
-			}
+			// if (res == 'admin') {
+			// 	await navigateTo('/admin');
+			// } else if (res == 'registrar') {
+			// 	await navigateTo('/registrar');
+			// } else if (res == 'employer') {
+			// 	await navigateTo('/employer');
+			// } else if (res == 'alumni') {
+			// 	await navigateTo('/alumni');
+			// } else {
+			// 	await navigateTo('/');
+			// }
 		} catch (err) {
 			console.error('Error during login:', err);
 			error.value = 'Incorrect email or password!';

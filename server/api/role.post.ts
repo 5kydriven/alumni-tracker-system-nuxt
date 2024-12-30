@@ -5,6 +5,10 @@ export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 
 	try {
+		if (!body) {
+			return null;
+		}
+
 		const docRef = await db.collection('users').doc(body).get();
 
 		return docRef.data()?.role;

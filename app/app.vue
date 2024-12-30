@@ -18,7 +18,7 @@ const router = useRouter();
 onMounted(() => {
   watch(user, (currentUser: any, prevUser: any) => {
     if (prevUser && !currentUser) {
-      return router.replace("/auth");
+      return router.push("/auth");
     }
   });
 });

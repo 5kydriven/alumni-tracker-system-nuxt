@@ -1,3 +1,4 @@
+import { camelize } from 'vue';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const alumni: Alumni[] = [

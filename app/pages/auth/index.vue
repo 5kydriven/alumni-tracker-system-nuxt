@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+  title: "CPSU | Welcome",
+});
 const router = useRouter();
 const user = useCurrentUser();
 

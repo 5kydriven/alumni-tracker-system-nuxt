@@ -13,8 +13,11 @@ const people = ["Wade Cooper", "Arlene Mccoy", "Devon Webb"];
 const selectedRole = ref([]);
 const store = useAdminStore();
 
-await store.getUsers();
+const { status } = useAsyncData("users", () =>
+  store.getUsers().then(() => true)
+);
 
+console.log(status);
 const columns = [
   { key: "id", label: "No." },
   { key: "name", label: "Name" },
