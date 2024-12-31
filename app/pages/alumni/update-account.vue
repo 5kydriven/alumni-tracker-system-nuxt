@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { getAuth, signOut } from 'firebase/auth';
+
+const auth = getAuth()
 const progres = ref(0);
 
 const { form } = storeToRefs(useStepperStore())
@@ -55,5 +58,6 @@ function onSubmit() {
       <UButton :label="progres != 2 ? 'Next step' : 'Finish'" type="submit" size="lg"
         :disabled="!stepper.current.value.isValid()" block class="mt-4" />
     </UForm>
+    <UButton @click="signOut(auth)" label="sign out" />
   </div>
 </template>

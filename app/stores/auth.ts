@@ -10,45 +10,16 @@ export const useAuthStore = defineStore('authStore', () => {
 	const isAuthenticated = ref(false);
 	const router = useRouter();
 
-	// Getters
-
 	// actions
 	async function login(auth: Auth, email: string, password: string) {
 		loading.value = true;
 		try {
-			// await setPersistence(auth, browserLocalPersistence);
-
-			userCredential.value = await signInWithEmailAndPassword(
+			const userCredential = await signInWithEmailAndPassword(
 				auth,
 				email,
 				password,
 			);
-			error.value = null;
-			const res = await $fetch('/api/role', {
-				method: 'POST',
-				body: { uid: userCredential.value.user.uid },
-			});
-			router.push('/');
-			// const token = await getIdToken(userCredential.value.user);
-
-			// const res = await $fetch('/api/auth', {
-			// 	method: 'POST',
-			// 	body: { token },
-			// });
-			// user.value = credentials.user;
-			// isAuthenticated.value = true;
-			// if (res.statusCode == 200) {
-			// if (res == 'admin') {
-			// 	await navigateTo('/admin');
-			// } else if (res == 'registrar') {
-			// 	await navigateTo('/registrar');
-			// } else if (res == 'employer') {
-			// 	await navigateTo('/employer');
-			// } else if (res == 'alumni') {
-			// 	await navigateTo('/alumni');
-			// } else {
-			// 	await navigateTo('/');
-			// }
+			router.replace('/');
 		} catch (err) {
 			console.error('Error during login:', err);
 			error.value = 'Incorrect email or password!';
