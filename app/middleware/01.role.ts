@@ -1,24 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	if (import.meta.client) return;
-	const user = useCurrentUser();
+	const user = await getCurrentUser();
 
 	if (!user) {
 		return await navigateTo('/auth');
 	}
 
-	const { data } = await useAsyncData('role-middleware', async () => {
-		const [role, alumni] = await Promise.all([
-			$fetch('/api/role', {
-				method: 'POST',
-				body: JSON.stringify({ uid: user.value.uid }),
-			}),
-			$fetch<Alumni>(`/api/alumni/${user.value.uid}`),
-		]);
-		return { role, alumni };
+	const role = await $fetch('/api/role', {
+		method: 'POST',
+		body: JSON.stringify({ uid: user.uid }),
 	});
+	const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
 
-	const role = data.value.role;
-	const alumni = data.value.alumni;
+	// const role = data.value.role;
+	// const alumni = data.value.alumni;
 	console.log('role: ', role);
 
 	const path = `/${role}`;
