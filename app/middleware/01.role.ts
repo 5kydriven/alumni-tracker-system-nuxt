@@ -1,22 +1,31 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-	const user = await getCurrentUser();
+	if (import.meta.client) return;
+	const user = useCurrentUser();
 
 	if (!user) {
-		return navigateTo('/auth');
+		return await navigateTo('/auth');
 	}
 
-	const { data: role } = await useFetch('/api/role', {
-		method: 'POST',
-		body: JSON.stringify(user.uid),
+	const { data } = await useAsyncData('role-middleware', async () => {
+		const [role, alumni] = await Promise.all([
+			$fetch('/api/role', {
+				method: 'POST',
+				body: JSON.stringify({ uid: user.value.uid }),
+			}),
+			$fetch<Alumni>(`/api/alumni/${user.value.uid}`),
+		]);
+		return { role, alumni };
 	});
-	const { data: alumni } = await useFetch<Alumni>(`/api/alumni/${user.uid}`);
 
-	console.log(role.value);
-	const path = `/${role.value}`;
-	if (role) {
-		if (role.value == 'alumni' && !alumni.value.isUpdated) {
-			return navigateTo('/alumni/update-account');
+	const role = data.value.role;
+	const alumni = data.value.alumni;
+	console.log('role: ', role);
+
+	const path = `/${role}`;
+	if (role != undefined) {
+		if (role === 'alumni' && !alumni.isUpdated) {
+			return await navigateTo('/alumni/update-account');
 		}
-		return navigateTo(path.toString());
+		return await navigateTo(path.toString());
 	}
 });
