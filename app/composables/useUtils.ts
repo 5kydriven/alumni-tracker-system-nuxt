@@ -3,7 +3,7 @@ export default function useUtils() {
 		const user = await getCurrentUser();
 		const { data: role } = await useLazyFetch('/api/role', {
 			method: 'POST',
-			body: JSON.stringify(user.uid),
+			body: JSON.stringify({ uid: user.uid }),
 		});
 		return role.value;
 	}
