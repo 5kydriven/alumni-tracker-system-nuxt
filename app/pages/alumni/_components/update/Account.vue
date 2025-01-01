@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { form } = storeToRefs(useStepperStore())
+const store = useStepperStore()
 
 </script>
 
@@ -10,10 +10,10 @@ const { form } = storeToRefs(useStepperStore())
 
     <div class="flex flex-col gap-2">
       <UFormGroup label="Email" required>
-        <UInput placeholder="you@example.com" type="email" v-model="form.email" />
+        <UInput placeholder="you@example.com" type="email" v-model="store.form.email" />
       </UFormGroup>
       <UFormGroup label="Password" required>
-        <UInput placeholder="••••••••" type="password" v-model="form.password" />
+        <UInput placeholder="••••••••" type="password" v-model="store.form.password" />
       </UFormGroup>
       <!-- <UFormGroup label="Confirm Password">
         <UInput placeholder="••••••••" type="password" />

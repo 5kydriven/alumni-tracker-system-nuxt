@@ -40,6 +40,11 @@ export default defineNuxtConfig({
 		// '/auth': { ssr: false },
 	},
 	vuefire: {
+		// appCheck: {
+		// 	provider: 'ReCaptchaV3',
+		// 	key: '6LdGpqoqAAAAAMZQKJSSqO758Ha0jQMNb28FO3zK',
+		// 	isTokenAutoRefreshEnabled: true,
+		// },
 		auth: {
 			enabled: true,
 			sessionCookie: true,

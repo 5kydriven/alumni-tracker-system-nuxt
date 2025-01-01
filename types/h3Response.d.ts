@@ -3,7 +3,9 @@ export declare global {
 		status?: number;
 		message?: string;
 		body?: any;
-		statusCode?: string;
-		statusMessage?: string;
+		statusCode?: number;
+		statusMessage?: StatusMessage;
 	}
+
+	type StatusMessage = 'success' | 'error' | null;
 }

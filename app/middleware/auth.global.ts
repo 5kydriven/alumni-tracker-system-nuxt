@@ -1,8 +1,10 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
-	if (import.meta.client) return;
+import type { User } from 'firebase/auth';
 
-	const user = await getCurrentUser();
-	console.log('User: ', user);
+export default defineNuxtRouteMiddleware(async (to, from) => {
+	// if (import.meta.client) return;
+
+	const user: User = await getCurrentUser();
+	console.log('User: ', user.uid);
 	console.log('To Path:', to.path);
 
 	const paths = ['/admin', '/registrar', '/employer', '/alumni'];
