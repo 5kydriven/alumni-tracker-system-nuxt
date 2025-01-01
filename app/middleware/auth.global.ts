@@ -3,8 +3,8 @@ import type { User } from 'firebase/auth';
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	// if (import.meta.client) return;
 
-	const user: User = await getCurrentUser();
-	console.log('User: ', user.uid);
+	const user = await getCurrentUser();
+
 	console.log('To Path:', to.path);
 
 	const paths = ['/admin', '/registrar', '/employer', '/alumni'];
@@ -24,28 +24,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	// if (user != null && from.path == '/auth') {
 	// 	return navigateTo('/');
-	// }
-
-	// const { data } = await useAsyncData('role-middleware', async () => {
-	// 	const [role, alumni] = await Promise.all([
-	// 		$fetch('/api/role', {
-	// 			method: 'POST',
-	// 			body: JSON.stringify({ uid: user.uid }),
-	// 		}),
-	// 		$fetch<Alumni>(`/api/alumni/${user.uid}`),
-	// 	]);
-	// 	return { role, alumni };
-	// });
-	// const role = data.value.role;
-	// const alumni = data.value.alumni;
-	// console.log('role: ', data.value.role);
-
-	// const path = `/${role}`;
-	// if (role) {
-	// 	if (role == 'alumni' && !alumni.isUpdated) {
-	// 		return navigateTo('/alumni/update-account');
-	// 	}
-	// if(user != null && role != null) {
-	// 	return navigateTo(`/${role}`);
 	// }
 });
