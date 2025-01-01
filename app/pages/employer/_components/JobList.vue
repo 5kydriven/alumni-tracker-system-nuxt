@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { AddJobModal } from '#components'
+const modal = useModal();
+</script>
+
 <template>
   <div class="flex flex-col gap-2">
     <label class="text-xl">Your Job Posts</label>
@@ -10,7 +15,7 @@
         </label>
       </div>
 
-      <UButton icon="i-heroicons-plus" label="Add my first job post" />
+      <UButton icon="i-heroicons-plus" label="Add my first job post" @click="modal.open(AddJobModal)" />
 
     </div>
 

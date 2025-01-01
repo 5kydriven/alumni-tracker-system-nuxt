@@ -1,19 +1,22 @@
 <script setup lang="ts">
-  const slideover = useSlideover()
 
-  const links = [{
-    label: 'Home',
-    to: '/alumni',
-    click: () => slideover.close()
-  }, {
-    label: 'Messages',
-    to: '/alumni/messages',
-    click: () => slideover.close()
-  }, {
-    label: 'Job Board',
-    to: '/alumni/job-list',
-    click: () => slideover.close()
-  }]
+const links = [{
+  label: 'Home',
+  to: '/alumni',
+  click: () => emits('close')
+}, {
+  label: 'Messages',
+  to: '/alumni/messages',
+  click: () => emits('close')
+}, {
+  label: 'Job Board',
+  to: '/alumni/job-list',
+  click: () => emits('close')
+}]
+
+const emits = defineEmits<{
+  close: []
+}>()
 </script>
 
 <template>
@@ -21,7 +24,7 @@
     <div class="p-4 flex items-center justify-between border-b dark:border-gray-800">
       <div>CPSU</div>
       <UButton color="gray" variant="ghost" size="sm" icon="i-heroicons-x-mark-20-solid" square padded
-        @click="slideover.close()" />
+        @click="emits('close')" />
     </div>
     <UVerticalNavigation :links="links" class="py-4 px-2">
       <template #default="{ link }">

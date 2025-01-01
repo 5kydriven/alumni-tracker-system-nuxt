@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
 	const { uid } = await readBody(event);
 
 	try {
-		console.log('role.post: ', uid);
 		if (!uid) {
 			throw createError({});
 		}

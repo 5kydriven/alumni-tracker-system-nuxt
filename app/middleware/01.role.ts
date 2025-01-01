@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	if (!user) {
 		return await navigateTo('/auth', { replace: true });
 	}
-	console.log('role: ', user.uid);
+
 	const role = await $fetch('/api/role', {
 		method: 'POST',
 		body: JSON.stringify({ uid: user.uid }),

@@ -26,14 +26,17 @@ export default defineEventHandler(async (event) => {
 		await db
 			.collection('alumni')
 			.doc(body.uid)
-			.set({
-				...body,
-				password: '********',
-				phoneNumber,
-				isUpdated: true,
-				status: 'unemployed',
-				updatedAt: Timestamp.now(),
-			});
+			.set(
+				{
+					...body,
+					password: '********',
+					phoneNumber,
+					isUpdated: true,
+					status: 'unemployed',
+					updatedAt: Timestamp.now(),
+				},
+				{ merge: true },
+			);
 
 		return {
 			statusCode: 200,
