@@ -10,8 +10,10 @@ declare global {
 		status?: AlumniStatus;
 		isUpdated?: boolean;
 		createdAt?: string;
-		phoneNumber?: number;
-		address?: Address;
+		phoneNumber?: string;
+		province?: string;
+		city?: string;
+		zipCode?: string;
 		gender?: Gender;
 		maritalStatus?: string;
 		birthDate?: string;
@@ -19,12 +21,12 @@ declare global {
 	}
 
 	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';
-	type Gender = 'female' | 'male';
+	type Gender = 'female' | 'male' | 'other';
 
 	interface Address {
 		province?: string;
 		city?: string;
-		zipCode?: number;
+		zipCode?: string;
 	}
 }
 

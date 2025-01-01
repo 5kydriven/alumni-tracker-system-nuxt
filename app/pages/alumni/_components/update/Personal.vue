@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { form } = storeToRefs(useStepperStore())
+const store = useStepperStore()
 </script>
 
 <template>
@@ -11,38 +11,38 @@ const { form } = storeToRefs(useStepperStore())
         <!-- <UAvatar size="3xl" src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar"
           :ui="{ rounded: 'rounded' }" /> -->
         <div class="flex flex-col gap-2 w-full">
-          <UFormGroup label="Full Name" required>
-            <UInput placeholder="you@example.com" v-model="form.name" />
+          <UFormGroup label="Full Name">
+            <UInput placeholder="you@example.com" v-model="store.form.name" />
           </UFormGroup>
-          <!-- <UFormGroup label="Last Name" required>
+          <!-- <UFormGroup label="Last Name" >
             <UInput placeholder="you@example.com" />
           </UFormGroup> -->
         </div>
       </div>
       <div class="grid grid-cols-12 gap-2">
-        <UFormGroup label="Phone number" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.phoneNumber" />
+        <UFormGroup label="Phone number" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.phoneNumber" />
         </UFormGroup>
-        <UFormGroup label="Province" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.address.province" />
+        <UFormGroup label="Province" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.province" />
         </UFormGroup>
-        <UFormGroup label="Zip Code" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.address.zipCode" />
+        <UFormGroup label="Zip Code" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.zipCode" />
         </UFormGroup>
-        <UFormGroup label="City" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.address.city" />
+        <UFormGroup label="City" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.city" />
         </UFormGroup>
-        <UFormGroup label="Date of birth" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.birthDate" />
+        <UFormGroup label="Date of birth" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.birthDate" />
         </UFormGroup>
-        <UFormGroup label="Place of birth" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.birthPlace" />
+        <UFormGroup label="Place of birth" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.birthPlace" />
         </UFormGroup>
-        <UFormGroup label="Gender" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.gender" />
+        <UFormGroup label="Gender" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.gender" />
         </UFormGroup>
-        <UFormGroup label="Marital status" class="col-span-6" required>
-          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="form.maritalStatus" />
+        <UFormGroup label="Marital status" class="col-span-6">
+          <UInput placeholder="you@example.com" icon="i-heroicons-envelope" v-model="store.form.maritalStatus" />
         </UFormGroup>
       </div>
     </div>

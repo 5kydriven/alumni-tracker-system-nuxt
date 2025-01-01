@@ -2,7 +2,7 @@ export default function useComposableToast() {
 	const toast = useToast();
 
 	function toastResponse(res: H3Response) {
-		if (res.status == 200) {
+		if (res.statusCode == 200) {
 			toast.add({
 				title: 'Success',
 				description: res.message,
