@@ -37,7 +37,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusMessage: 'success',
 			message: 'Successfully deleted a user',
 			data: { doc: doc, user: user },
-		};
+		} as H3Response;
 	} catch (err: any) {
 		console.log('/alumni.delete: ', err);
 		return errorResponse(err);

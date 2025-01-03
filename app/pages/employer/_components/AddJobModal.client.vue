@@ -25,6 +25,7 @@ const form = reactive<Job>({
 })
 
 const store = useJobStore()
+const { toastResponse } = useToastComposables()
 
 const employmentTypes = [
 	{ name: 'Full-Time', value: 'full time' },
@@ -44,8 +45,13 @@ const props = defineProps<{
 	index?: number
 }>()
 
-function onSubmit(event: FormSubmitEvent<Schema>) {
-	store.createJob(event.data)
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+	if (props.job?.id) {
+		console.log('edit')
+	} else {
+		const res = await store.createJob(event.data)
+		toastResponse(res)
+	}
 	emits('close')
 }
 
@@ -105,7 +111,7 @@ watch(() => props.job, (newJob) => {
 				<template #footer>
 					<div class="flex justify-end gap-2">
 						<UButton color="gray" @click="emits('close')" variant="solid" label="Cancel" />
-						<UButton variant="solid" type="submit" :label="props.job ? 'Save' : 'Add job'" />
+						<UButton variant="solid" type="submit" :label="props.job ? 'Save' : 'Add job'" :loading="store.isLoading" />
 					</div>
 				</template>
 			</UCard>

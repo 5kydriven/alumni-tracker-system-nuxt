@@ -11,10 +11,12 @@ const navLinks = [{
 }, {
   label: 'Messages',
   to: '/employer/messages'
-}, {
-  label: 'Post Job',
-  to: '/employer/post-job'
-}]
+}
+  // {
+  //   label: 'Post Job',
+  //   to: '/employer/post-job'
+  // }
+]
 
 const colorMode = useColorMode();
 const isDark = computed({

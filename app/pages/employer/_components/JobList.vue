@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { AddJobModal } from '#components'
+import { AddJobModal, DeleteJobModal } from '#components'
 const modal = useModal();
 
 const props = defineProps<{
 	jobs: Job[],
 }>()
+
 </script>
 
 <template>
@@ -28,7 +29,7 @@ const props = defineProps<{
 
 		</div>
 
-		<div v-else class="w-full grid grid-cols-3 gap-2">
+		<div v-else class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 			<div v-for="(job, index) in props.jobs"
 				class="flex flex-col gap-2 dark:bg-gray-800 bg-gray-100 rounded-lg p-4 col-span-1">
 				<div class="flex items-center justify-between">
@@ -40,7 +41,8 @@ const props = defineProps<{
 					<UButton label="Edit" :padded="false" variant="link" color="gray"
 						@click="modal.open(AddJobModal, { onClose: modal.close, job: job, index: index })" />
 					<UDivider orientation="vertical" :ui="{ border: { base: 'dark:border-gray-500 border-gray-500' } }" />
-					<span>Delete</span>
+					<UButton label="Delete" :padded="false" variant="link" color="gray"
+						@click="modal.open(DeleteJobModal, { onClose: modal.close, uid: job.uid })" />
 				</div>
 			</div>
 		</div>

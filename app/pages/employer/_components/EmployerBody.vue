@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const modal = useModal();
-
 const store = useJobStore();
+
+const { data, status } = useAsyncData('jobs', async () => await store.fetchJobs().then(() => true));
 </script>
 
 <template>

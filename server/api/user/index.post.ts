@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const body = await readBody(event);
@@ -32,8 +33,8 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusCode: 200,
 			statusMessage: 'success',
 			message: 'Successfully created user',
-			body: { ...body, uid: userDetails.uid },
-		};
+			data: { ...body, uid: userDetails.uid },
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/user.post: ', error);
 		if (error.code === 'auth/email-already-exists') {

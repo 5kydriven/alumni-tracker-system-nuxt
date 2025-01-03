@@ -25,7 +25,7 @@ export default defineEventHandler(async (event: H3Event) => {
 				response: res,
 				...body,
 			},
-		};
+		} as H3Response;
 	} catch (error: any) {
 		if (error.code === 'not-found') {
 			return errorResponse(

@@ -39,7 +39,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusCode: 200,
 			statusMessage: 'success',
 			message: 'Succesfully updated personal account!',
-		};
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/api/alumni.put', error);
 		return errorResponse(error);

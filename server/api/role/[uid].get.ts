@@ -1,9 +1,10 @@
-import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import { getFirestore } from 'firebase-admin/firestore';
 
-export default eventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const param = getRouterParam(event, 'uid');
+
 	try {
 		if (!param) {
 			throw createError({
@@ -14,13 +15,10 @@ export default eventHandler(async (event: H3Event) => {
 		}
 
 		const doc = await db.collection('users').doc(param).get();
-		const role = doc.data()?.role;
 
-		const user = await db.collection(role).doc(param).get();
-
-		return { ...user.data(), uid: user.id };
+		return doc.data()?.role;
 	} catch (error: any) {
-		console.log('/user.uid.get', error);
+		console.log('/role.uid.get: ', error);
 		return errorResponse(error);
 	}
 });

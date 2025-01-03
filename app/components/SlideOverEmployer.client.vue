@@ -8,11 +8,13 @@ const links = [{
   label: 'Messages',
   to: '/employer/messages',
   click: () => emits('close')
-}, {
-  label: 'Post Job',
-  to: '/employer/post-job',
-  click: () => emits('close')
-}]
+}
+  // {
+  //   label: 'Post Job',
+  //   to: '/employer/post-job',
+  //   click: () => emits('close')
+  // }
+]
 
 const emits = defineEmits<{
   close: []

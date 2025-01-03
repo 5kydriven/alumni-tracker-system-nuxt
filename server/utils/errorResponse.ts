@@ -3,5 +3,5 @@ export default function errorResponse(error: any) {
 		statusCode: error.statusCode || 400,
 		statusMessage: error.statusMessage || 'Something went wrong',
 		message: error.message,
-	};
+	} as H3Response;
 }

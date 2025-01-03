@@ -22,7 +22,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusMessage: 'success',
 			message: 'Succesfully created job',
 			data: { uid: res.id },
-		};
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/job.post', error);
 		return errorResponse(error);

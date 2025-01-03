@@ -43,7 +43,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusMessage: 'success',
 			message: 'Succesfully updated personal account!',
 			data: res,
-		};
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);
 		if (error.code === 'auth/email-already-exists') {

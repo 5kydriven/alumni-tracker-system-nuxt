@@ -6,7 +6,7 @@ export default eventHandler(async (event: H3Event) => {
 	try {
 		const snapShot = await db.collection('alumni').get();
 
-		return snapShot.docs.map((doc) => doc.data());
+		return snapShot.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
 	} catch (error) {
 		console.log('/alumni.get: ', error);
 	}

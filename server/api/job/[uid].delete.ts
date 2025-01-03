@@ -14,13 +14,13 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 		const res = await db.collection('jobs').doc(params).delete();
-		console.log(res);
+
 		return {
 			statusCode: 200,
 			statusMessage: 'success',
 			message: 'Succesfully deleted job',
 			body: res,
-		};
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/job.delete', error);
 		return errorResponse(error);
