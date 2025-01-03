@@ -5,6 +5,7 @@ export declare global {
 		body?: any;
 		statusCode?: number;
 		statusMessage?: StatusMessage;
+		data?: any;
 	}
 
 	type StatusMessage = 'success' | 'error' | null;
