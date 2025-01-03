@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { SlideOverEmployer } from '#components';
+import { signOut } from 'firebase/auth';
+
+const auth = useFirebaseAuth();
 const slideover = useSlideover();
 
 const navLinks = [{
@@ -39,9 +42,10 @@ const isDark = computed({
             variant="ghost" @click="isDark = !isDark" />
           <UHorizontalNavigation :links="navLinks" :ui="{ wrapper: 'justify-end' }" class="hidden md:flex">
             <template #default="{ link }">
-              <span class="group-hover:text-primary ">{{ link.label }}</span>
+              <span class="group-hover:text-primary relative">{{ link.label }}</span>
             </template>
           </UHorizontalNavigation>
+          <UButton label="Sign out" variant="solid" color="white" @click="signOut(auth)" size="xs" />
         </div>
       </div>
     </div>
