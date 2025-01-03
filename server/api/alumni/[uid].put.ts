@@ -3,26 +3,29 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
-	const body = await readBody<Alumni>(event);
 	const db = getFirestore();
+	const body = await readBody<Alumni>(event);
+	const param = getRouterParam(event, 'uid');
 
 	try {
-		if (!body || !body.uid) {
+		if (!body || !param) {
 			throw createError({
 				statusCode: 204,
+				statusMessage: 'No content',
+				message: 'Body or id has no content',
 			});
 		}
 
 		const phoneNumber = `+63${body.phoneNumber}`;
-		const user = await getAuth().updateUser(body.uid, {
+		const user = await getAuth().updateUser(param, {
 			email: body.email,
 			password: body.password,
 			phoneNumber: phoneNumber,
 		});
 
-		await db
+		const res = await db
 			.collection('alumni')
-			.doc(body.uid)
+			.doc(param)
 			.set(
 				{
 					...body,
@@ -39,9 +42,17 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusCode: 200,
 			statusMessage: 'success',
 			message: 'Succesfully updated personal account!',
+			data: res,
 		};
 	} catch (error: any) {
-		console.log('/api/alumni.put', error);
+		console.log('/alumni.put', error);
+		if (error.code === 'auth/email-already-exists') {
+			throw createError({
+				statusCode: 409,
+				statusMessage: 'Conflict',
+				message: 'Email already exists',
+			});
+		}
 		return errorResponse(error);
 	}
 });

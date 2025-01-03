@@ -1,17 +1,31 @@
 import { getFirestore } from 'firebase-admin/firestore';
+import { H3Event } from 'h3';
 
-export default defineEventHandler(async (event) => {
-	const param = getRouterParam(event, 'uid');
+export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
+	const param = getRouterParam(event, 'uid');
+
 	try {
 		if (!param) {
-			throw createError({});
+			throw createError({
+				statusCode: 204,
+				statusMessage: 'No content',
+				message: 'No uid provided',
+			});
 		}
-		const docRef = await db.collection('alumni').doc(param).get();
+		const doc = await db.collection('alumni').doc(param).get();
 
-		return docRef.data();
+		if (!doc.exists) {
+			throw createError({
+				statusCode: 404,
+				statusMessage: 'Not found',
+				message: 'Alumni not found',
+			});
+		}
+
+		return doc.data();
 	} catch (error) {
-		console.log('alumni:uid: ', error);
-		return null;
+		console.log('/alumni.[uid].get: ', error);
+		return errorResponse(error);
 	}
 });
