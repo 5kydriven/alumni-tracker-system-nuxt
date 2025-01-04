@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const store = useJobStore();
+const store = useEmployerStore();
+const user = useCurrentUser()
 
-const { data, status } = useAsyncData('jobs', async () => await store.fetchJobs().then(() => true));
+const { status } = useAsyncData('jobs', async () => await store.fetchJobs(user.value.uid).then(() => true));
 </script>
 
 <template>

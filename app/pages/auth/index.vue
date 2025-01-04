@@ -13,7 +13,5 @@ useHead({
 </script>
 
 <template>
-  <section class="bg-gray-50 dark:bg-gray-900">
-    <AuthForm />
-  </section>
+  <AuthForm />
 </template>

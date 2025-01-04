@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const store = useJobStore();
+const store = useEmployerStore();
 const { toastResponse } = useToastComposables();
 
 async function onDelete(uid: string) {

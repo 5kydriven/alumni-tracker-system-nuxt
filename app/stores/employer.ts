@@ -1,20 +1,18 @@
-export const useJobStore = defineStore('jobStore', () => {
+export const useEmployerStore = defineStore('employerStore', () => {
 	const jobs = ref<Job[]>([]);
 	const isLoading = ref(false);
 
-	async function fetchJobs() {
-		const res = await $fetch<Job[]>('/api/job', {
-			method: 'GET',
-		});
+	async function fetchJobs(uid: string) {
+		const res = await $fetch<Job[]>(`/api/employer/job/${uid}`);
 		jobs.value = res;
 	}
 
-	async function createJob(job: Job) {
+	async function createJob(job: Job, uid: string) {
 		isLoading.value = true;
 
-		const res = await $fetch<H3Response>('/api/job', {
+		const res = await $fetch<H3Response>('/api/employer/job', {
 			method: 'POST',
-			body: JSON.stringify(job),
+			body: JSON.stringify({ ...job, uid }),
 		});
 
 		jobs.value.push({ ...job, uid: res.data.uid });
@@ -28,7 +26,7 @@ export const useJobStore = defineStore('jobStore', () => {
 	async function deleteJob(uid: string) {
 		isLoading.value = true;
 		try {
-			const res = await $fetch(`/api/job/${uid}`, {
+			const res = await $fetch(`/api/employer/job/${uid}`, {
 				method: 'DELETE',
 			});
 			jobs.value = jobs.value.filter((job) => job.uid !== uid);
