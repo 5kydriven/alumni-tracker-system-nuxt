@@ -24,7 +24,8 @@ const form = reactive<Job>({
 	description: ''
 })
 
-const store = useJobStore()
+const user = useCurrentUser()
+const store = useEmployerStore()
 const { toastResponse } = useToastComposables()
 
 const employmentTypes = [
@@ -49,7 +50,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	if (props.job?.id) {
 		console.log('edit')
 	} else {
-		const res = await store.createJob(event.data)
+		const res = await store.createJob(event.data, user.value.uid)
 		toastResponse(res)
 	}
 	emits('close')

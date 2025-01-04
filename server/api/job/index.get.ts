@@ -3,6 +3,7 @@ import { H3Event } from 'h3';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
+
 	try {
 		const snapShot = await db.collection('jobs').get();
 

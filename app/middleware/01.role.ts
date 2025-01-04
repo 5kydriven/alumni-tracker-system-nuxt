@@ -12,14 +12,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		method: 'POST',
 		body: JSON.stringify({ uid: user.uid }),
 	});
-	const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
-
-	// const role = data.value.role;
-	// const alumni = data.value.alumni;
-	console.log('role: ', role);
 
 	const path = `/${role}`;
 	if (role != undefined) {
+		const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
 		if (role === 'alumni' && !alumni.isUpdated) {
 			return await navigateTo('/alumni/update-account', { replace: true });
 		}
