@@ -4,7 +4,6 @@ import { H3Event } from 'h3';
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const param = getRouterParam(event, 'uid');
-
 	try {
 		if (!param) {
 			throw createError({
@@ -13,19 +12,21 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('alumni').doc(param).get();
+
+		const doc = await db.collection('jobs').doc(param).get();
 
 		if (!doc.exists) {
 			throw createError({
 				statusCode: 404,
 				statusMessage: 'Not found',
-				message: 'Alumni not found',
+				message: 'Job not found',
+				data: { uid: param },
 			});
 		}
 
 		return doc.data();
-	} catch (error) {
-		console.log('/alumni.[uid].get: ', error);
+	} catch (error: any) {
+		console.log('/job.[uid].get', error);
 		return errorResponse(error);
 	}
 });

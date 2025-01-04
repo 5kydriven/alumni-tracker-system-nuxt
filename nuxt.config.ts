@@ -36,7 +36,7 @@ export default defineNuxtConfig({
 		public: {},
 	},
 	routeRules: {
-		// '/': { prerender: true },
+		'/': { prerender: true },
 		// '/auth': { ssr: false },
 	},
 	vuefire: {

@@ -13,19 +13,15 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('alumni').doc(param).get();
 
-		if (!doc.exists) {
-			throw createError({
-				statusCode: 404,
-				statusMessage: 'Not found',
-				message: 'Alumni not found',
-			});
-		}
+		const doc = await db.collection('users').doc(param).get();
+		const role = doc.data()?.role;
 
-		return doc.data();
-	} catch (error) {
-		console.log('/alumni.[uid].get: ', error);
+		const user = await db.collection(role).doc(param).get();
+
+		return { ...user.data(), uid: user.id };
+	} catch (error: any) {
+		console.log('/user.put', error);
 		return errorResponse(error);
 	}
 });

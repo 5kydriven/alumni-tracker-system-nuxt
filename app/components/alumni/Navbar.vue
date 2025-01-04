@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import { SlideOverAlumni } from '#components'
-  const slideover = useSlideover()
+import { SlideOverAlumni } from '#components'
+const slideover = useSlideover()
 
-  const navLinks = [{
-    label: 'Home',
-    to: '/alumni'
-  }, {
-    label: 'Messages',
-    to: '/alumni/messages'
-  }, {
-    label: 'Job Board',
-    to: '/alumni/jobs'
-  },]
+const navLinks = [{
+  label: 'Home',
+  to: '/alumni'
+}, {
+  label: 'Messages',
+  to: '/alumni/messages'
+}, {
+  label: 'Job Board',
+  to: '/alumni/jobs'
+},]
 
-  const colorMode = useColorMode()
-  const isDark = computed({
-    get() {
-      return colorMode.value === 'dark'
-    },
-    set() {
-      colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-    }
-  })
+const colorMode = useColorMode()
+const isDark = computed({
+  get() {
+    return colorMode.value === 'dark'
+  },
+  set() {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  }
+})
 </script>
 
 <template>
@@ -31,7 +31,7 @@
       <div class=" h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <UButton icon="i-heroicons-bars-3" class="lg:hidden" variant="ghost" color="gray"
-            @click="slideover.open(SlideOverAlumni)" />
+            @click="slideover.open(SlideOverAlumni, { onClose: slideover.close })" />
           <NuxtLink to="/alumni">CPSU</NuxtLink>
         </div>
         <div class="flex items-center gap-2">

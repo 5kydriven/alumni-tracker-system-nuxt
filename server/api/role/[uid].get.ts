@@ -1,5 +1,5 @@
-import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import { getFirestore } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -13,19 +13,12 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('alumni').doc(param).get();
 
-		if (!doc.exists) {
-			throw createError({
-				statusCode: 404,
-				statusMessage: 'Not found',
-				message: 'Alumni not found',
-			});
-		}
+		const doc = await db.collection('users').doc(param).get();
 
-		return doc.data();
-	} catch (error) {
-		console.log('/alumni.[uid].get: ', error);
+		return doc.data()?.role;
+	} catch (error: any) {
+		console.log('/role.uid.get: ', error);
 		return errorResponse(error);
 	}
 });
