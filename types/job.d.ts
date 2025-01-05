@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 export declare global {
 	interface Job {
 		id?: string;
@@ -12,7 +14,7 @@ export declare global {
 		contactPerson?: string;
 		salary?: string;
 		desiredWeeklyHours?: string;
-		createdAt?: string;
+		createdAt?: any;
 		updatedAt?: string;
 	}
 }

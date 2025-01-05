@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 export default function useUtils() {
 	async function getRole() {
 		const user = await getCurrentUser();
@@ -8,7 +10,12 @@ export default function useUtils() {
 		return role.value;
 	}
 
+	function convertFirebaseTimestamp(timestamp: Timestamp) {
+		return timestamp.toDate();
+	}
+
 	return {
+		convertFirebaseTimestamp,
 		getRole,
 	};
 }

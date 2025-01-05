@@ -10,7 +10,7 @@ const links = [{
   click: () => emits('close')
 }, {
   label: 'Job Board',
-  to: '/alumni/job-list',
+  to: '/alumni/jobs',
   click: () => emits('close')
 }]
 
