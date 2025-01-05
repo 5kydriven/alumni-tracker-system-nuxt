@@ -5,7 +5,10 @@ export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 
 	try {
-		const snapShot = await db.collection('jobs').get();
+		const snapShot = await db
+			.collection('jobs')
+			.orderBy('createdAt', 'desc')
+			.get();
 
 		return snapShot.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
 	} catch (error: any) {

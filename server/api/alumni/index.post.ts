@@ -33,7 +33,7 @@ export default eventHandler(async (event: H3Event) => {
 				});
 
 				const docRef = db.collection('alumni').doc(userCreds.uid);
-				batch.set(docRef, {
+				batch.update(docRef, {
 					...item,
 					email,
 					password,
@@ -43,7 +43,7 @@ export default eventHandler(async (event: H3Event) => {
 				});
 
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
-				batch.set(accountRolesDocRef, {
+				batch.update(accountRolesDocRef, {
 					role: 'alumni',
 					created_at: Timestamp.now(),
 				});

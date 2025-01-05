@@ -9,7 +9,7 @@ declare global {
 		password?: string;
 		status?: AlumniStatus;
 		isUpdated?: boolean;
-		createdAt?: string;
+		createdAt?: any;
 		phoneNumber?: string;
 		province?: string;
 		city?: string;
