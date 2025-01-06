@@ -27,6 +27,6 @@ export default defineEventHandler(async (event: H3Event) => {
 		return doc.data();
 	} catch (error: any) {
 		console.log('/job.[uid].get', error);
-		return errorResponse(error);
+		return error;
 	}
 });

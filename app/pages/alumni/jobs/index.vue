@@ -63,7 +63,7 @@ const { data: jobs, status } = await useLazyFetch<Job[]>('/api/job')
             <p class="dark:text-gray-500 text-gray-400 truncate text-wrap h-36"
               v-html="job.description.replace(/\n/g, '<br>')">
             </p>
-            <UButton label="View more" :to="`/alumni/jobs/job-detail/${job.uid}`" color="gray" class="self-end" />
+            <UButton label="View more" :to="`/alumni/jobs/${job.uid}`" color="gray" class="self-end" />
           </div>
         </div>
       </div>
