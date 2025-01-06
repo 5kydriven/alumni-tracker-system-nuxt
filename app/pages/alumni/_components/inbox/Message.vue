@@ -68,7 +68,7 @@ const emits = defineEmits<{
       </div>
 
       <div class="flex gap-2 p-4">
-        <UInput placeholder="Type a message" :autofocus="false" class="w-full" />
+        <UInput :autofocus="false" :autofocusDelay="5000" class="w-full" />
         <UButton icon="i-heroicons-paper-airplane" />
       </div>
 
