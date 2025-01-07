@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AddStudentModal, AsideSlideover } from "#components";
+import { AddStudentModal, RegistrarSlideOver } from "#components";
 import useComposableToast from "~/composables/useToastComposables";
 
 definePageMeta({
@@ -11,13 +11,11 @@ const modal = useModal();
 const store = useRegistrarStore();
 const { toastResponse } = useComposableToast()
 
-const { status, data } = useAsyncData(
-  "alumni",
-  async () => await store.getAlumni()
-);
+const { status, data: alumni } = await useLazyFetch<Alumni[]>('/api/alumni', { method: 'GET' });
 
-watch(data, () => {
-  console.log(data.value)
+watch(alumni, (val) => {
+  console.log(val)
+  store.loadAlumni(alumni.value)
 })
 
 const columns = [
@@ -42,15 +40,14 @@ async function handleDelete(uid: string) {
 </script>
 
 <template>
-  <div>
-    <Navbar>
-      <div class="flex gap-2 items-center">
-        <UButton @click="slideOver.open(AsideSlideover)" class="md:hidden" icon="i-heroicons-bars-3" variant="ghost"
-          color="white" size="sm" />
-        <label>Alumni's</label>
-      </div>
-      <div class="flex items-center w-full justify-end gap-4">
-        <!-- <UInput
+  <Navbar>
+    <div class="flex gap-2 items-center">
+      <UButton @click="slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })" class="md:hidden"
+        icon="i-heroicons-bars-3" variant="ghost" color="white" size="sm" />
+      <label>Alumni's</label>
+    </div>
+    <div class="flex items-center w-full justify-end gap-4">
+      <!-- <UInput
           icon="i-heroicons-magnifying-glass-20-solid"
           size="sm"
           color="white"
@@ -58,44 +55,44 @@ async function handleDelete(uid: string) {
           placeholder="Search..."
           v-model="q"
         /> -->
-        <UButton icon="i-heroicons-pencil-square" size="sm" color="gray" variant="solid" label="Add Alumni" trailing
-          @click="modal.open(AddStudentModal)" />
-      </div>
-    </Navbar>
-    <SubNavbar>
-      <div class="flex items-center gap-4 w-full">
-        <USelectMenu multiple placeholder="Select Status" />
-        <USelectMenu :options="people" multiple placeholder="Location" />
-      </div>
-      <USelectMenu :options="people" multiple placeholder="Display" />
-    </SubNavbar>
-    <UTable :loading="status != 'success' ? true : false" :loading-state="{
-      icon: 'i-heroicons-arrow-path-20-solid',
-      label: 'Loading...',
-    }" class="w-full" :empty-state="{
-      icon: 'i-heroicons-circle-stack-20-solid',
-      label: 'No items.',
-    }" :rows="store.alumni" :columns="columns">
-      <template #id-data="{ index }">{{ index + 1 }}</template>
-      <template #actions-data="{ row }">
-        <UDropdown :items="[
-          [
-            {
-              label: 'Edit',
-              icon: 'i-heroicons-pencil-square-20-solid',
+      <UButton icon="i-heroicons-pencil-square" size="sm" color="gray" variant="solid" label="Add Alumni" trailing
+        @click="modal.open(AddStudentModal)" />
+    </div>
+  </Navbar>
+  <SubNavbar>
+    <div class="flex items-center gap-4 w-full">
+      <!-- <USelectMenu multiple placeholder="Select Status" /> -->
+      <USelectMenu :options="people" multiple placeholder="Location" />
+    </div>
+    <USelectMenu :options="people" multiple placeholder="Display" />
+  </SubNavbar>
+  <UTable :loading="status != 'success' ? true : false" :loading-state="{
+    icon: 'i-heroicons-arrow-path-20-solid',
+    label: 'Loading...',
+  }" :empty-state="{
+    icon: 'i-heroicons-circle-stack-20-solid',
+    label: 'No items.',
+  }" :rows="store.alumni" :columns="columns">
+    <template #id-data="{ index }">{{ index + 1 }}</template>
+    <template #actions-data="{ row }">
+      <UDropdown :items="[
+        [
+          {
+            label: 'Edit',
+            icon: 'i-heroicons-pencil-square-20-solid',
+          },
+          {
+            label: 'Delete',
+            icon: 'i-heroicons-trash-20-solid',
+            click: () => {
+              handleDelete(row.uid);
             },
-            {
-              label: 'Delete',
-              icon: 'i-heroicons-trash-20-solid',
-              click: () => {
-                handleDelete(row.uid);
-              },
-            },
-          ],
-        ]">
-          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-        </UDropdown>
-      </template>
-    </UTable>
-  </div>
+          },
+        ],
+      ]">
+        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+      </UDropdown>
+    </template>
+  </UTable>
+
 </template>

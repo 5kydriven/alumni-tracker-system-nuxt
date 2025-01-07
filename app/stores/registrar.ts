@@ -4,9 +4,13 @@ export const useRegistrarStore = defineStore('registrarStore', () => {
 	const isLoading = ref(false);
 
 	//actions
+	function loadAlumni(payload: Alumni[]) {
+		alumni.value = payload;
+	}
+
 	async function getAlumni() {
 		try {
-			const res = await $fetch<Alumni[]>('/api/registrar/alumni', {
+			const res = await $fetch<Alumni[]>('/api/alumni', {
 				method: 'GET',
 			});
 			alumni.value = res;
@@ -19,7 +23,7 @@ export const useRegistrarStore = defineStore('registrarStore', () => {
 	async function storeAlumni(csv: Alumni[]) {
 		isLoading.value = true;
 		try {
-			const res = await $fetch<H3Response>('/api/registrar/alumni', {
+			const res = await $fetch<H3Response>('/api/alumni', {
 				method: 'POST',
 				body: csv,
 			});
@@ -35,7 +39,7 @@ export const useRegistrarStore = defineStore('registrarStore', () => {
 
 	async function deleteAlumni(uid: string) {
 		isLoading.value = true;
-		const res = await $fetch<H3Response>(`/api/registrar/alumni`, {
+		const res = await $fetch<H3Response>(`/api/alumni`, {
 			method: 'DELETE',
 			body: JSON.stringify(uid),
 		});
@@ -50,6 +54,7 @@ export const useRegistrarStore = defineStore('registrarStore', () => {
 	return {
 		alumni,
 		isLoading,
+		loadAlumni,
 		deleteAlumni,
 		getAlumni,
 		storeAlumni,

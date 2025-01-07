@@ -37,7 +37,6 @@ export default eventHandler(async (event: H3Event) => {
 					...item,
 					email,
 					password,
-					uid: userCreds.uid,
 					isUpdated: false,
 					createdAt: Timestamp.now(),
 				});
@@ -45,7 +44,7 @@ export default eventHandler(async (event: H3Event) => {
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
 				batch.update(accountRolesDocRef, {
 					role: 'alumni',
-					created_at: Timestamp.now(),
+					createdAt: Timestamp.now(),
 				});
 
 				return { ...item, email, password, uid: userCreds.uid };

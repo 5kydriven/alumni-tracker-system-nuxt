@@ -14,11 +14,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	});
 
 	const path = `/${role}`;
-	if (role != undefined) {
-		const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
-		if (role === 'alumni' && !alumni.isUpdated) {
-			return await navigateTo('/alumni/update-account', { replace: true });
-		}
+	if (role !== 'alumni')
 		return await navigateTo(path.toString(), { replace: true });
+
+	if (role === 'alumni') {
+		const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
+		if (!alumni.isUpdated)
+			return await navigateTo('/alumni/update-account', { replace: true });
 	}
 });
