@@ -28,16 +28,11 @@ export const useAuthStore = defineStore('authStore', () => {
 		}
 	}
 
-	async function getUser() {
-		return await $fetch('/api/user');
-	}
-
 	return {
 		userCredential,
 		loading,
 		error,
 		isAuthenticated,
 		login,
-		getUser,
 	};
 });

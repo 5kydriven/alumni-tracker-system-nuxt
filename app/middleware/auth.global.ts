@@ -1,5 +1,3 @@
-import type { User } from 'firebase/auth';
-
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	// if (import.meta.client) return;
 

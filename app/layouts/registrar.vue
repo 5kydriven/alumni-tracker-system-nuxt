@@ -16,7 +16,7 @@ const links = ref([
 
 <template>
   <div class="w-full flex h-screen">
-    <aside class="w-[250px] flex-col hidden lg:flex border-r dark:border-gray-800 h-full px-4">
+    <aside class="w-[250px] flex-col hidden md:flex border-r dark:border-gray-800 h-full px-4">
       <div class="h-16 flex items-center">CPSU</div>
       <UVerticalNavigation :links="links" class="grow">
         <template #default="{ link }">

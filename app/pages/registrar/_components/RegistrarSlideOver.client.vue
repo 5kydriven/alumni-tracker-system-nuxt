@@ -16,6 +16,11 @@ const links = ref([
 	},
 ]);
 
+function handleSignOut() {
+	emits('close')
+	signOut(auth)
+}
+
 const emits = defineEmits<{
 	close: []
 }>()
@@ -37,7 +42,7 @@ const emits = defineEmits<{
 				</template>
 			</UVerticalNavigation>
 
-			<UButton @click="signOut(auth)" label="Sign out" icon="i-heroicons-arrow-left-end-on-rectangle" variant="solid"
+			<UButton @click="handleSignOut" label="Sign out" icon="i-heroicons-arrow-left-end-on-rectangle" variant="solid"
 				class="w-full" color="white" />
 		</div>
 	</USlideover>
