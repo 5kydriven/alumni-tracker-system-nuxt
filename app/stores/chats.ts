@@ -1,3 +1,5 @@
+import type { Chats } from '~~/types/chats';
+
 export const useChatStore = defineStore('chatStore', () => {
 	const chats = ref([
 		{
@@ -7,6 +9,7 @@ export const useChatStore = defineStore('chatStore', () => {
 			uid: '1',
 		},
 	]);
+
 	const messages = ref([
 		{
 			content: 'My Message',
@@ -20,15 +23,24 @@ export const useChatStore = defineStore('chatStore', () => {
 			content: 'from sender',
 			uid: '2',
 		},
+		{
+			content: 'from sender',
+			uid: '2',
+		},
 	]);
 
 	function storeMessage(payload: any) {
 		messages.value.push(payload);
 	}
 
+	function loadMessages(payload: any) {
+		messages.value = payload;
+	}
+
 	return {
 		chats,
 		messages,
+		loadMessages,
 		storeMessage,
 	};
 });

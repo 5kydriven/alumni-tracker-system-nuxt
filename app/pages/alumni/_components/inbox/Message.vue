@@ -1,90 +1,103 @@
 <script setup lang="ts">
-  import { breakpointsTailwind } from "@vueuse/core";
+	import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
 
-  const store = useChatStore()
+	const store = useChatStore();
+	const db = useFirestore();
+	const route = useRoute();
+	const { getUserCredentials } = useFirbaseUtils();
 
-  const breakpoints = useBreakpoints(breakpointsTailwind);
-  const isLaptop = breakpoints.greaterOrEqual("lg");
+	const user = useCurrentUser();
+	const message = ref('');
 
-  const currentUid = ref('1')
-  // const messages = ref(Array.from({ length: 30 }, (_, i) => i + 1));
-  const message = ref('')
-  function handleSubmit() {
-    store.storeMessage({ content: message.value, uid: currentUid.value })
-    message.value = ''
-  }
+	const messages = ref([]);
+	const messagesRef = collection(
+		db,
+		'conversations',
+		route.params.uid.toString(),
+		'messages',
+	);
 
-  const emits = defineEmits<{
-    close: []
-  }>()
+	const unscribe = onSnapshot(
+		messagesRef,
+		(querySnapshot) => {
+			messages.value = querySnapshot.docs.map((doc) => ({
+				uid: doc.id,
+				...doc.data(),
+			}));
+		},
+		(error) => {
+			console.error('Error listening to real-time updates:', error);
+		},
+	);
+
+	const user2 = await getDoc(
+		doc(db, 'conversations', route.params.uid.toString()),
+	);
+
+	function handleSubmit() {
+		store.storeMessage({ content: message.value, uid: user.value.uid });
+		message.value = '';
+	}
+
+	const messagesContainer = ref(null);
+	const scrollBottomRef = ref(null);
+	function scrollToBottom() {
+		if (messagesContainer.value) {
+			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+		}
+	}
+
+	watch(messages, () => console.log(messages.value));
+
+	watch(messages, async () => {
+		await nextTick();
+		scrollToBottom();
+	});
+
+	onMounted(() => {
+		scrollToBottom();
+	});
 </script>
 
 <template>
-  <div class="w-full flex flex-col">
-    <div class="h-16 p-4 flex items-center gap-2 w-full shrink-0">
-      <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" />
-      <label>John Doe</label>
-    </div>
+	<div class="w-full flex flex-col">
+		<div class="h-16 p-4 flex items-center gap-2 w-full shrink-0">
+			<UAvatar :alt="user2.data().name" />
+			<label>{{ user2.data().name }}</label>
+		</div>
 
-    <!-- message section -->
-    <div
-      class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto flex flex-col justify-end flex-1">
-      <div class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2">
-        <div v-for="(m, i) in store.messages" :key="i" class="flex flex-col gap-1 h-14"
-          :class="currentUid == m.uid ? 'self-end' : 'self-start'">
-          <div class="flex" :class="currentUid == m.uid ? 'justify-end' : 'gap-2'">
-            <UAvatar alt="test" :class="currentUid == m.uid ? 'hidden' : ''" />
-            <p :class="currentUid == m.uid ? 'bg-gray-400 dark:bg-primary-800 rounded-tr-none  rounded-lg'
-              : 'bg-primary-400 dark:bg-gray-800  rounded-tl-none rounded-lg'
-              " class="px-2 py-1 text-wrap">
-              {{ m.content }}
-            </p>
-          </div>
-          <span :class="currentUid == m.uid ? 'self-start' : 'self-end'" class="text-xs text-gray-500">07:4{{ i }}
-            AM</span>
-        </div>
-      </div>
-    </div>
+		<div
+			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto flex flex-col justify-end flex-1"
+		>
+			<div
+				ref="messagesContainer"
+				class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2"
+			>
+				<MessageItem
+					v-for="(item, index) in messages"
+					v-bind="item"
+					:currentUid="user.uid"
+					:key="index"
+				/>
+				<div ref="scrollBottomRef"></div>
+			</div>
+		</div>
 
-    <form @submit.prevent="handleSubmit" class="flex gap-2 p-4">
-      <UInput placeholder="Type a message" v-model="message" class="w-full" required />
-      <UButton label="send" icon="i-heroicons-paper-airplane" type="submit" />
-    </form>
-  </div>
-
-
-
-  <!-- <template v-if="false">
-    <USlideover>
-
-      <div class="h-16 px-4 flex items-center gap-2 w-full shrink-0">
-        <UIcon name="i-heroicons-chevron-left" @click="emits('close')" class="lg:hidden cursor-pointer" />
-        <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" />
-        <label>John Doe</label>
-      </div>
-
-      <div
-        class="grid h-full grid-cols-12 gap-4 px-4 py-2 border-y border-gray-200 dark:border-gray-800 overflow-auto dark:text-gray-200">
-        <div v-for="(m, i) in store.messages" :key="i" :class="i % 2 == 0 ? 'col-span-8' : 'col-start-4 col-end-13'"
-          class="flex flex-col gap-1">
-          <p :class="i % 2 == 0
-            ? 'bg-gray-400 dark:bg-gray-800 rounded-tl-none rounded-lg'
-            : 'bg-primary-400 dark:bg-primary-800 rounded-tr-none rounded-lg'
-            " class="px-2 py-1 text-wrap">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-            quaerat illum quas iste voluptatum veniam ipsum esse. Omnis
-            praesentium voluptatibus incidunt voluptates fugit quasi enim ea,
-            dolorem numquam tempore tempora.
-          </p>
-          <span :class="i % 2 !== 0 ? '' : 'self-end'" class="text-xs text-gray-500">07:40 AM</span>
-        </div>
-      </div>
-
-      <div class="flex gap-2 p-4">
-        <UInput placeholder="Type a message" class="w-full" />
-        <UButton icon="i-heroicons-paper-airplane" />
-      </div>
-
-    </USlideover>
-  </template> -->
+		<form
+			@submit.prevent="handleSubmit"
+			class="flex gap-2 p-4"
+		>
+			<UInput
+				placeholder="Type a message"
+				v-model="message"
+				class="w-full"
+				required
+			/>
+			<UButton
+				label="send"
+				icon="i-heroicons-paper-airplane"
+				type="submit"
+			/>
+		</form>
+	</div>
 </template>
