@@ -10,6 +10,7 @@
 	const store = useChatStore();
 	const db = useFirestore();
 	const route = useRoute();
+	const isLoading = ref(false);
 	const { getUserCredentials } = useFirbaseUtils();
 
 	const user = useCurrentUser();
@@ -41,6 +42,7 @@
 	);
 
 	async function handleSubmit() {
+		isLoading.value = true;
 		const res = await $fetch(`/api/conversation/message/${route.params.uid}`, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -51,6 +53,7 @@
 		});
 		// store.storeMessage({ content: message.value, uid: user.value.uid });
 		message.value = '';
+		isLoading.value = false;
 		console.log(res);
 	}
 
@@ -109,6 +112,7 @@
 				required
 			/>
 			<UButton
+				:loading="isLoading"
 				label="send"
 				icon="i-heroicons-paper-airplane"
 				type="submit"
