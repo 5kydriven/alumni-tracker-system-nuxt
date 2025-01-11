@@ -16,10 +16,10 @@
 			>
 				<div class="flex gap-2 items-center">
 					<label>Messages</label>
-					<UBadge
+					<!-- <UBadge
 						label="20"
 						variant="subtle"
-					/>
+					/> -->
 				</div>
 			</div>
 

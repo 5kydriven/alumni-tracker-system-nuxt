@@ -14,10 +14,10 @@
 			<div class="h-16 px-4 lg:flex items-center hidden shrink-0">
 				<div class="flex gap-2 items-center">
 					<label>Messages</label>
-					<UBadge
+					<!-- <UBadge
 						label="20"
 						variant="subtle"
-					/>
+					/> -->
 				</div>
 			</div>
 

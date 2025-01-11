@@ -1,5 +1,11 @@
 <script setup lang="ts">
-	import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
+	import {
+		addDoc,
+		collection,
+		doc,
+		getDoc,
+		onSnapshot,
+	} from 'firebase/firestore';
 
 	const store = useChatStore();
 	const db = useFirestore();
@@ -34,9 +40,18 @@
 		doc(db, 'conversations', route.params.uid.toString()),
 	);
 
-	function handleSubmit() {
-		store.storeMessage({ content: message.value, uid: user.value.uid });
+	async function handleSubmit() {
+		const res = await $fetch(`/api/conversation/message/${route.params.uid}`, {
+			method: 'POST',
+			body: JSON.stringify({
+				message: message.value,
+				senderUid: user.value.uid,
+				name: user.value.displayName,
+			}),
+		});
+		// store.storeMessage({ content: message.value, uid: user.value.uid });
 		message.value = '';
+		console.log(res);
 	}
 
 	const messagesContainer = ref(null);

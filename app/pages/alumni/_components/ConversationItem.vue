@@ -29,10 +29,10 @@
 	<div
 		v-for="(conversation, index) in conversations"
 		:key="index"
-		class="flex flex-col border-t-none h-full border-gray-200 overflow-auto lg:border-t dark:border-gray-800 xl:h-[calc(100vh-73px)]"
+		class="flex flex-col border-t-none h-full border-gray-200 overflow-auto dark:border-gray-800 xl:h-[calc(100vh-73px)]"
 	>
 		<div
-			class="p-4 border-b dark:border-gray-800 cursor-pointer"
+			class="p-4 dark:border-gray-800 border-b cursor-pointer"
 			@click="handleClick(conversation.id)"
 		>
 			<div class="flex justify-between text-gray-500">
