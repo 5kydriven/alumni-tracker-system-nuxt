@@ -1,16 +1,20 @@
 <script setup lang="ts">
+	import type { Timestamp } from 'firebase/firestore';
+
+	const { convertMessagesTimestamp } = useConverter();
+
 	const props = defineProps<{
 		currentUid?: string;
 		senderUid?: string;
 		message?: string;
-		createdAt?: any;
+		createdAt?: Timestamp;
 		name?: string;
 	}>();
 </script>
 
 <template>
 	<div
-		class="flex flex-col gap-1 h-14"
+		class="flex flex-col gap-1 max-w-md"
 		:class="props.currentUid == props.senderUid ? 'self-end' : 'self-start'"
 	>
 		<div
@@ -18,7 +22,7 @@
 			:class="props.currentUid == props.senderUid ? 'justify-end' : 'gap-2'"
 		>
 			<UAvatar
-				alt="test"
+				:alt="props.name"
 				:class="props.currentUid == props.senderUid ? 'hidden' : ''"
 			/>
 			<p
@@ -35,7 +39,7 @@
 		<span
 			:class="props.currentUid == props.senderUid ? 'self-start' : 'self-end'"
 			class="text-xs text-gray-500"
-			>07:40 AM</span
+			>{{ convertMessagesTimestamp(props.createdAt) }}</span
 		>
 	</div>
 </template>

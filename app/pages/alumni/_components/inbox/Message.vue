@@ -5,6 +5,8 @@
 		doc,
 		getDoc,
 		onSnapshot,
+		orderBy,
+		query,
 	} from 'firebase/firestore';
 
 	const store = useChatStore();
@@ -17,11 +19,9 @@
 	const message = ref('');
 
 	const messages = ref([]);
-	const messagesRef = collection(
-		db,
-		'conversations',
-		route.params.uid.toString(),
-		'messages',
+	const messagesRef = query(
+		collection(db, 'conversations', route.params.uid.toString(), 'messages'),
+		orderBy('createdAt', 'asc'),
 	);
 
 	const unscribe = onSnapshot(
