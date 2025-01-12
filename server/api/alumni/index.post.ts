@@ -44,7 +44,11 @@ export default eventHandler(async (event: H3Event) => {
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
 				batch.update(accountRolesDocRef, {
 					role: 'alumni',
+					email,
+					password,
+					name: item.name,
 					createdAt: Timestamp.now(),
+					userCredentials: { batch: item.batch, course: item.course },
 				});
 
 				return { ...item, email, password, uid: userCreds.uid };

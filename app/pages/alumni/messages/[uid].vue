@@ -2,6 +2,12 @@
 	definePageMeta({
 		layout: 'user',
 	});
+
+	const router = useRouter();
+
+	function handleClick(uid: string) {
+		router.push(`/registrar/messages/${uid}`);
+	}
 </script>
 
 <template>
@@ -23,7 +29,7 @@
 				</div>
 			</div>
 
-			<ConversationItem />
+			<AlumniConversationItem @itemClicked="handleClick" />
 		</div>
 
 		<InboxMessage />

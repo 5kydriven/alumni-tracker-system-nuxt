@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -18,10 +18,14 @@ export default defineEventHandler(async (event: H3Event) => {
 		const userDetails = await getAuth().createUser({
 			email: body.email,
 			password: body.password,
+			displayName: body.name,
 		});
 
 		await db.collection('users').doc(userDetails.uid).set({
 			role: body.role,
+			email: body.email,
+			name: body.name,
+			createdAt: Timestamp.now(),
 		});
 
 		await db

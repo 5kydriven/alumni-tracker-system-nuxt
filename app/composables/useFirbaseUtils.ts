@@ -11,6 +11,8 @@ export default function useUtils() {
 		return { ...userCreds.data(), uid: userCreds.id };
 	}
 
+	function getParticipantsInfo() {}
+
 	return {
 		role,
 		getUserCredentials,
