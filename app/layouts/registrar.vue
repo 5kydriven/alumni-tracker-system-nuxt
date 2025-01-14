@@ -37,9 +37,7 @@
 				class="grow py-2"
 			>
 				<template #default="{ link }">
-					<span class="group-hover:text-primary relative">{{
-						link.label
-					}}</span>
+					<span class="group-hover:text-black relative">{{ link.label }}</span>
 				</template>
 			</UVerticalNavigation>
 			<div class="py-4">
