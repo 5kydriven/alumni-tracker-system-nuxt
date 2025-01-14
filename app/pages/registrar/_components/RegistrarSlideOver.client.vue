@@ -43,7 +43,7 @@ const emits = defineEmits<{
 			</UVerticalNavigation>
 
 			<UButton @click="handleSignOut" label="Sign out" icon="i-heroicons-arrow-left-end-on-rectangle" variant="solid"
-				class="w-full" color="white" />
+				class="w-full" color="yellow" />
 		</div>
 	</USlideover>
 </template>
