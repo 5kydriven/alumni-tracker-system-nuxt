@@ -1,4 +1,13 @@
 <script setup lang="ts">
+	useSeoMeta({
+		title: 'CPSU || Welcome',
+		ogTitle: 'CPSU',
+		description: 'Central Philippine State University',
+		ogDescription: 'Central Philippine State University',
+		ogImage: '/cpsu-banner.png',
+		twitterCard: 'summary_large_image',
+	});
+
 	useHead({
 		meta: [
 			{ charset: 'utf-8' },
