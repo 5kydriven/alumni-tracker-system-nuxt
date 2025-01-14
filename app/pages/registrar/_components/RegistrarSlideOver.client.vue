@@ -36,7 +36,7 @@ const emits = defineEmits<{
 		<div class="flex flex-col py-4 px-2 justify-between h-full">
 			<UVerticalNavigation :links="links">
 				<template #default="{ link }">
-					<span class="group-hover:text-primary relative">{{
+					<span class="group-hover:text-black relative">{{
 						link.label
 					}}</span>
 				</template>
