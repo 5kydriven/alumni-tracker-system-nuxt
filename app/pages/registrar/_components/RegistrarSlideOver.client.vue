@@ -27,7 +27,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-	<USlideover side="left">
+	<USlideover side="left" :ui="{background: 'bg-zuccini-500'}">
 		<div class="p-4 flex items-center justify-between border-b dark:border-gray-800">
 			<div>CPSU</div>
 			<UButton color="gray" variant="ghost" size="sm" icon="i-heroicons-x-mark-20-solid" square padded
