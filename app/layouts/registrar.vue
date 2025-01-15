@@ -22,8 +22,10 @@
 </script>
 
 <template>
-	<div class="w-full flex h-screen">
-		<aside class="w-[250px] flex-col hidden md:flex bg-zuccini-500 h-full px-4">
+	<div class="h-screen flex">
+		<aside
+			class="w-[225px] flex-col hidden md:flex bg-zuccini-500 h-full px-4 shrink-0"
+		>
 			<div class="h-16 flex items-center gap-2">
 				<NuxtImg
 					src="/cpsu-logo.png"
@@ -51,7 +53,7 @@
 				/>
 			</div>
 		</aside>
-		<div class="flex flex-col w-full">
+		<div class="flex flex-col h-full flex-1 overflow-auto">
 			<slot />
 		</div>
 	</div>

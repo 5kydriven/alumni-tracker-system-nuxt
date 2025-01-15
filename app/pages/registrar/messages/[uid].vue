@@ -21,7 +21,7 @@
 				class="h-16 px-4 flex items-center border-b dark:border-gray-800 border-gray-200 shrink-0"
 			>
 				<div class="flex gap-2 items-center">
-					<label>Messages</label>
+					<label class="text-lg font-bold">Messages</label>
 				</div>
 			</div>
 			<RegistrarConversationItem @itemClicked="handleClick" />

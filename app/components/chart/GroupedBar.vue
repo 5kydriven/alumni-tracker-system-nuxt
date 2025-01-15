@@ -18,21 +18,13 @@
 		[GroupedBar.selectors.barGroup]: (d: any) =>
 			`<span>${d.employed}, ${d.unemployed}, ${d.unknown}</span>`,
 	};
-
-	const events = {
-		[Axis.selectors.axis]: {
-			mouseover: (d: number | Date) => {
-				console.log(d);
-			},
-			mouseout: (d: number | Date) => {
-				console.log(d);
-			},
-		},
-	};
 </script>
 
 <template>
-	<VisXYContainer :data="props.data">
+	<VisXYContainer
+		:data="props.data"
+		width="100%"
+	>
 		<VisGroupedBar
 			:x="x"
 			:y="y"
@@ -41,7 +33,6 @@
 			type="x"
 			label="Employed vs Unemployed"
 			:numTicks="props.data.length"
-			:events="events"
 		/>
 		<!-- <VisTooltip :triggers="triggers" /> -->
 	</VisXYContainer>
