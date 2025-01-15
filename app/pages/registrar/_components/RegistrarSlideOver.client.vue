@@ -14,6 +14,11 @@
 			to: '/registrar/alumni-list',
 			click: () => emits('close'),
 		},
+		{
+			label: 'Alumni',
+			to: '/registrar/messages',
+			click: () => emits('close'),
+		},
 	]);
 
 	function handleSignOut() {

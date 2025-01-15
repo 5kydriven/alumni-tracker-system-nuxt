@@ -17,5 +17,8 @@ export default defineAppConfig({
 			inactive:
 				'text-white dark:text-gray-400 hover:text-black dark:hover:text-white hover:before:bg-yellow-300 dark:hover:before:bg-gray-800/50',
 		},
+		avatar: {
+			background: 'bg-gray-200',
+		},
 	},
 });

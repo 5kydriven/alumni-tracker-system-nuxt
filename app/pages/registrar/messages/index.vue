@@ -1,9 +1,12 @@
 <script setup lang="ts">
+	import { RegistrarSlideOver } from '#components';
+
 	definePageMeta({
 		layout: 'registrar',
 	});
 
 	const router = useRouter();
+	const slideOver = useSlideover();
 
 	function handleClick(uid: string) {
 		router.push(`/registrar/messages/${uid}`);
@@ -13,13 +16,21 @@
 <template>
 	<div class="flex h-full">
 		<div
-			class="border-r-none w-full border-gray-200 lg:border-r dark:border-gray-800 lg:max-w-sm flex flex-col"
+			class="border-gray-200 border-r drop-shadow-sm flex flex-col md:max-w-sm w-full flex-none"
 		>
-			<div
-				class="h-16 px-4 flex items-center border-b dark:border-gray-800 border-gray-200 bg-gray-500 shrink-0"
-			>
+			<div class="h-16 px-4 flex items-center bg-gray-300 w-full">
 				<div class="flex gap-2 items-center">
-					<label class="text-lg font-bold">Messages</label>
+					<UButton
+						@click="
+							slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
+						"
+						class="lg:hidden"
+						icon="i-heroicons-bars-3"
+						variant="ghost"
+						color="white"
+						size="sm"
+					/>
+					<label class="text-lg font-bold text-gray-900">Messages</label>
 				</div>
 			</div>
 			<RegistrarConversationItem @itemClicked="handleClick" />
