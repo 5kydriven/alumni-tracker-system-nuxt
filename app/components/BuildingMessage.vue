@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full flex-1 justify-center flex flex-col items-center gap-2 text-gray-600"
+		class="w-full flex-1 justify-center flex flex-col items-center bg-gray-50 gap-2 text-gray-600"
 	>
 		<UIcon
 			name="i-heroicons-wrench-screwdriver"
