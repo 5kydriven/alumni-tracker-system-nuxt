@@ -33,27 +33,35 @@ export default eventHandler(async (event: H3Event) => {
 				});
 
 				const docRef = db.collection('alumni').doc(userCreds.uid);
-				batch.update(docRef, {
-					...item,
-					email,
-					password,
-					isUpdated: false,
-					createdAt: Timestamp.now(),
-				});
+				batch.set(
+					docRef,
+					{
+						...item,
+						email,
+						password,
+						isUpdated: false,
+						createdAt: Timestamp.now(),
+					},
+					{ merge: true },
+				);
 
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
-				batch.update(accountRolesDocRef, {
-					role: 'alumni',
-					email,
-					password,
-					name: item.name,
-					createdAt: Timestamp.now(),
-					userCredentials: {
-						batch: item.batch,
-						course: item.course,
-						isUpdated: false,
+				batch.set(
+					accountRolesDocRef,
+					{
+						role: 'alumni',
+						email,
+						password,
+						name: item.name,
+						createdAt: Timestamp.now(),
+						userCredentials: {
+							batch: item.batch,
+							course: item.course,
+							isUpdated: false,
+						},
 					},
-				});
+					{ merge: true },
+				);
 
 				return { ...item, email, password, uid: userCreds.uid };
 			}),
@@ -68,7 +76,7 @@ export default eventHandler(async (event: H3Event) => {
 			data: result,
 		} as H3Response;
 	} catch (error: any) {
-		console.error('/alumni.post', error);
+		console.error('/registrar/alumni.post', error);
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,

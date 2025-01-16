@@ -11,9 +11,12 @@
 	const store = useRegistrarStore();
 	const { toastResponse } = useComposableToast();
 
-	const { status, data: alumni } = await useLazyFetch<Alumni[]>('/api/alumni', {
-		method: 'GET',
-	});
+	const { status, data: alumni } = await useLazyFetch<Alumni[]>(
+		'/api/registrar/alumni',
+		{
+			method: 'GET',
+		},
+	);
 
 	watch(alumni, (val) => {
 		console.log(val);
@@ -116,6 +119,11 @@
 		}"
 		:rows="store.alumni"
 		:columns="columns"
+		:ui="{
+			th: {
+				base: 'sticky z-10 top-0 bg-gray-100',
+			},
+		}"
 	>
 		<template #id-data="{ index }">{{ index + 1 }}</template>
 		<template #status-data="{ row }">
