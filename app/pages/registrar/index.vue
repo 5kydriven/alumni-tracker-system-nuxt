@@ -15,7 +15,7 @@
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
 				"
-				class="md:hidden"
+				class="lg:hidden"
 				icon="i-heroicons-bars-3"
 				variant="ghost"
 				color="white"
@@ -65,5 +65,4 @@
 			]"
 		/>
 	</div>
-	<!-- <BuildingMessage /> -->
 </template>

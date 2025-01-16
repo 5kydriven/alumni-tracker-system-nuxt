@@ -63,9 +63,7 @@
 
 <template>
 	<template v-if="conversations">
-		<div
-			class="flex flex-col border-t-none h-full border-gray-200 overflow-auto dark:border-gray-800 xl:h-[calc(100vh-73px)]"
-		>
+		<div class="flex flex-col h-full overflow-auto xl:h-[calc(100vh-73px)]">
 			<div
 				v-for="(conversation, index) in conversations"
 				:key="index"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { AddJobModal, DeleteJobModal } from '#components';
+	import { EmployerModalAdd, EmployerModalDelete } from '#components';
 	const modal = useModal();
 
 	const props = defineProps<{
@@ -13,7 +13,7 @@
 			<label class="text-xl font-bold">Your Job Posts</label>
 			<UButton
 				v-show="props.jobs.length >= 1"
-				@click="modal.open(AddJobModal, { onClose: modal.close })"
+				@click="modal.open(EmployerModalAdd, { onClose: modal.close })"
 				icon="i-heroicons-plus"
 				label="Add job post"
 				size="xs"
@@ -37,7 +37,7 @@
 			<UButton
 				icon="i-heroicons-plus"
 				label="Add my first job post"
-				@click="modal.open(AddJobModal, { onClose: modal.close })"
+				@click="modal.open(EmployerModalAdd, { onClose: modal.close })"
 			/>
 		</div>
 
@@ -68,7 +68,7 @@
 						variant="link"
 						color="gray"
 						@click="
-							modal.open(AddJobModal, {
+							modal.open(EmployerModalAdd, {
 								onClose: modal.close,
 								job: job,
 								index: index,
@@ -85,7 +85,10 @@
 						variant="link"
 						color="gray"
 						@click="
-							modal.open(DeleteJobModal, { onClose: modal.close, uid: job.uid })
+							modal.open(EmployerModalDelete, {
+								onClose: modal.close,
+								uid: job.uid,
+							})
 						"
 					/>
 				</div>

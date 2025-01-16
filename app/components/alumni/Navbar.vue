@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { SlideOverAlumni } from '#components';
+	import { AlumniSlideOver } from '#components';
 	import { signOut } from 'firebase/auth';
 
 	const auth = useFirebaseAuth();
@@ -42,7 +42,7 @@
 						variant="ghost"
 						color="white"
 						@click="
-							slideover.open(SlideOverAlumni, { onClose: slideover.close })
+							slideover.open(AlumniSlideOver, { onClose: slideover.close })
 						"
 					/>
 					<NuxtImg

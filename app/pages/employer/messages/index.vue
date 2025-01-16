@@ -27,6 +27,6 @@
 
 			<EmployerConversationItem @itemClicked="handleClick" />
 		</div>
-		<EmployerDefaultMessage />
+		<MessageDefault />
 	</div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-	import { AddUserModal, AdminSlideOver } from '#components';
+	import { AdminModalAdd, AdminSlideOver } from '#components';
+	import useComposableToast from '~/composables/useToastComposables';
 	import { useAdminStore } from '~/stores/admin';
 
 	definePageMeta({
@@ -7,7 +8,7 @@
 	});
 
 	const modal = useModal();
-	const toast = useToast();
+	const { toastResponse } = useComposableToast();
 	const slideOver = useSlideover();
 
 	const people = ['Wade Cooper', 'Arlene Mccoy', 'Devon Webb'];
@@ -29,20 +30,7 @@
 
 	async function handleDelete(uid: string) {
 		const res = await store.deleteUser(uid);
-		if (res.statusCode === 200) {
-			toast.add({
-				title: 'Success',
-				description: res.statusMessage,
-				icon: 'i-heroicons-check-circle',
-			});
-		} else {
-			toast.add({
-				title: 'Error',
-				description: res.statusMessage,
-				color: 'red',
-				icon: 'i-heroicons-exclamation-circle',
-			});
-		}
+		toastResponse(res);
 	}
 </script>
 
@@ -58,7 +46,7 @@
 					color="white"
 					size="sm"
 				/>
-				<label class="font-bold text-lg">User's</label>
+				<label class="font-bold text-lg text-yellow-500">User's</label>
 			</div>
 			<div class="flex items-center gap-4">
 				<UInput
@@ -75,7 +63,7 @@
 					variant="solid"
 					label="Add User"
 					trailing
-					@click="modal.open(AddUserModal)"
+					@click="modal.open(AdminModalAdd)"
 				/>
 			</div>
 		</Navbar>

@@ -25,8 +25,8 @@
 <template>
 	<div class="flex gap-4 flex-col xl:flex-row p-4">
 		<template v-if="status == 'success' && job.createdAt">
-			<JobHeader v-bind="job" />
-			<JobDescription v-bind="job" />
+			<AlumniJobHeader v-bind="job" />
+			<AlumniJobDescription v-bind="job" />
 		</template>
 
 		<template v-else>
