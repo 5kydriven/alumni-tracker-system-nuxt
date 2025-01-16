@@ -15,7 +15,7 @@
 			click: () => emits('close'),
 		},
 		{
-			label: 'Alumni',
+			label: 'Message',
 			to: '/registrar/messages',
 			click: () => emits('close'),
 		},

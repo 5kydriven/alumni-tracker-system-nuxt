@@ -1,14 +1,17 @@
 <script setup lang="ts">
-const store = useEmployerStore();
-const user = useCurrentUser()
+	const store = useEmployerStore();
+	const user = useCurrentUser();
 
-const { status } = useAsyncData('jobs', async () => await store.fetchJobs(user.value.uid).then(() => true));
+	const { status } = useAsyncData(
+		'jobs',
+		async () => await store.fetchJobs(user.value.uid).then(() => true),
+	);
 </script>
 
 <template>
-  <JobList :jobs="store.jobs" />
+	<EmployerJobList :jobs="store.jobs" />
 
-  <!-- <div class="flex flex-col gap-2">
+	<!-- <div class="flex flex-col gap-2">
       <label class="text-xl">Your workers</label>
       <div
         class="h-80 w-full rounded flex flex-col justify-center items-center gap-4 border dark:border-gray-800 border-gray-200">

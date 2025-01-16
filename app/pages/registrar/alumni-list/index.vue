@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { AddStudentModal, RegistrarSlideOver } from '#components';
+	import { RegistrarModalAdd, RegistrarSlideOver } from '#components';
 	import useComposableToast from '~/composables/useToastComposables';
 
 	definePageMeta({
@@ -61,7 +61,7 @@
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
 				"
-				class="md:hidden"
+				class="lg:hidden"
 				icon="i-heroicons-bars-3"
 				variant="ghost"
 				color="white"
@@ -85,7 +85,7 @@
 				variant="solid"
 				label="Add Alumni"
 				trailing
-				@click="modal.open(AddStudentModal)"
+				@click="modal.open(RegistrarModalAdd)"
 			/>
 		</div>
 	</Navbar>

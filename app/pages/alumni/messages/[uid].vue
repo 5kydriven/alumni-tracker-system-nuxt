@@ -28,6 +28,6 @@
 			<AlumniConversationItem @itemClicked="handleClick" />
 		</div>
 
-		<InboxMessage />
+		<AlumniMessage />
 	</div>
 </template>

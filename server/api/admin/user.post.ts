@@ -1,18 +1,27 @@
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 	const db = getFirestore();
 	try {
+		if (!body) {
+			throw createError({
+				statusCode: 204,
+				statusMessage: 'No content',
+				message: 'Body has no content',
+			});
+		}
+
 		const userDetails = await getAuth().createUser({
 			email: body.email,
 			password: body.password,
 		});
 
-		await db.collection('users').doc(userDetails.uid).set({
-			role: body.role,
-		});
+		await db
+			.collection('users')
+			.doc(userDetails.uid)
+			.set({ ...body, createdAt: Timestamp.now() });
 
 		await db
 			.collection(body.role)
@@ -22,13 +31,18 @@ export default defineEventHandler(async (event) => {
 		return {
 			statusCode: 200,
 			statusMessage: 'Successfully created user',
-			body: { ...body, uid: userDetails.uid },
+			data: { ...body, uid: userDetails.uid },
 		};
-	} catch (err: any) {
-		console.log('/admin/usesPost: ', err);
-		return {
-			statusCode: 400,
-			statusMessage: err.message,
-		};
+	} catch (error: any) {
+		console.log('/admin/usesPost: ', error);
+		if (error.code === 'auth/email-already-exists') {
+			throw createError({
+				statusCode: 409,
+				statusMessage: 'Conflict',
+				message: 'Email already exists',
+				data: error,
+			});
+		}
+		return errorResponse(error);
 	}
 });

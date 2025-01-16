@@ -15,15 +15,6 @@ export default defineNuxtConfig({
 	future: {
 		compatibilityVersion: 4,
 	},
-	ssr: true,
-	components: [
-		//making every page has dedicated component so navigating them isn't hard
-		{ path: '~/pages/admin/_components' },
-		{ path: '~/pages/registrar/_components' },
-		{ path: '~/pages/employer/_components' },
-		{ path: '~/pages/alumni/_components' },
-		'~/components',
-	],
 	pinia: {
 		storesDirs: ['./app/stores/**'],
 	},

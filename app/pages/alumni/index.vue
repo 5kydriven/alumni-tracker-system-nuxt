@@ -11,7 +11,7 @@
 
 <template>
 	<div class="flex flex-col gap-4 p-4 lg:max-w-screen-xl lg:mx-auto w-full">
-		<Profile v-bind="alumni" />
+		<AlumniProfile v-bind="alumni" />
 
 		<div
 			class="flex flex-col gap-4 w-full bg-white border-gray-300 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
