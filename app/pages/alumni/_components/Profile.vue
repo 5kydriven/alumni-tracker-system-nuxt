@@ -13,7 +13,7 @@
 
 <template>
 	<div
-		class="border pb-4 rounded-lg border-gray-200 shadow-lg dark:border-gray-800"
+		class="border pb-4 rounded-lg border-gray-200 shadow-lg dark:border-gray-800 bg-white"
 	>
 		<div class="relative">
 			<div class="h-32 md:h-52 bg-primary-700 w-full relative z-0 rounded-t">

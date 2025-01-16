@@ -12,6 +12,7 @@
 	const store = useChatStore();
 	const db = useFirestore();
 	const route = useRoute();
+	const router = useRouter();
 	const isLoading = ref(false);
 	const { getUserCredentials } = useFirbaseUtils();
 
@@ -79,13 +80,24 @@
 
 <template>
 	<div class="w-full flex flex-col">
-		<div class="h-16 p-4 flex items-center gap-2 w-full shrink-0">
+		<div
+			class="h-16 p-4 flex items-center gap-2 w-full shrink-0 bg-white shadow-lg"
+		>
+			<UButton
+				icon="i-heroicons-chevron-left"
+				color="white"
+				variant="ghost"
+				class="md:hidden"
+				@click="router.back()"
+			/>
 			<UAvatar :alt="user2.data().name" />
-			<label>{{ user2.data().name }}</label>
+			<label class="text-black text-lg font-bold">
+				{{ user2.data().name }}
+			</label>
 		</div>
 
 		<div
-			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto flex flex-col justify-end flex-1"
+			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1"
 		>
 			<div
 				ref="messagesContainer"
@@ -103,7 +115,7 @@
 
 		<form
 			@submit.prevent="handleSubmit"
-			class="flex gap-2 p-4"
+			class="flex gap-2 p-4 bg-white"
 		>
 			<UInput
 				placeholder="Type a message"

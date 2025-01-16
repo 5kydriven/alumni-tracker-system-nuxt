@@ -10,11 +10,11 @@
 </script>
 
 <template>
-	<div class="flex flex-col gap-4 p-4 h-full overflow-auto">
+	<div class="flex flex-col gap-4 p-4 lg:max-w-screen-xl lg:mx-auto w-full">
 		<Profile v-bind="alumni" />
 
 		<div
-			class="flex flex-col gap-4 w-full border-gray-200 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
+			class="flex flex-col gap-4 w-full bg-white border-gray-300 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
 		>
 			<label class="font-bold text-lg">Experience</label>
 			<div class="flex flex-col gap-2">
@@ -64,7 +64,7 @@
 		</div>
 
 		<div
-			class="flex flex-col gap-4 w-full border border-gray-200 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
+			class="flex flex-col gap-4 w-full bg-white border border-gray-300 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
 		>
 			<label class="font-bold text-lg">Education</label>
 			<div class="flex flex-col gap-2">

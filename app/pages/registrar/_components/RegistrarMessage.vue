@@ -92,9 +92,9 @@
 				@click="router.back()"
 			/>
 			<UAvatar :alt="user2.data().name" />
-			<label class="text-black text-lg font-bold">{{
-				user2.data().name
-			}}</label>
+			<label class="text-black text-lg font-bold">
+				{{ user2.data().name }}
+			</label>
 		</div>
 
 		<div
