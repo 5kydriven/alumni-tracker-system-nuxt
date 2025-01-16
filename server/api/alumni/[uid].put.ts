@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const body = await readBody<Alumni>(event);
 	const param = getRouterParam(event, 'uid');
-
+	const batch = db.batch();
 	try {
 		if (!body || !param) {
 			throw createError({
@@ -17,32 +17,46 @@ export default defineEventHandler(async (event: H3Event) => {
 		}
 
 		const phoneNumber = `+63${body.phoneNumber}`;
-		const user = await getAuth().updateUser(param, {
+		await getAuth().updateUser(param, {
 			email: body.email,
 			password: body.password,
 			phoneNumber: phoneNumber,
 		});
 
-		const res = await db
-			.collection('alumni')
-			.doc(param)
-			.set(
-				{
-					...body,
-					password: '********',
-					phoneNumber,
-					isUpdated: true,
-					status: 'unemployed',
-					updatedAt: Timestamp.now(),
-				},
-				{ merge: true },
-			);
+		const alumniRef = db.collection('alumni').doc(param);
+		batch.set(
+			alumniRef,
+			{
+				...body,
+				password: '********',
+				phoneNumber,
+				isUpdated: true,
+				status: 'unemployed',
+				updatedAt: Timestamp.now(),
+			},
+			{ merge: true },
+		);
+
+		const userRef = db.collection('users').doc(param);
+		batch.update(userRef, {
+			password: '********',
+			email: body.email,
+			userCredentials: {
+				...body,
+				phoneNumber,
+				updatedAt: Timestamp.now(),
+				isUpdated: true,
+				status: 'unemployed',
+			},
+		});
+
+		const result = await batch.commit();
 
 		return {
 			statusCode: 200,
 			statusMessage: 'success',
 			message: 'Succesfully updated personal account!',
-			data: res,
+			data: result,
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);

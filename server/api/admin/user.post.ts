@@ -4,6 +4,7 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 	const db = getFirestore();
+	const batch = db.batch();
 	try {
 		if (!body) {
 			throw createError({
@@ -18,20 +19,19 @@ export default defineEventHandler(async (event) => {
 			password: body.password,
 		});
 
-		await db
-			.collection('users')
-			.doc(userDetails.uid)
-			.set({ ...body, createdAt: Timestamp.now() });
+		const userRef = db.collection('users').doc(userDetails.uid);
+		batch.set(userRef, { ...body, createdAt: Timestamp.now() });
 
-		await db
-			.collection(body.role)
-			.doc(userDetails.uid)
-			.set({ ...body, uid: userDetails.uid });
+		const roleRef = db.collection(body.role).doc(userDetails.uid);
+		batch.set(roleRef, { ...body, uid: userDetails.uid });
+
+		const result = await batch.commit();
 
 		return {
 			statusCode: 200,
-			statusMessage: 'Successfully created user',
-			data: { ...body, uid: userDetails.uid },
+			statusMessage: 'success',
+			message: 'Successfully created user',
+			data: result,
 		};
 	} catch (error: any) {
 		console.log('/admin/usesPost: ', error);

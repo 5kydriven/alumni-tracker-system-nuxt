@@ -1,11 +1,19 @@
-import { camelize } from '@vueuse/core';
+import { H3Event } from 'h3';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
-export default eventHandler(async (event) => {
+export default eventHandler(async (event: H3Event) => {
+	const db = getFirestore();
+	const body = await readBody(event);
 	try {
-		const body = await readBody(event);
-		const db = getFirestore();
+		if (!body) {
+			throw createError({
+				statusCode: 204,
+				statusMessage: 'No content',
+				message: 'Body has no content',
+			});
+		}
+
 		const batch = db.batch();
 		const password = '123456';
 
@@ -25,19 +33,26 @@ export default eventHandler(async (event) => {
 				});
 
 				const docRef = db.collection('alumni').doc(userCreds.uid);
-				batch.set(docRef, {
+				batch.update(docRef, {
 					...item,
 					email,
 					password,
-					uid: userCreds.uid,
 					isUpdated: false,
 					createdAt: Timestamp.now(),
 				});
 
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
-				batch.set(accountRolesDocRef, {
+				batch.update(accountRolesDocRef, {
 					role: 'alumni',
-					created_at: Timestamp.now(),
+					email,
+					password,
+					name: item.name,
+					createdAt: Timestamp.now(),
+					userCredentials: {
+						batch: item.batch,
+						course: item.course,
+						isUpdated: false,
+					},
 				});
 
 				return { ...item, email, password, uid: userCreds.uid };
@@ -45,17 +60,23 @@ export default eventHandler(async (event) => {
 		);
 
 		await batch.commit();
+
 		return {
-			status: 200,
+			statusCode: 200,
+			statusMessage: 'success',
 			message: 'Successfully created alumni',
-			body: result,
-		};
+			data: result,
+		} as H3Response;
 	} catch (error: any) {
-		console.error('registrar/alumni.post', error);
-		return {
-			status: 400,
-			message: 'Something went wrong',
-			body: error,
-		};
+		console.error('/alumni.post', error);
+		if (error.code === 'auth/email-already-exists') {
+			throw createError({
+				statusCode: 409,
+				statusMessage: 'Conflict',
+				message: 'Email already exists',
+				data: error,
+			});
+		}
+		return errorResponse(error);
 	}
 });
