@@ -33,7 +33,7 @@
 
 <template>
 	<div
-		class="border-b dark:border-gray-800 sticky border-gray-200 bg-zuccini top-0 z-50 dark:bg-[#111827]"
+		class="dark:border-gray-800 sticky bg-zuccini top-0 z-50 dark:bg-[#111827]"
 	>
 		<div class="max-w-screen-xl mx-auto px-4">
 			<div class="h-16 flex items-center justify-between">
@@ -54,34 +54,33 @@
 					/>
 					<NuxtLink
 						to="/employer"
-						class="text-lg font-bold"
+						class="text-lg font-bold text-white"
 						>CPSU</NuxtLink
 					>
 				</div>
 				<div class="flex items-center gap-2">
-					<UButton
+					<!-- <UButton
 						:icon="
 							isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
 						"
 						color="gray"
 						variant="ghost"
 						@click="isDark = !isDark"
-					/>
+					/> -->
 					<UHorizontalNavigation
 						:links="navLinks"
 						:ui="{ wrapper: 'justify-end' }"
 						class="hidden md:flex"
 					>
 						<template #default="{ link }">
-							<span class="group-hover:text-primary relative">{{
+							<span class="group-hover:text-yellow-500 relative">{{
 								link.label
 							}}</span>
 						</template>
 					</UHorizontalNavigation>
 					<UButton
 						label="Sign out"
-						variant="solid"
-						color="white"
+						color="yellow"
 						@click="signOut(auth)"
 						size="xs"
 					/>
