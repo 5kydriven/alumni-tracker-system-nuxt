@@ -4,5 +4,7 @@ definePageMeta({
 });
 </script>
 <template>
-  <div>index</div>
+  <div class="w-full h-screen">
+    <BuildingMessage />
+  </div>
 </template>

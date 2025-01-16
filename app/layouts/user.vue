@@ -7,9 +7,7 @@
 	<main>
 		<EmployerNavbar v-show="route.path.startsWith('/employer')" />
 		<AlumniNavbar v-show="route.path.startsWith('/alumni')" />
-		<div
-			class="xl:max-w-screen-xl xl:mx-auto xl:p-4 h-[calc(100vh-65px)] overflow-auto"
-		>
+		<div class="h-[calc(100vh-65px)] overflow-auto bg-gray-100">
 			<slot />
 		</div>
 	</main>

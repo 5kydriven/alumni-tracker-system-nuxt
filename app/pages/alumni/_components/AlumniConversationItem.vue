@@ -64,29 +64,32 @@
 <template>
 	<template v-if="conversations">
 		<div
-			v-for="(conversation, index) in conversations"
-			:key="index"
 			class="flex flex-col border-t-none h-full border-gray-200 overflow-auto dark:border-gray-800 xl:h-[calc(100vh-73px)]"
 		>
 			<div
-				class="p-4 dark:border-gray-800 border-b cursor-pointer"
+				v-for="(conversation, index) in conversations"
+				:key="index"
+				class="p-4 dark:border-gray-800 border-b cursor-pointer flex gap-2 items-center"
 				@click="emits('itemClicked', conversation.id)"
 			>
-				<div class="flex justify-between text-gray-500">
-					<label class="capitalize truncate w-64">
+				<UAvatar :alt="conversation.participants.join(', ')" />
+				<div class="flex flex-col w-full">
+					<label class="capitalize truncate w-64 text-black">
 						{{ conversation.participants.join(', ') }}
 					</label>
-					<span>
-						{{
-							convertConversationTimestamp(conversation.lastMessage.createdAt)
-						}}
-					</span>
+					<div
+						class="flex justify-between dark:text-gray-700 text-gray-400 text-sm"
+					>
+						<p class="truncate line-clamp-1 w-64">
+							{{ conversation.lastMessage.message }}
+						</p>
+						<span>
+							{{
+								convertConversationTimestamp(conversation.lastMessage.createdAt)
+							}}
+						</span>
+					</div>
 				</div>
-				<p
-					class="dark:text-gray-700 text-gray-700 truncate line-clamp-1 text-sm"
-				>
-					{{ conversation.lastMessage.message }}
-				</p>
 			</div>
 		</div>
 	</template>
@@ -97,7 +100,7 @@
 		>
 			<UIcon
 				name="i-heroicons-arrow-path"
-				class="w-10 h-10 dark:text-gray-700 text-gray-200 animate-spin"
+				class="w-10 h-10 dark:text-gray-700 text-black animate-spin"
 			/>
 		</div>
 		<div

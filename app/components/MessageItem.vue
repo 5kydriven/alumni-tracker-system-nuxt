@@ -28,8 +28,8 @@
 			<p
 				:class="
 					props.currentUid == props.senderUid
-						? 'bg-gray-400 dark:bg-primary-800 rounded-tr-none  rounded-lg'
-						: 'bg-primary-400 dark:bg-gray-800  rounded-tl-none rounded-lg'
+						? 'bg-primary-500 text-white rounded-tr-none  rounded-lg'
+						: 'bg-gray-300  rounded-tl-none rounded-lg'
 				"
 				class="px-2 py-1 text-wrap"
 			>
