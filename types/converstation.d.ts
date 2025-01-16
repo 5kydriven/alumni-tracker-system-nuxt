@@ -1,20 +1,23 @@
 declare global {
-	interface conversations {
+	interface Conversations {
 		id?: string;
 		uid?: string;
-		type?: conversationType;
+		type?: ConversationType;
+		isGroup?: boolean;
+		participantName: string;
 		participants?: array;
 		createdAt?: any;
 		lastMessage?: lastMessage;
 	}
 
-	interface lastMessage {
+	interface LastMessage {
 		senderUid?: string;
 		message?: string;
 		createdAt?: any;
+		name?: string;
 	}
 
-	type conversationType = 'private' | 'group';
+	type ConversationType = 'private' | 'group';
 }
 
-export { conversations, lastMessage, conversationType };
+export { Conversations, LastMessage, ConversationType };

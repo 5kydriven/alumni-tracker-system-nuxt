@@ -25,9 +25,12 @@
 				</div>
 			</div>
 
-			<AlumniConversationItem @itemClicked="handleClick" />
+			<ConversationContainer
+				@itemClicked="handleClick"
+				class="xl:h-[calc(100vh-73px)]"
+			/>
 		</div>
 
-		<AlumniMessage />
+		<MessageContainer />
 	</div>
 </template>

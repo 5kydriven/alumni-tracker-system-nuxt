@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import {
-		addDoc,
 		collection,
 		doc,
 		getDoc,
@@ -9,14 +8,13 @@
 		query,
 	} from 'firebase/firestore';
 
-	const store = useChatStore();
 	const db = useFirestore();
 	const route = useRoute();
-	const router = useRouter();
-	const isLoading = ref(false);
-
 	const user = useCurrentUser();
+	const { getParticipantName } = useConversation();
+	const isLoading = ref(false);
 	const message = ref('');
+	const participant = ref();
 
 	const messages = ref([]);
 	const messagesRef = query(
@@ -24,9 +22,14 @@
 		orderBy('createdAt', 'asc'),
 	);
 
-	const unscribe = onSnapshot(
+	const unsubscribe = onSnapshot(
 		messagesRef,
-		(querySnapshot) => {
+		async (querySnapshot) => {
+			participant.value = await getParticipantName(
+				route.params.uid.toString(),
+				db,
+				user.value.uid,
+			);
 			messages.value = querySnapshot.docs.map((doc) => ({
 				uid: doc.id,
 				...doc.data(),
@@ -35,10 +38,6 @@
 		(error) => {
 			console.error('Error listening to real-time updates:', error);
 		},
-	);
-
-	const user2 = await getDoc(
-		doc(db, 'conversations', route.params.uid.toString()),
 	);
 
 	async function handleSubmit() {
@@ -51,7 +50,6 @@
 				name: user.value.displayName,
 			}),
 		});
-		// store.storeMessage({ content: message.value, uid: user.value.uid });
 		message.value = '';
 		isLoading.value = false;
 		console.log(res);
@@ -65,8 +63,6 @@
 		}
 	}
 
-	watch(messages, () => console.log(messages.value));
-
 	watch(messages, async () => {
 		await nextTick();
 		scrollToBottom();
@@ -77,25 +73,13 @@
 	});
 
 	onUnmounted(() => {
-		unscribe();
+		unsubscribe();
 	});
 </script>
 
 <template>
 	<div class="w-full flex flex-col">
-		<div class="h-16 p-4 flex items-center gap-2 w-full shrink-0">
-			<UButton
-				icon="i-heroicons-chevron-left"
-				color="white"
-				variant="ghost"
-				class="md:hidden"
-				@click="router.back()"
-			/>
-			<UAvatar :alt="user2.data().name" />
-			<label class="text-black text-lg font-bold">
-				{{ user2.data().name }}
-			</label>
-		</div>
+		<MessageHeader :participantName="participant" />
 
 		<div
 			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1"
@@ -110,6 +94,7 @@
 					:currentUid="user.uid"
 					:key="index"
 				/>
+
 				<div ref="scrollBottomRef"></div>
 			</div>
 		</div>
