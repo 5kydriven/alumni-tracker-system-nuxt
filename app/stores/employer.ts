@@ -12,7 +12,7 @@ export const useEmployerStore = defineStore('employerStore', () => {
 
 		const res = await $fetch<H3Response>('/api/employer/job', {
 			method: 'POST',
-			body: JSON.stringify({ ...job, uid }),
+			body: JSON.stringify({ ...job, employerUid: uid }),
 		});
 
 		jobs.value.push({ ...job, uid: res.data.uid });

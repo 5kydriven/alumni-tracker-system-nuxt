@@ -17,13 +17,18 @@ export default defineEventHandler(async (event) => {
 		const userDetails = await getAuth().createUser({
 			email: body.email,
 			password: body.password,
+			displayName: body.name,
 		});
 
 		const userRef = db.collection('users').doc(userDetails.uid);
-		batch.set(userRef, { ...body, createdAt: Timestamp.now() });
+		batch.set(
+			userRef,
+			{ ...body, createdAt: Timestamp.now() },
+			{ merge: true },
+		);
 
 		const roleRef = db.collection(body.role).doc(userDetails.uid);
-		batch.set(roleRef, { ...body, uid: userDetails.uid });
+		batch.set(roleRef, { ...body, uid: userDetails.uid }, { merge: true });
 
 		const result = await batch.commit();
 
