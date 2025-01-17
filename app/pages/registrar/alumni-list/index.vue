@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { RegistrarModalAdd, RegistrarSlideOver } from '#components';
+	import { RegistrarModalAdd, RegistrarSlideOver, UButton } from '#components';
 	import useComposableToast from '~/composables/useToastComposables';
 
 	definePageMeta({
@@ -9,14 +9,23 @@
 	const slideOver = useSlideover();
 	const modal = useModal();
 	const store = useRegistrarStore();
+	const nuxtApp = useNuxtApp();
 	const { toastResponse } = useComposableToast();
 
-	const { status, data: alumni } = await useLazyFetch<Alumni[]>(
-		'/api/registrar/alumni',
-		{
-			method: 'GET',
+	const {
+		status,
+		data: alumni,
+		refresh,
+	} = useLazyFetch<Alumni[]>('/api/registrar/alumni', {
+		method: 'GET',
+		getCachedData: (key) => {
+			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+			if (cachedData) {
+				return cachedData;
+			}
+			return null;
 		},
-	);
+	});
 
 	watch(alumni, (val) => {
 		console.log(val);
@@ -106,6 +115,10 @@
 			multiple
 			placeholder="Display"
 		/>
+		<UButton
+			label="refresh"
+			@click="async () => await refresh()"
+		/>
 	</SubNavbar>
 	<UTable
 		:loading="status != 'success' ? true : false"
@@ -117,7 +130,7 @@
 			icon: 'i-heroicons-circle-stack-20-solid',
 			label: 'No items.',
 		}"
-		:rows="store.alumni"
+		:rows="alumni"
 		:columns="columns"
 		:ui="{
 			th: {
