@@ -22,6 +22,7 @@ declare global {
 
 	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';
 	type Gender = 'female' | 'male' | 'other';
+	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 
 	interface Address {
 		province?: string;
@@ -30,4 +31,4 @@ declare global {
 	}
 }
 
-export { Alumni, AlumniStatus, Address, Gender };
+export { Alumni, AlumniStatus, Address, Gender, Course };

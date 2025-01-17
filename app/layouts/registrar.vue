@@ -19,38 +19,39 @@
 			to: '/registrar/messages/',
 		},
 	]);
+
+	function handleSignOut() {
+		signOut(auth);
+		clearCacheData();
+	}
 </script>
 
 <template>
 	<div class="h-screen flex">
 		<aside
-			class="w-[225px] flex-col hidden lg:flex bg-zuccini-500 h-full px-4 shrink-0"
-		>
+			class="w-[225px] flex-col hidden lg:flex bg-zuccini-500 h-full px-4 shrink-0">
 			<div class="h-16 flex items-center gap-2">
 				<NuxtImg
 					src="/cpsu-logo.png"
 					width="36"
-					height="36"
-				/>
+					height="36" />
 				<label class="font-bold text-white">CPSU</label>
 			</div>
 			<UVerticalNavigation
 				:links="links"
-				class="grow py-2"
-			>
+				class="grow py-2">
 				<template #default="{ link }">
 					<span class="group-hover:text-black relative">{{ link.label }}</span>
 				</template>
 			</UVerticalNavigation>
 			<div class="py-4">
 				<UButton
-					@click="signOut(auth)"
+					@click="handleSignOut"
 					label="Sign out"
 					icon="i-heroicons-arrow-left-end-on-rectangle"
 					variant="solid"
 					class="w-full text-black"
-					color="yellow"
-				/>
+					color="yellow" />
 			</div>
 		</aside>
 		<div class="flex flex-col h-full flex-1 overflow-auto">

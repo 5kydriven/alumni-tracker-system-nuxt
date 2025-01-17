@@ -1,6 +1,7 @@
 import { H3Event } from 'h3';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import generateSearchKeywords from '~~/server/utils/searchKeywords';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -37,6 +38,8 @@ export default eventHandler(async (event: H3Event) => {
 					docRef,
 					{
 						...item,
+						name: item.name.toLowerCase(),
+						searchKeywords: generateSearchKeywords(item.name),
 						email,
 						password,
 						isUpdated: false,
@@ -52,7 +55,8 @@ export default eventHandler(async (event: H3Event) => {
 						role: 'alumni',
 						email,
 						password,
-						name: item.name,
+						name: item.name.toLowerCase(),
+						searchKeywords: generateSearchKeywords(item.name),
 						createdAt: Timestamp.now(),
 						userCredentials: {
 							batch: item.batch,

@@ -12,27 +12,7 @@
 	const nuxtApp = useNuxtApp();
 	const { toastResponse } = useComposableToast();
 
-	const {
-		status,
-		data: alumni,
-		refresh,
-	} = useLazyFetch<Alumni[]>('/api/registrar/alumni', {
-		method: 'GET',
-		getCachedData: (key) => {
-			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-			if (cachedData) {
-				return cachedData;
-			}
-			return null;
-		},
-	});
-
-	watch(alumni, (val) => {
-		console.log(val);
-		store.loadAlumni(alumni.value);
-	});
-
-	const columns = [
+	const defaultColumns = [
 		{ key: 'id', label: 'ID' },
 		{ key: 'name', label: 'Name' },
 		{ key: 'course', label: 'Course' },
@@ -42,17 +22,28 @@
 		{ key: 'status', label: 'Status' },
 		{ key: 'actions', label: '' },
 	];
+	const courses = ['BSIT', 'BSCRIM', 'BSED', 'BSAB', 'BSHM', 'BEED'];
+	const statuses = ['unknown', 'unemployed', 'employed'];
 
-	const people = ['Wade Cooper', 'Arlene Mccoy', 'Devon Webb'];
+	const q = ref();
+	const selectedColumns = ref(defaultColumns);
+	const selectedCourses = ref<Course[]>([]);
+	const selectedStatuses = ref<AlumniStatus[]>([]);
+	const selected = ref<Alumni[]>([]);
 
-	const selected = ref<Alumni[]>();
-	async function handleDelete(uid: string) {
-		const res = await store.deleteAlumni(uid);
-		toastResponse(res);
-	}
-
+	const filteredColumns = computed(() =>
+		defaultColumns.filter((column) => column.key !== 'actions'),
+	);
+	const columns = computed(() =>
+		defaultColumns.filter((column) => selectedColumns.value.includes(column)),
+	);
+	const query = computed(() => ({
+		q: q.value,
+		courses: selectedCourses.value,
+		statuses: selectedStatuses.value,
+	}));
 	const statusColors = computed(() => {
-		return (status: any): any => {
+		return (status: AlumniStatus): any => {
 			switch (status.toLowerCase()) {
 				case 'unemployed':
 					return 'yellow';
@@ -64,6 +55,41 @@
 			}
 		};
 	});
+
+	const {
+		status,
+		data: alumni,
+		refresh,
+	} = useLazyFetch<Alumni[]>('/api/registrar/alumni', {
+		key: 'alumni',
+		method: 'GET',
+		query,
+		default: () => [],
+		getCachedData: (key) => {
+			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+			if (cachedData) {
+				return cachedData;
+			}
+			return null;
+		},
+		watch: [q],
+	});
+
+	async function handleDelete(uid: string) {
+		const res = await store.deleteAlumni(uid);
+		await refresh();
+		toastResponse(res);
+	}
+
+	async function handleSelectedDelete() {
+		const res = await $fetch<H3Response>('/api/registrar/alumni', {
+			method: 'DELETE',
+			body: JSON.stringify(selected.value),
+		});
+		await refresh();
+		selected.value = [];
+		toastResponse(res);
+	}
 </script>
 
 <template>
@@ -77,19 +103,17 @@
 				icon="i-heroicons-bars-3"
 				variant="ghost"
 				color="white"
-				size="sm"
-			/>
+				size="sm" />
 			<label class="font-bold text-lg text-yellow-400">Alumni's</label>
 		</div>
 		<div class="flex items-center w-full justify-end gap-4">
-			<!-- <UInput
-          icon="i-heroicons-magnifying-glass-20-solid"
-          size="sm"
-          color="white"
-          :trailing="false"
-          placeholder="Search..."
-          v-model="q"
-        /> -->
+			<UInput
+				icon="i-heroicons-magnifying-glass-20-solid"
+				size="sm"
+				color="white"
+				:trailing="false"
+				placeholder="Search..."
+				v-model="q" />
 			<UButton
 				icon="i-heroicons-pencil-square"
 				size="sm"
@@ -97,28 +121,37 @@
 				variant="solid"
 				label="Add Alumni"
 				trailing
-				@click="modal.open(RegistrarModalAdd)"
-			/>
+				@click="modal.open(RegistrarModalAdd)" />
 		</div>
 	</Navbar>
 	<SubNavbar>
 		<div class="flex items-center gap-4 w-full">
-			<!-- <USelectMenu multiple placeholder="Select Status" /> -->
 			<USelectMenu
-				:options="people"
 				multiple
-				placeholder="Location"
-			/>
+				v-model="selectedStatuses"
+				placeholder="Select Status"
+				:options="statuses" />
+			<USelectMenu
+				:options="courses"
+				v-model="selectedCourses"
+				multiple
+				placeholder="Select Course" />
 		</div>
-		<USelectMenu
-			:options="people"
-			multiple
-			placeholder="Display"
-		/>
-		<UButton
-			label="refresh"
-			@click="async () => await refresh()"
-		/>
+		<div class="flex gap-2 items-center">
+			<UButton
+				icon="i-heroicons-trash-solid"
+				label="Delete"
+				color="red"
+				@click="handleSelectedDelete"
+				v-show="selected.length > 0" />
+			<USelectMenu
+				v-model="selectedColumns"
+				icon="i-heroicons-adjustments-horizontal-solid"
+				:options="filteredColumns"
+				multiple>
+				<template #label> Display </template>
+			</USelectMenu>
+		</div>
 	</SubNavbar>
 	<UTable
 		:loading="status != 'success' ? true : false"
@@ -132,13 +165,16 @@
 		}"
 		:rows="alumni"
 		:columns="columns"
+		v-model="selected"
 		:ui="{
 			th: {
 				base: 'sticky z-10 top-0 bg-gray-100',
 			},
-		}"
-	>
+		}">
 		<template #id-data="{ index }">{{ index + 1 }}</template>
+		<template #name-data="{ row }"
+			><span class="capitalize">{{ row.name }}</span></template
+		>
 		<template #status-data="{ row }">
 			<UBadge
 				variant="subtle"
@@ -162,13 +198,11 @@
 							},
 						},
 					],
-				]"
-			>
+				]">
 				<UButton
 					color="gray"
 					variant="ghost"
-					icon="i-heroicons-ellipsis-horizontal-20-solid"
-				/>
+					icon="i-heroicons-ellipsis-horizontal-20-solid" />
 			</UDropdown>
 		</template>
 	</UTable>
