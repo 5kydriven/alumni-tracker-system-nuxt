@@ -8,7 +8,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!doc.exists) {
 			throw createError({
 				statusCode: 404,
-				statusMessage: 'Not found',
+				statusMessage: 'not found',
 				message: 'Job not found',
 				data: { uid: param },
 			});

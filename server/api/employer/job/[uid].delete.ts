@@ -9,7 +9,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!params) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully deleted job',
 			body: res,
 		} as H3Response;

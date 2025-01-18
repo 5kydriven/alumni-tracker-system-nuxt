@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Successfully deleted a user',
 			data: [result, user],
 		};

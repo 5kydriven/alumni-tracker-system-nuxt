@@ -27,8 +27,11 @@ export default eventHandler(async (event: H3Event) => {
 			queryRef = queryRef.where('status', 'in', statusArray);
 		}
 
+		if (offset) {
+			queryRef = queryRef.offset(Number(offset));
+		}
+
 		queryRef = queryRef.limit(Number(limit));
-		queryRef = queryRef.offset(Number(offset));
 
 		const snapShot = await queryRef.get();
 		const countSnap = await db.collection('alumni').count().get();

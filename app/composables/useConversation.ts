@@ -1,28 +1,32 @@
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 export default function useConversation() {
-	const conversations = useState<Conversations[]>('conversations', () => null);
+	const conversations = useState<Conversations[]>('conversations', () => []);
 
 	function fetchConversations(user: any, q: any, db: any) {
-		const unsubcribe = onSnapshot(q, async (querySnapshot: any) => {
-			const snapshot = [];
-			for (const docSnap of querySnapshot.docs) {
+		const unsubscribe = onSnapshot(q, async (querySnapshot: any) => {
+			const snapshotPromises = querySnapshot.docs.map(async (docSnap: any) => {
 				const conversation = docSnap.data();
-				const participantName = await getParticipantName(
-					docSnap.id,
-					db,
-					user.value.uid,
-				);
+				const conversationId = docSnap.id;
 
-				snapshot.push({
-					...conversation,
-					id: docSnap.id,
-					participantName,
-				});
-			}
+				if (conversation.isGroup) {
+					return { ...conversation, id: conversationId };
+				} else {
+					const name = await getParticipantName(
+						conversationId,
+						db,
+						user.value.uid,
+					);
+					return { ...conversation, id: conversationId, name };
+				}
+			});
+
+			const snapshot = await Promise.all(snapshotPromises);
+			console.log(snapshot);
 			conversations.value = snapshot;
 		});
-		return unsubcribe;
+
+		return unsubscribe;
 	}
 
 	async function getParticipantName(
@@ -30,13 +34,22 @@ export default function useConversation() {
 		db: any,
 		currentUid: string,
 	) {
-		const chatDoc = await getDoc(doc(db, 'conversations', conversationUid));
-
-		const participants = chatDoc.data().participants;
-		const participantId = participants.find((id: string) => id !== currentUid);
-		const participantDoc = await getDoc(doc(db, 'users', participantId));
-
-		return participantDoc.data().name;
+		try {
+			const chatDoc = await getDoc(doc(db, 'conversations', conversationUid));
+			const participants = chatDoc.data().participants;
+			const participantId = participants.find(
+				(id: string) => id !== currentUid,
+			);
+			if (chatDoc.data().isGroup) {
+				return chatDoc.data().name;
+			} else {
+				const participantDoc = await getDoc(doc(db, 'users', participantId));
+				return participantDoc.data()?.name;
+			}
+		} catch (error) {
+			console.error('Error fetching participant name:', error);
+			return '';
+		}
 	}
 
 	return {

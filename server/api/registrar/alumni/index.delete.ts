@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!body || body.length === 0) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No body provided',
 			});
 		}
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: "Successfully deleted alumni's",
 			data: [result, users],
 		};

@@ -1,7 +1,7 @@
 declare global {
-	interface PaginatedResponse<T> {
-		data: T[];
-		total: number;
+	interface PaginatedResponse<T = any> {
+		data?: T;
+		total?: number;
 	}
 }
 

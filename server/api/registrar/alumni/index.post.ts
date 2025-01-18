@@ -10,7 +10,7 @@ export default eventHandler(async (event: H3Event) => {
 		if (!body) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'Body has no content',
 			});
 		}
@@ -75,7 +75,7 @@ export default eventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Successfully created alumni',
 			data: result,
 		} as H3Response;
@@ -84,7 +84,7 @@ export default eventHandler(async (event: H3Event) => {
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'Conflict',
+				statusMessage: 'conflict',
 				message: 'Email already exists',
 				data: error,
 			});

@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 		if (!body) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'Body has no content',
 			});
 		}
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Successfully created user',
 			data: result,
 		};
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'Conflict',
+				statusMessage: 'conflict',
 				message: 'Email already exists',
 				data: error,
 			});

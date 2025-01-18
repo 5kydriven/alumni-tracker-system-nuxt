@@ -4,7 +4,7 @@ declare global {
 		uid?: string;
 		type?: ConversationType;
 		isGroup?: boolean;
-		participantName: string;
+		name?: string;
 		participants?: array;
 		createdAt?: any;
 		lastMessage?: lastMessage;

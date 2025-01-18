@@ -37,7 +37,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
 		} as H3Response;
 	} catch (error: any) {

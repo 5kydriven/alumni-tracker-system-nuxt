@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 	if (!idToken) {
 		throw createError({
 			statusCode: 400,
-			statusMessage: 'ID Token is required',
+			statusMessage: 'unauthorized',
 		});
 	}
 
@@ -28,6 +28,6 @@ export default defineEventHandler(async (event) => {
 		return { success: true };
 	} catch (error) {
 		console.error('Session creation failed:', error);
-		throw createError({ statusCode: 401, statusMessage: 'Invalid ID Token' });
+		throw createError({ statusCode: 401, statusMessage: 'unauthorized' });
 	}
 });

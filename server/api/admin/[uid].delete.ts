@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!doc.exists) {
 			throw createError({
 				statusCode: 404,
-				statusMessage: 'Not found',
+				statusMessage: 'not found',
 				message: 'Alumni not found',
 			});
 		}
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Successfully deleted a user',
 			data: { doc: doc, user: user },
 		} as H3Response;

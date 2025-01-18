@@ -8,7 +8,7 @@ export default eventHandler(async (event: H3Event) => {
 		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
