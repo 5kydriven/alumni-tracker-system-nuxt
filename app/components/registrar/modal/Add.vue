@@ -3,11 +3,11 @@
 	import useComposableToast from '~/composables/useToastComposables';
 	import { useRegistrarStore } from '~/stores/registrar';
 
-	const modal = useModal();
 	const store = useRegistrarStore();
 	const { toastResponse } = useComposableToast();
 
 	const csvData = ref();
+	const isLoading = ref(false);
 
 	const handleFileChange = (files: FileList) => {
 		const file = files.item(0);
@@ -26,11 +26,20 @@
 	};
 
 	async function handleSubmit() {
-		const res = await store.storeAlumni(csvData.value);
+		isLoading.value = true;
+		const res = await $fetch('/api/registrar/alumni', {
+			method: 'POST',
+			body: JSON.stringify(csvData.value),
+		});
 		await refreshNuxtData('alumni');
 		toastResponse(res);
-		modal.close();
+		isLoading.value = false;
+		emits('close');
 	}
+
+	const emits = defineEmits<{
+		close: [];
+	}>();
 </script>
 
 <template>
@@ -53,7 +62,7 @@
 						variant="ghost"
 						icon="i-heroicons-x-mark-20-solid"
 						class="-my-1"
-						@click="modal.close()" />
+						@click="emits('close')" />
 				</div>
 			</template>
 
@@ -75,12 +84,12 @@
 						color="gray"
 						variant="solid"
 						label="Cancel"
-						@click="modal.close()" />
+						@click="emits('close')" />
 					<UButton
 						variant="solid"
 						label="Upload"
 						type="submit"
-						:loading="store.isLoading" />
+						:loading="isLoading" />
 				</div>
 			</template>
 		</UCard>

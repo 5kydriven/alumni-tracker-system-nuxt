@@ -12,19 +12,18 @@ export default defineEventHandler(async (event) => {
 
 		batch.delete(db.collection(role).doc(uid));
 		batch.delete(db.collection('users').doc(uid));
-		await batch.commit();
+		const result = await batch.commit();
 
-		await getAuth().deleteUser(uid);
+		const user = await getAuth().deleteUser(uid);
 
 		return {
-			status: 200,
+			statusCode: 200,
+			statusMessage: 'success',
 			message: 'Successfully deleted a user',
+			data: [result, user],
 		};
-	} catch (err: any) {
-		console.log('/registrar/alumni.delete: ', err);
-		return {
-			status: 400,
-			message: 'Something went wrong!',
-		};
+	} catch (error: any) {
+		console.log('/registrar/alumni.delete: ', error);
+		return errorResponse(error);
 	}
 });

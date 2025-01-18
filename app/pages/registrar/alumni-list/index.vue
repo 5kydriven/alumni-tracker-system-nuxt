@@ -1,6 +1,11 @@
 <script setup lang="ts">
-	import { RegistrarModalAdd, RegistrarSlideOver, UButton } from '#components';
-	import useComposableToast from '~/composables/useToastComposables';
+	import {
+		RegistrarModalAdd,
+		RegistrarModalDelete,
+		RegistrarModalDeleteMultiple,
+		RegistrarSlideOver,
+		UButton,
+	} from '#components';
 
 	definePageMeta({
 		layout: 'registrar',
@@ -8,9 +13,7 @@
 
 	const slideOver = useSlideover();
 	const modal = useModal();
-	const store = useRegistrarStore();
 	const nuxtApp = useNuxtApp();
-	const { toastResponse } = useComposableToast();
 
 	const defaultColumns = [
 		{ key: 'uid', label: 'ID' },
@@ -61,42 +64,32 @@
 		};
 	});
 
-	const {
-		status,
-		data: alumni,
-		refresh,
-	} = useLazyFetch('/api/registrar/alumni', {
-		key: 'alumni',
-		method: 'GET',
-		query,
-		default: () => {},
-		getCachedData: (key) => {
-			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-			if (cachedData) {
-				return cachedData;
-			}
-			return null;
+	const { status, data: alumni } = useLazyFetch<PaginatedResponse<Alumni[]>>(
+		'/api/registrar/alumni',
+		{
+			key: 'alumni',
+			method: 'GET',
+			query,
+			default: () => ({
+				data: [],
+				total: 0,
+			}),
+			getCachedData: (key) => {
+				const cachedData =
+					nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+				if (cachedData) {
+					return cachedData;
+				}
+				return null;
+			},
+			watch: [q, page],
 		},
-		watch: [q, page],
-	});
+	);
 
-	async function handleDelete(uid: string) {
-		const res = await store.deleteAlumni(uid);
-		await refresh();
-		toastResponse(res);
-	}
-
-	async function handleSelectedDelete() {
-		const res = await $fetch<H3Response>('/api/registrar/alumni', {
-			method: 'DELETE',
-			body: JSON.stringify(selected.value),
-		});
-		await refresh();
+	function onClosed() {
+		modal.close();
 		selected.value = [];
-		toastResponse(res);
 	}
-
-	watch(alumni, () => console.log(alumni.value));
 </script>
 
 <template>
@@ -129,7 +122,7 @@
 				color="gray"
 				variant="solid"
 				trailing
-				@click="modal.open(RegistrarModalAdd)">
+				@click="modal.open(RegistrarModalAdd, { onClose: modal.close })">
 				<span class="hidden md:block">Import Alumni</span>
 			</UButton>
 		</div>
@@ -152,7 +145,12 @@
 				icon="i-heroicons-trash-solid"
 				label="Delete"
 				color="red"
-				@click="handleSelectedDelete"
+				@click="
+					modal.open(RegistrarModalDeleteMultiple, {
+						onClose: onClosed,
+						selected: selected,
+					})
+				"
 				v-show="selected.length > 0" />
 			<USelectMenu
 				v-model="selectedColumns"
@@ -209,7 +207,10 @@
 							label: 'Delete',
 							icon: 'i-heroicons-trash-20-solid',
 							click: () => {
-								handleDelete(row.uid);
+								modal.open(RegistrarModalDelete, {
+									uid: row.uid,
+									onClose: modal.close,
+								});
 							},
 						},
 					],
