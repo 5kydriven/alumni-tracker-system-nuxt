@@ -1,4 +1,8 @@
 <script setup lang="ts">
+	import { RegistrarMessageAdd } from '#components';
+
+	const modal = useModal();
+
 	const emits = defineEmits<{
 		click?: [];
 	}>();
@@ -21,15 +25,15 @@
 					icon="i-heroicons-bars-3"
 					variant="ghost"
 					color="white"
-					size="sm"
-				/>
-				<label class="text-lg font-bold text-gray-900">Messages</label>
+					size="sm" />
+				<label class="text-lg font-bold text-gray-900">Chats</label>
 			</div>
 			<UButton
 				color="yellow"
 				icon="i-heroicons-pencil-square-solid"
 				:class="!props.isShowButton ? 'hidden' : 'text-black'"
-			/>
+				label="New chat"
+				@click="modal.open(RegistrarMessageAdd, { onClose: modal.close })" />
 		</div>
 	</div>
 </template>

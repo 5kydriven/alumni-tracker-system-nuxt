@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import {
-		RegistrarModalAdd,
-		RegistrarModalDelete,
-		RegistrarModalDeleteMultiple,
+		RegistrarAlumniAdd,
+		RegistrarAlumniDelete,
+		RegistrarAlumniDeleteMultiple,
 		RegistrarSlideOver,
 		UButton,
 	} from '#components';
@@ -122,7 +122,7 @@
 				color="gray"
 				variant="solid"
 				trailing
-				@click="modal.open(RegistrarModalAdd, { onClose: modal.close })">
+				@click="modal.open(RegistrarAlumniAdd, { onClose: modal.close })">
 				<span class="hidden md:block">Import Alumni</span>
 			</UButton>
 		</div>
@@ -146,7 +146,7 @@
 				label="Delete"
 				color="red"
 				@click="
-					modal.open(RegistrarModalDeleteMultiple, {
+					modal.open(RegistrarAlumniDeleteMultiple, {
 						onClose: onClosed,
 						selected: selected,
 					})
@@ -207,7 +207,7 @@
 							label: 'Delete',
 							icon: 'i-heroicons-trash-20-solid',
 							click: () => {
-								modal.open(RegistrarModalDelete, {
+								modal.open(RegistrarAlumniDelete, {
 									uid: row.uid,
 									onClose: modal.close,
 								});
