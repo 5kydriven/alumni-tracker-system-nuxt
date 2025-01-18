@@ -10,6 +10,8 @@
 		},
 	];
 
+	const batch = ['2025', '2026'];
+
 	const isGroup = ref(false);
 	const message = ref('');
 
@@ -54,11 +56,18 @@
 					:items="items"
 					@change="onChanged" />
 
-				<div v-if="isGroup">
+				<div
+					v-if="isGroup"
+					class="flex flex-col gap-2">
 					<UFormGroup
 						label="Group name"
 						required>
 						<UInput />
+					</UFormGroup>
+					<UFormGroup
+						label="Select Batch"
+						required>
+						<USelectMenu :options="batch" />
 					</UFormGroup>
 				</div>
 
@@ -68,7 +77,7 @@
 					<UFormGroup
 						label="Receiver Name"
 						required>
-						<UInput />
+						<UInput placeholder="search name..." />
 					</UFormGroup>
 
 					<UTextarea

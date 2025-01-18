@@ -27,7 +27,7 @@
 
 	async function handleSubmit() {
 		isLoading.value = true;
-		const res = await $fetch('/api/registrar/alumni', {
+		const res = await $fetch<H3Response<any>>('/api/registrar/alumni', {
 			method: 'POST',
 			body: JSON.stringify(csvData.value),
 		});

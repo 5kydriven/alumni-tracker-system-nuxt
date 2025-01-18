@@ -32,17 +32,14 @@
 		<template v-else>
 			<div class="w-full xl:w-80">
 				<div
-					class="flex flex-col xl:gap-4 gap-2 p-4 border border-gray-300 shadow-lg dark:border-gray-800 rounded sticky top-4 bg-white"
-				>
+					class="flex flex-col xl:gap-4 gap-2 p-4 border border-gray-300 shadow-lg dark:border-gray-800 rounded sticky top-4 bg-white">
 					<USkeleton class="w-[110px] h-[24px]" />
 					<div
-						class="flex flex-wrap xl:flex-col gap-2 justify-between xl:gap-1.5"
-					>
+						class="flex flex-wrap xl:flex-col gap-2 justify-between xl:gap-1.5">
 						<div
 							class="flex items-center gap-2"
 							v-for="(item, index) in 4"
-							:key="index"
-						>
+							:key="index">
 							<USkeleton class="w-[36px] h-[36px]" />
 							<div class="flex flex-col gap-2">
 								<USkeleton class="w-[75px] h-[36px]" />
@@ -53,8 +50,7 @@
 			</div>
 
 			<div
-				class="flex-1 flex flex-col bg-white border-gray-300 border rounded-lg p-4 shadow-lg"
-			>
+				class="flex-1 flex flex-col bg-white border-gray-300 border rounded-lg p-4 shadow-lg">
 				<div class="flex justify-between items-center">
 					<div class="flex items-center gap-2">
 						<USkeleton class="w-[48px] h-[48px]" />
