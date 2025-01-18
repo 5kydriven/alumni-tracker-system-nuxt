@@ -3,7 +3,7 @@ import { getFirestore, Query } from 'firebase-admin/firestore';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const { q, courses, statuses } = getQuery(event);
+	const { q, courses, statuses, limit, offset } = getQuery(event);
 	try {
 		let queryRef: Query = db.collection('alumni').orderBy('name', 'asc');
 		if (q) {
@@ -13,8 +13,6 @@ export default eventHandler(async (event: H3Event) => {
 				'array-contains',
 				queryLowerCase,
 			);
-			// .where('name', '>=', queryLowerCase)
-			// .where('name', '<=', queryLowerCase + '\uf8ff');
 		}
 
 		if (courses) {
@@ -28,9 +26,22 @@ export default eventHandler(async (event: H3Event) => {
 
 			queryRef = queryRef.where('status', 'in', statusArray);
 		}
-		const snapShot = await queryRef.get();
 
-		return snapShot.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+		queryRef = queryRef.limit(Number(limit));
+		queryRef = queryRef.offset(Number(offset));
+
+		const snapShot = await queryRef.get();
+		const countSnap = await db.collection('alumni').count().get();
+
+		const alumni = snapShot.docs.map((doc) => ({
+			...doc.data(),
+			uid: doc.id,
+		})) as Alumni[];
+
+		return {
+			data: alumni,
+			total: countSnap.data().count,
+		};
 	} catch (error) {
 		console.log('/alumni.get: ', error);
 	}

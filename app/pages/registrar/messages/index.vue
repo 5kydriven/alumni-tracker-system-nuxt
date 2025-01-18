@@ -16,16 +16,13 @@
 <template>
 	<div class="flex h-full">
 		<div
-			class="border-gray-200 border-r drop-shadow-sm flex flex-col md:max-w-sm w-full flex-none"
-		>
+			class="border-gray-200 border-r drop-shadow-sm flex flex-col md:max-w-sm w-full flex-none">
 			<ConversationHeader
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
 				"
-				isShowButton
-			/>
+				isShowButton />
 			<ConversationContainer @itemClicked="handleClick" />
-			/>
 		</div>
 		<MessageDefault />
 	</div>

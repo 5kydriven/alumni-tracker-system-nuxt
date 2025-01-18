@@ -13,7 +13,7 @@
 	const { toastResponse } = useComposableToast();
 
 	const defaultColumns = [
-		{ key: 'id', label: 'ID' },
+		{ key: 'uid', label: 'ID' },
 		{ key: 'name', label: 'Name' },
 		{ key: 'course', label: 'Course' },
 		{ key: 'email', label: 'Email' },
@@ -26,11 +26,14 @@
 	const statuses = ['unknown', 'unemployed', 'employed'];
 
 	const q = ref();
+	const page = ref(1);
+	const limit = ref(10);
+	const selected = ref<Alumni[]>([]);
 	const selectedColumns = ref(defaultColumns);
 	const selectedCourses = ref<Course[]>([]);
 	const selectedStatuses = ref<AlumniStatus[]>([]);
-	const selected = ref<Alumni[]>([]);
 
+	const offset = computed(() => (page.value - 1) * limit.value);
 	const filteredColumns = computed(() =>
 		defaultColumns.filter((column) => column.key !== 'actions'),
 	);
@@ -41,6 +44,8 @@
 		q: q.value,
 		courses: selectedCourses.value,
 		statuses: selectedStatuses.value,
+		limit: limit.value,
+		offset: offset.value,
 	}));
 	const statusColors = computed(() => {
 		return (status: AlumniStatus): any => {
@@ -60,11 +65,11 @@
 		status,
 		data: alumni,
 		refresh,
-	} = useLazyFetch<Alumni[]>('/api/registrar/alumni', {
+	} = useLazyFetch('/api/registrar/alumni', {
 		key: 'alumni',
 		method: 'GET',
 		query,
-		default: () => [],
+		default: () => {},
 		getCachedData: (key) => {
 			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
 			if (cachedData) {
@@ -72,7 +77,7 @@
 			}
 			return null;
 		},
-		watch: [q],
+		watch: [q, page],
 	});
 
 	async function handleDelete(uid: string) {
@@ -90,6 +95,8 @@
 		selected.value = [];
 		toastResponse(res);
 	}
+
+	watch(alumni, () => console.log(alumni.value));
 </script>
 
 <template>
@@ -104,9 +111,11 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg text-yellow-400">Alumni's</label>
+			<label class="font-bold text-lg text-yellow-400 hidden md:block"
+				>Alumni's</label
+			>
 		</div>
-		<div class="flex items-center w-full justify-end gap-4">
+		<div class="flex items-center w-full justify-end gap-2 md:gap-4">
 			<UInput
 				icon="i-heroicons-magnifying-glass-20-solid"
 				size="sm"
@@ -119,13 +128,14 @@
 				size="sm"
 				color="gray"
 				variant="solid"
-				label="Add Alumni"
 				trailing
-				@click="modal.open(RegistrarModalAdd)" />
+				@click="modal.open(RegistrarModalAdd)">
+				<span class="hidden md:block">Import Alumni</span>
+			</UButton>
 		</div>
 	</Navbar>
 	<SubNavbar>
-		<div class="flex items-center gap-4 w-full">
+		<div class="flex items-center gap-2 md:gap-4 w-full">
 			<USelectMenu
 				multiple
 				v-model="selectedStatuses"
@@ -148,6 +158,7 @@
 				v-model="selectedColumns"
 				icon="i-heroicons-adjustments-horizontal-solid"
 				:options="filteredColumns"
+				class="md:flex hidden"
 				multiple>
 				<template #label> Display </template>
 			</USelectMenu>
@@ -163,15 +174,19 @@
 			icon: 'i-heroicons-circle-stack-20-solid',
 			label: 'No items.',
 		}"
-		:rows="alumni"
+		:rows="alumni ? alumni.data : []"
 		:columns="columns"
 		v-model="selected"
 		:ui="{
 			th: {
 				base: 'sticky z-10 top-0 bg-gray-100',
 			},
+			td: {
+				padding: 'p-2',
+			},
+			wrapper: 'flex-1',
 		}">
-		<template #id-data="{ index }">{{ index + 1 }}</template>
+		<template #uid-data="{ row }">{{ row.uid }}</template>
 		<template #name-data="{ row }"
 			><span class="capitalize">{{ row.name }}</span></template
 		>
@@ -206,4 +221,26 @@
 			</UDropdown>
 		</template>
 	</UTable>
+	<div class="flex py-2 px-4 items-center border-t justify-between">
+		<div>
+			<span class="text-sm leading-5">
+				Showing
+				<span class="font-medium">{{ (page - 1) * limit + 1 }}</span>
+				to
+				<span class="font-medium">{{
+					Math.min(page * limit, alumni && alumni.total)
+				}}</span>
+				of
+				<span class="font-medium">{{ alumni && alumni.total }}</span>
+				results
+			</span>
+		</div>
+		<UPagination
+			v-model="page"
+			:page-count="10"
+			:total="alumni && alumni.total"
+			:to="(page: number) => ({
+      query: { page },
+    })" />
+	</div>
 </template>
