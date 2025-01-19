@@ -1,12 +1,5 @@
 <script setup lang="ts">
-	import {
-		collection,
-		doc,
-		getDoc,
-		onSnapshot,
-		orderBy,
-		query,
-	} from 'firebase/firestore';
+	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 
 	const db = useFirestore();
 	const route = useRoute();
