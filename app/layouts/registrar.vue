@@ -11,7 +11,7 @@
 		{
 			label: 'Alumni',
 			labelClass: 'hover:text-black',
-			to: '/registrar/alumni-list',
+			to: '/registrar/alumni',
 		},
 		{
 			label: 'Messages',

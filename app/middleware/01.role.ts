@@ -1,20 +1,22 @@
-import type { User } from 'firebase/auth';
-
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	// if (import.meta.client) return;
-	const user: User = await getCurrentUser();
+	const user = await getCurrentUser();
 
-	if (!user) {
-		return await navigateTo('/auth', { replace: true });
-	}
+	// if (!user) {
+	// 	return await navigateTo('/auth', { replace: true });
+	// }
 
-	const role = await $fetch(`/api/role/${user.uid}`);
+	const response = await $fetch<H3Response<User<Alumni>>>(
+		`/api/user/${user.uid}`,
+		{
+			method: 'GET',
+		},
+	);
 
-	const path = `/${role}`;
-
-	if (role === 'alumni') {
-		const alumni = await $fetch<Alumni>(`/api/alumni/${user.uid}`);
-		if (!alumni.isUpdated) {
+	const path = `/${response?.data?.role}`;
+	console.log(!response?.data?.userCredentials?.isUpdated);
+	if (response?.data?.role === 'alumni') {
+		if (!response?.data?.userCredentials?.isUpdated) {
 			return await navigateTo('/alumni/update-account', { replace: true });
 		}
 	}

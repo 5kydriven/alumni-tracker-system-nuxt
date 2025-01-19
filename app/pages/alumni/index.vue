@@ -5,6 +5,7 @@
 
 	const user = useCurrentUser();
 	const { data: alumni } = useFetch<Alumni>(`/api/alumni/${user.value.uid}`, {
+		key: 'alumni-profile',
 		method: 'GET',
 	});
 </script>
@@ -14,16 +15,14 @@
 		<AlumniProfile v-bind="alumni" />
 
 		<div
-			class="flex flex-col gap-4 w-full bg-white border-gray-300 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
-		>
+			class="flex flex-col gap-4 w-full bg-white border-gray-300 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800">
 			<label class="font-bold text-lg">Experience</label>
 			<div class="flex flex-col gap-2">
 				<div class="flex items-start gap-2">
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>
@@ -36,8 +35,7 @@
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>
@@ -50,8 +48,7 @@
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>
@@ -64,16 +61,14 @@
 		</div>
 
 		<div
-			class="flex flex-col gap-4 w-full bg-white border border-gray-300 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800"
-		>
+			class="flex flex-col gap-4 w-full bg-white border border-gray-300 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800">
 			<label class="font-bold text-lg">Education</label>
 			<div class="flex flex-col gap-2">
 				<div class="flex items-start gap-2">
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>
@@ -86,8 +81,7 @@
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>
@@ -100,8 +94,7 @@
 					<UAvatar
 						label="P"
 						class="!rounded"
-						size="lg"
-					/>
+						size="lg" />
 					<div class="flex flex-col">
 						<label class="font-bold">Information Technology Intern</label>
 						<span class="font-thin">Newfold Digital</span>

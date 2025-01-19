@@ -11,6 +11,7 @@
 		layout: 'registrar',
 	});
 
+	const router = useRouter();
 	const slideOver = useSlideover();
 	const modal = useModal();
 	const nuxtApp = useNuxtApp();
@@ -200,12 +201,15 @@
 				:items="[
 					[
 						{
-							label: 'Edit',
-							icon: 'i-heroicons-pencil-square-20-solid',
+							label: 'View',
+							icon: 'i-heroicons-eye-solid',
+							click: () => {
+								router.push(`/registrar/alumni/${row.uid}`);
+							},
 						},
 						{
 							label: 'Delete',
-							icon: 'i-heroicons-trash-20-solid',
+							icon: 'i-heroicons-trash-solid',
 							click: () => {
 								modal.open(RegistrarAlumniDelete, {
 									uid: row.uid,

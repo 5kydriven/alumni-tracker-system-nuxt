@@ -35,6 +35,20 @@ export default defineEventHandler(async (event: H3Event) => {
 				{ merge: true },
 			);
 
+		await db
+			.collection('users')
+			.doc(body.uid)
+			.update({
+				password: '********',
+				email: body.email,
+				updatedAt: Timestamp.now(),
+				userCredentials: {
+					...body,
+					isUpdated: true,
+					status: 'unemployed',
+				},
+			});
+
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',

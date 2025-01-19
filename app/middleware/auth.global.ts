@@ -5,7 +5,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	console.log('To Path:', to.path);
 
-	const paths = ['/admin', '/registrar', '/employer', '/alumni'];
+	// if (!user) {
+	// 	return await navigateTo('/auth', { replace: true });
+	// }
+
+	const paths = ['/admin', '/registrar', '/employer', '/alumni', '/'];
 	if (!user && paths.includes(to.path)) {
 		console.log('Redirecting to /auth');
 		return await navigateTo('/auth');

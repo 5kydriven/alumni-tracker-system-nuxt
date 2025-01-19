@@ -4,6 +4,7 @@
 	const props = defineProps<{
 		name?: Conversations['name'];
 		lastMessage?: Conversations['lastMessage'];
+		isGroup?: Conversations['isGroup'];
 	}>();
 </script>
 
@@ -18,7 +19,11 @@
 			<div
 				class="flex justify-between dark:text-gray-700 text-gray-400 text-sm">
 				<p class="truncate line-clamp-1 w-52">
-					{{ props.lastMessage.message }}
+					<span
+						v-show="props.isGroup"
+						class="capitalize font-semibold"
+						>{{ props.lastMessage.name }}: </span
+					>{{ props.lastMessage.message }}
 				</p>
 				<span>
 					{{ convertConversationTimestamp(props.lastMessage.createdAt) }}

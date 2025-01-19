@@ -82,18 +82,15 @@
 		<MessageHeader :participantName="participant" />
 
 		<div
-			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1"
-		>
+			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1">
 			<div
 				ref="messagesContainer"
-				class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2"
-			>
+				class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2">
 				<MessageItem
 					v-for="(item, index) in messages"
 					v-bind="item"
 					:currentUid="user.uid"
-					:key="index"
-				/>
+					:key="index" />
 
 				<div ref="scrollBottomRef"></div>
 			</div>
@@ -101,20 +98,17 @@
 
 		<form
 			@submit.prevent="handleSubmit"
-			class="flex gap-2 p-4"
-		>
+			class="flex gap-2 p-4 bg-white border-t border-gray-300">
 			<UInput
 				placeholder="Type a message"
 				v-model="message"
 				class="w-full"
-				required
-			/>
+				required />
 			<UButton
 				:loading="isLoading"
 				label="send"
 				icon="i-heroicons-paper-airplane"
-				type="submit"
-			/>
+				type="submit" />
 		</form>
 	</div>
 </template>

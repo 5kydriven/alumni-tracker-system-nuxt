@@ -1,7 +1,7 @@
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 export default function useConversation() {
-	const conversations = useState<Conversations[]>('conversations', () => []);
+	const conversations = ref<Conversations[]>(null);
 
 	function fetchConversations(user: any, q: any, db: any) {
 		const unsubscribe = onSnapshot(q, async (querySnapshot: any) => {
@@ -22,7 +22,6 @@ export default function useConversation() {
 			});
 
 			const snapshot = await Promise.all(snapshotPromises);
-			console.log(snapshot);
 			conversations.value = snapshot;
 		});
 
