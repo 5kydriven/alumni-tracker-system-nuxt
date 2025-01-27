@@ -1,9 +1,11 @@
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 export default function useConversation() {
-	const conversations = ref<Conversations[]>(null);
+	const conversations = ref<Conversations[]>([]);
+	const isLoading = ref(false);
 
 	function fetchConversations(user: any, q: any, db: any) {
+		isLoading.value = true;
 		const unsubscribe = onSnapshot(q, async (querySnapshot: any) => {
 			const snapshotPromises = querySnapshot.docs.map(async (docSnap: any) => {
 				const conversation = docSnap.data();
@@ -23,6 +25,7 @@ export default function useConversation() {
 
 			const snapshot = await Promise.all(snapshotPromises);
 			conversations.value = snapshot;
+			isLoading.value = false;
 		});
 
 		return unsubscribe;
@@ -53,6 +56,7 @@ export default function useConversation() {
 
 	return {
 		conversations,
+		isLoading,
 		fetchConversations,
 		getParticipantName,
 	};

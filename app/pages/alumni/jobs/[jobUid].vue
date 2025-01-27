@@ -10,7 +10,7 @@
 		data: job,
 		status,
 		error,
-	} = await useLazyFetch<any>(`/api/job/${route.params.jobUid}`, {
+	} = await useLazyFetch<Job>(`/api/job/${route.params.jobUid}`, {
 		method: 'GET',
 	});
 

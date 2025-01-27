@@ -3,7 +3,7 @@
 
 	const user = useCurrentUser();
 	const db = useFirestore();
-	const { conversations, fetchConversations } = useConversation();
+	const { conversations, fetchConversations, isLoading } = useConversation();
 
 	const conversationsRef = collection(db, 'conversations');
 	const q = query(
@@ -15,40 +15,36 @@
 
 	onUnmounted(() => {
 		unsubcribe();
+		console.log('unsubscribed');
 	});
 
 	const emits = defineEmits(['itemClicked']);
 </script>
 
 <template>
-	<template v-if="conversations">
+	<template v-if="!isLoading && conversations.length > 0">
 		<div class="flex flex-col h-full overflow-auto">
 			<ConversationItem
 				v-for="(conversation, index) in conversations"
 				:key="index"
 				@click="emits('itemClicked', conversation.id)"
-				v-bind="conversation"
-			/>
+				v-bind="conversation" />
 		</div>
 	</template>
 	<template v-else>
 		<div
 			class="w-full h-full flex flex-col justify-center items-center"
-			v-if="conversations == null"
-		>
+			v-if="isLoading">
 			<UIcon
 				name="i-heroicons-arrow-path"
-				class="w-10 h-10 dark:text-gray-700 text-black animate-spin"
-			/>
+				class="w-10 h-10 dark:text-gray-700 text-black animate-spin" />
 		</div>
 		<div
 			class="w-full h-full flex flex-col justify-center gap-2 items-center"
-			v-else
-		>
+			v-else>
 			<UIcon
 				name="i-heroicons-inbox"
-				class="w-14 h-14 dark:text-gray-700 text-gray-500"
-			/>
+				class="w-14 h-14 dark:text-gray-700 text-gray-500" />
 			<div class="dark:text-gray-700 text-black">You have no messages</div>
 		</div>
 	</template>

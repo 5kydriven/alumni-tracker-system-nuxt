@@ -24,6 +24,9 @@ export default defineAppConfig({
 			active: 'text-yellow-500 border-b border-yellow-500 rounded-none',
 			inactive: 'text-white hover:text-yellow hover:bg-transparent',
 		},
+		slideover: {
+			background: 'bg-zuccini-500',
+		},
 		avatar: {
 			background: 'bg-gray-200',
 		},

@@ -28,7 +28,8 @@
 		</div>
 		<div
 			class="flex justify-center items-center h-full w-full px-4 xl:px-16 lg:w-[500px]">
-			<div class="flex flex-col w-full max-w-md gap-4">
+			<div
+				class="flex flex-col w-full max-w-md gap-4 border p-8 rounded-lg shadow-lg lg:border-none lg:shadow-none lg:p-0">
 				<div class="flex gap-2 items-center">
 					<NuxtImg
 						src="/cpsu-logo.png"
@@ -85,6 +86,9 @@
 						block
 						label="Sign in"
 						:loading="isLoading" />
+					<p class="text-sm">
+						Are you an employer? <NuxtLink to="#">Sign up</NuxtLink>
+					</p>
 				</UForm>
 			</div>
 		</div>
