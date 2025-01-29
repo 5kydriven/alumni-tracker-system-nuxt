@@ -2,6 +2,7 @@
 	import { AdminSlideOver } from '#components';
 
 	definePageMeta({
+		// middleware: ['01-role'],
 		layout: 'admin',
 	});
 

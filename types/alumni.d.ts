@@ -18,6 +18,7 @@ declare global {
 		maritalStatus?: string;
 		birthDate?: string;
 		birthPlace?: string;
+		role?: string;
 	}
 
 	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';

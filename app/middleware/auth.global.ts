@@ -13,23 +13,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		return await navigateTo('/');
 	}
 
-	const { data } = await $fetch<H3Response<User<Alumni>>>(
-		`/api/user/${user.uid}`,
-		{
+	if (user && from.path != '/auth') {
+		const { data } = await $fetch<H3Response<Alumni>>(`/api/user/${user.uid}`, {
 			method: 'GET',
-		},
-	);
+		});
 
-	if (user && to.path != `/${data.role}`) {
-		return await navigateTo(`/${data.role}`);
+		if (user && to.path != `/${data.role}`) {
+			return await navigateTo(`/${data.role}`);
+		}
 	}
-
-	// if (user && paths.includes(from.path)) {
-	// 	console.log('Redirecting back to:', from.path);
-	// 	return navigateTo(from.path);
-	// }
-
-	// if (user != null && from.path == '/auth') {
-	// 	return navigateTo('/');
-	// }
 });
