@@ -18,8 +18,7 @@
 					icon="i-heroicons-bars-3"
 					variant="ghost"
 					color="white"
-					size="sm"
-				/>
+					size="sm" />
 				<label class="text-lg font-bold">Home</label>
 			</div>
 		</Navbar>

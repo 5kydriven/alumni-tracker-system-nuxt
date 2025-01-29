@@ -21,16 +21,15 @@
 </script>
 
 <template>
-	<div class="flex gap-4 p-4 flex-col md:flex-row">
+	<div
+		class="flex gap-4 p-4 flex-col md:flex-row max-w-screen-xl justify-center w-full mx-auto">
 		<div class="w-full md:w-80">
 			<div
-				class="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg sticky top-4 bg-white"
-			>
+				class="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg sticky top-4 bg-white">
 				<UInput
 					placeholder="Search..."
 					type="text"
-					icon="i-heroicons-magnifying-glass"
-				/>
+					icon="i-heroicons-magnifying-glass" />
 				<div class="flex flex-col gap-1.5">
 					<label class="text-lg font-bold">Job Types</label>
 					<div class="flex flex-col gap-1">
@@ -49,8 +48,7 @@
 				<div
 					v-for="(job, index) in jobs"
 					:key="index"
-					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg"
-				>
+					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg">
 					<div class="flex justify-between">
 						<div class="flex flex-col gap-2">
 							<div class="flex gap-2 items-center">
@@ -66,8 +64,7 @@
 									size="sm"
 									:label="job.type"
 									variant="soft"
-									class="capitalize"
-								/>
+									class="capitalize" />
 								<!-- <UBadge size="sm" label="Hybrid" variant="soft" /> -->
 								<span class="dark:text-gray-500 text-gray-900"
 									>{{ job.salary }}/month</span
@@ -77,20 +74,17 @@
 						<div>
 							<UButton
 								icon="i-heroicons-bookmark"
-								variant="soft"
-							/>
+								variant="soft" />
 						</div>
 					</div>
 					<div class="flex flex-col">
 						<p
 							class="text-gray-500 text-sm truncate text-wrap h-36"
-							v-html="job.description.replace(/\n/g, '<br>')"
-						></p>
+							v-html="job.description.replace(/\n/g, '<br>')"></p>
 						<UButton
 							label="View more"
 							:to="`/alumni/jobs/${job.uid}`"
-							class="self-end"
-						/>
+							class="self-end" />
 					</div>
 				</div>
 			</div>
@@ -101,8 +95,7 @@
 				<div
 					v-for="(job, index) in 4"
 					:key="index"
-					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg"
-				>
+					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg">
 					<div class="flex justify-between">
 						<div class="flex flex-col gap-2">
 							<USkeleton class="w-[250px] h-[28px]" />

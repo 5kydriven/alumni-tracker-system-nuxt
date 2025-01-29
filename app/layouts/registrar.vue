@@ -22,7 +22,7 @@
 
 	function handleSignOut() {
 		signOut(auth);
-		clearCacheData();
+		clearNuxtData();
 	}
 </script>
 

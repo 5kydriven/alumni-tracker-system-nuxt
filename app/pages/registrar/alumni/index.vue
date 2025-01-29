@@ -53,7 +53,7 @@
 	}));
 	const statusColors = computed(() => {
 		return (status: AlumniStatus): any => {
-			switch (status.toLowerCase()) {
+			switch (status) {
 				case 'unemployed':
 					return 'yellow';
 				case 'unknown':
@@ -105,9 +105,7 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg text-yellow-400 hidden md:block"
-				>Alumni's</label
-			>
+			<label class="font-bold text-lg hidden md:block">Alumni's</label>
 		</div>
 		<div class="flex items-center w-full justify-end gap-2 md:gap-4">
 			<UInput

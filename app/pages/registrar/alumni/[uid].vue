@@ -32,7 +32,7 @@
 			},
 			rounded: 'rounded-none',
 			header: {
-				base: 'bg-gray-300 border-b border-gray-400 shadow-lg h-16 p-4',
+				base: 'bg-gray-300 shadow  h-16 p-4',
 			},
 		}">
 		<template #header>

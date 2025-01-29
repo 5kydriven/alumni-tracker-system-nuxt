@@ -13,7 +13,7 @@ export default function useAuth() {
 				email,
 				password,
 			);
-			router.replace('/');
+			// router.replace('/');
 		} catch (err) {
 			console.error('Error during login:', err);
 			error.value = 'Incorrect email or password!';

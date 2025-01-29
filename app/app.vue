@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	import { onAuthStateChanged } from 'firebase/auth';
+
 	useSeoMeta({
 		title: 'CPSU || Welcome',
 		ogTitle: 'CPSU',
@@ -23,11 +25,40 @@
 
 	const user = useCurrentUser();
 	const router = useRouter();
+	const auth = useFirebaseAuth();
 
-	watch(user, async (currentUser, prevUser) => {
-		if (prevUser && !currentUser) {
-			return router.push('/auth');
-		}
+	// watch(user, async (currentUser, prevUser) => {
+	// 	if (prevUser && !currentUser) {
+	// 		return router.push('/auth');
+	// 	}
+
+	// 	if (user) {
+	// 		const { data } = await $fetch<H3Response<any>>(
+	// 			`/api/user/${user.value.uid}`,
+	// 			{
+	// 				method: 'GET',
+	// 			},
+	// 		);
+	// 		return router.replace(`/${data.role}`);
+	// 	}
+	// });
+
+	onMounted(() => {
+		onAuthStateChanged(auth, async (user: any) => {
+			if (!user) {
+				return router.push('/auth');
+			}
+
+			if (user) {
+				const { data } = await $fetch<H3Response<any>>(
+					`/api/user/${user.uid}`,
+					{
+						method: 'GET',
+					},
+				);
+				return router.replace(`/${data.role}`);
+			}
+		});
 	});
 </script>
 

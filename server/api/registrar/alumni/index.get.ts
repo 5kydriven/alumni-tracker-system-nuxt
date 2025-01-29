@@ -5,7 +5,11 @@ export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const { q, courses, statuses, limit, offset } = getQuery(event);
 	try {
-		let queryRef: Query = db.collection('alumni').orderBy('name', 'asc');
+		let queryRef: Query = db
+			.collection('users')
+			.where('role', '==', 'alumni')
+			.orderBy('name', 'asc');
+
 		if (q) {
 			const queryLowerCase = q.toString().toLowerCase();
 			queryRef = queryRef.where(
@@ -34,7 +38,11 @@ export default eventHandler(async (event: H3Event) => {
 		queryRef = queryRef.limit(Number(limit));
 
 		const snapShot = await queryRef.get();
-		const countSnap = await db.collection('alumni').count().get();
+		const countSnap = await db
+			.collection('users')
+			.where('role', '==', 'alumni')
+			.count()
+			.get();
 
 		const alumni = snapShot.docs.map((doc) => ({
 			...doc.data(),

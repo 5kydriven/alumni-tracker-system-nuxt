@@ -5,18 +5,23 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	console.log('To Path:', to.path);
 
-	// if (!user) {
-	// 	return await navigateTo('/auth', { replace: true });
-	// }
-
-	const paths = ['/admin', '/registrar', '/employer', '/alumni', '/'];
-	if (!user && paths.includes(to.path)) {
-		console.log('Redirecting to /auth');
+	if (!user && to.path != '/auth') {
 		return await navigateTo('/auth');
 	}
 
 	if (user && to.path == '/auth') {
 		return await navigateTo('/');
+	}
+
+	const { data } = await $fetch<H3Response<User<Alumni>>>(
+		`/api/user/${user.uid}`,
+		{
+			method: 'GET',
+		},
+	);
+
+	if (user && to.path != `/${data.role}`) {
+		return await navigateTo(`/${data.role}`);
 	}
 
 	// if (user && paths.includes(from.path)) {
