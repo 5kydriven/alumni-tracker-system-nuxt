@@ -20,17 +20,24 @@
 
 <template>
 	<div class="flex h-screen w-full">
-		<div class="relative h-full flex-1 hidden md:block">
+		<div
+			class="h-full flex-1 justify-center items-center hidden bg-primary-500 gap-4 flex-col text-white md:flex">
 			<NuxtImg
-				src="/cpsu-banner.png"
-				class="h-full w-full"
+				src="/cpsu-logo.png"
+				class="w-52 h-52"
 				preload />
+			<div class="flex flex-col items-center justify-center">
+				<label class="text-lg font-bold font-serif"
+					>Central Philippines State University</label
+				>
+				<span class="font-thin">San Carlos City, Negros Occidental</span>
+			</div>
 		</div>
 		<div
-			class="flex justify-center items-center h-full w-full px-4 xl:px-16 lg:w-[500px]">
+			class="flex justify-center items-center h-full w-full px-4 xl:px-16 lg:w-[600px]">
 			<div
 				class="flex flex-col w-full max-w-md gap-4 border p-8 rounded-lg shadow-lg lg:border-none lg:shadow-none lg:p-0">
-				<div class="flex gap-2 items-center">
+				<div class="flex gap-2 items-center lg:hidden">
 					<NuxtImg
 						src="/cpsu-logo.png"
 						height="44"
@@ -73,21 +80,27 @@
 							placeholder="••••••••"
 							required />
 					</UFormGroup>
-					<div class="flex items-center justify-between mb-4">
+					<!-- <div class="flex items-center justify-between mb-4">
 						<UCheckbox label="Remember me" />
 						<a
 							href="#"
 							class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
 							>Forgot password?</a
 						>
-					</div>
+					</div> -->
 					<UButton
 						type="submit"
 						block
+						class="mt-4"
 						label="Sign in"
 						:loading="isLoading" />
 					<p class="text-sm">
-						Are you an employer? <NuxtLink to="#">Sign up</NuxtLink>
+						Are you an employer?
+						<NuxtLink
+							to="/auth/signup"
+							class="hover:underline text-primary-500 font-semibold"
+							>Sign up</NuxtLink
+						>
 					</p>
 				</UForm>
 			</div>

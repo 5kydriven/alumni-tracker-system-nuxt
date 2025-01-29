@@ -17,20 +17,17 @@
 <template>
 	<div class="w-full flex h-full">
 		<aside
-			class="hidden w-[250px] flex-col lg:flex bg-zuccini-500 h-screen px-4"
-		>
+			class="hidden w-[250px] flex-col lg:flex bg-zuccini-500 h-screen px-4">
 			<div class="h-16 flex items-center gap-2">
 				<NuxtImg
 					src="/cpsu-logo.png"
 					width="36"
-					height="36"
-				/>
+					height="36" />
 				<label class="font-bold text-white">CPSU</label>
 			</div>
 			<UVerticalNavigation
 				:links="links"
-				class="grow py-2"
-			>
+				class="grow py-2">
 				<template #default="{ link }">
 					<span class="group-hover:text-black relative">{{ link.label }}</span>
 				</template>
@@ -42,8 +39,7 @@
 					icon="i-heroicons-arrow-left-end-on-rectangle"
 					variant="solid"
 					class="w-full text-black"
-					color="yellow"
-				/>
+					color="yellow" />
 			</div>
 		</aside>
 		<div class="flex flex-col h-full flex-1 overflow-auto">

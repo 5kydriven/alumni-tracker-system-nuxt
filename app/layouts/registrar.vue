@@ -29,7 +29,7 @@
 <template>
 	<div class="h-screen flex">
 		<aside
-			class="w-[225px] flex-col hidden lg:flex bg-zuccini-500 h-full px-4 xl:w-[350px] shrink-0">
+			class="w-[225px] flex-col hidden lg:flex bg-zuccini-500 h-full px-4 xl:w-[250px] shrink-0">
 			<div class="h-16 flex items-center gap-2">
 				<NuxtImg
 					src="/cpsu-logo.png"
