@@ -56,12 +56,7 @@
 						method: 'GET',
 					},
 				);
-
-				if (data.role == 'alumni' && data.isUpdated == false) {
-					return router.replace('/alumni/update-account');
-				} else {
-					return router.replace(`/${data.role}`);
-				}
+				return router.replace(`/${data.role}`);
 			}
 		});
 	});

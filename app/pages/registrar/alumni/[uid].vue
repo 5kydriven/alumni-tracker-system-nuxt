@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	definePageMeta({
+		middleware: ['personel'],
 		layout: 'registrar',
 	});
 	const nuxtApp = useNuxtApp();

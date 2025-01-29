@@ -8,6 +8,7 @@
 	} from '#components';
 
 	definePageMeta({
+		middleware: ['personel'],
 		layout: 'registrar',
 	});
 

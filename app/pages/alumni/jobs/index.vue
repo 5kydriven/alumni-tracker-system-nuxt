@@ -2,6 +2,7 @@
 	import { ref } from 'vue';
 
 	definePageMeta({
+		middleware: ['alumni'],
 		layout: 'user',
 	});
 

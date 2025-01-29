@@ -4,6 +4,7 @@
 	import { useAdminStore } from '~/stores/admin';
 
 	definePageMeta({
+		middleware: ['admin'],
 		layout: 'admin',
 	});
 
@@ -44,8 +45,7 @@
 					icon="i-heroicons-bars-3"
 					variant="ghost"
 					color="white"
-					size="sm"
-				/>
+					size="sm" />
 				<label class="font-bold text-lg text-yellow-500">User's</label>
 			</div>
 			<div class="flex items-center gap-4">
@@ -54,8 +54,7 @@
 					size="sm"
 					color="white"
 					:trailing="false"
-					placeholder="Search..."
-				/>
+					placeholder="Search..." />
 				<UButton
 					icon="i-heroicons-pencil-square"
 					size="sm"
@@ -63,8 +62,7 @@
 					variant="solid"
 					label="Add User"
 					trailing
-					@click="modal.open(AdminModalAdd)"
-				/>
+					@click="modal.open(AdminModalAdd)" />
 			</div>
 		</Navbar>
 		<SubNavbar>
@@ -73,8 +71,7 @@
 					v-model="selectedRole"
 					:options="['Registar', 'Employer']"
 					multiple
-					placeholder="Select Role"
-				/>
+					placeholder="Select Role" />
 				<!-- <USelectMenu v-model="selected" :options="people" multiple placeholder="Location" /> -->
 			</div>
 			<!-- <USelectMenu v-model="selected" :options="people" multiple placeholder="Display" /> -->
@@ -88,8 +85,7 @@
 				}"
 				:rows="store.rows"
 				:columns="columns"
-				class="w-full"
-			>
+				class="w-full">
 				<template #id-data="{ index }">{{ index + 1 }}</template>
 				<template #actions-data="{ row }">
 					<UDropdown
@@ -107,25 +103,21 @@
 									},
 								},
 							],
-						]"
-					>
+						]">
 						<UButton
 							color="gray"
 							variant="ghost"
-							icon="i-heroicons-ellipsis-horizontal-20-solid"
-						/>
+							icon="i-heroicons-ellipsis-horizontal-20-solid" />
 					</UDropdown>
 				</template>
 			</UTable>
 			<div
 				:class="store.users.length <= 13 ? 'hidden' : 'flex'"
-				class="justify-end p-4 border-t border-gray-200 dark:border-gray-700"
-			>
+				class="justify-end p-4 border-t border-gray-200 dark:border-gray-700">
 				<UPagination
 					v-model="store.page"
 					:page-count="store.pageCount"
-					:total="store.users.length"
-				/>
+					:total="store.users.length" />
 			</div>
 		</div>
 	</div>

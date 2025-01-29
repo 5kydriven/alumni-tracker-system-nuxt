@@ -2,6 +2,7 @@
 	import { RegistrarSlideOver } from '#components';
 
 	definePageMeta({
+		middleware: ['personel'],
 		layout: 'registrar',
 	});
 

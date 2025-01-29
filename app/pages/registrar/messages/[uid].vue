@@ -2,6 +2,7 @@
 	import { RegistrarSlideOver } from '#components';
 
 	definePageMeta({
+		middleware: ['personel'],
 		layout: 'registrar',
 	});
 
@@ -16,14 +17,12 @@
 <template>
 	<div class="flex h-full">
 		<div
-			class="w-full border-gray-200 border-r hidden md:flex flex-col md:max-w-sm flex-none"
-		>
+			class="w-full border-gray-200 border-r hidden md:flex flex-col md:max-w-sm flex-none">
 			<ConversationHeader
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
 				"
-				isShowButton
-			/>
+				isShowButton />
 			<ConversationContainer @itemClicked="handleClick" />
 		</div>
 		<MessageContainer />
