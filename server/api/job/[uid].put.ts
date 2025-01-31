@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!body || !param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'Body or param has no content',
 			});
 		}
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully updated job',
 			data: {
 				response: res,
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			return errorResponse(
 				createError({
 					statusCode: 404,
-					statusMessage: 'Document Not Found',
+					statusMessage: 'not found',
 					message: `No document found with UID: ${param}.`,
 					data: error,
 				}),

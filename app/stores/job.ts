@@ -23,8 +23,6 @@ export const useJobStore = defineStore('jobStore', () => {
 		return res;
 	}
 
-	function updateJob(job: Job) {}
-
 	async function deleteJob(uid: string) {
 		isLoading.value = true;
 		try {

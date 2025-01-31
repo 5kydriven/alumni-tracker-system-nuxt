@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!body) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No body provided',
 			});
 		}
@@ -18,10 +18,14 @@ export default defineEventHandler(async (event: H3Event) => {
 		const userDetails = await getAuth().createUser({
 			email: body.email,
 			password: body.password,
+			displayName: body.name,
 		});
 
 		await db.collection('users').doc(userDetails.uid).set({
 			role: body.role,
+			email: body.email,
+			name: body.name,
+			createdAt: Timestamp.now(),
 		});
 
 		await db
@@ -31,7 +35,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Successfully created user',
 			data: { ...body, uid: userDetails.uid },
 		} as H3Response;
@@ -40,7 +44,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'Conflict',
+				statusMessage: 'conflict',
 				message: 'Email already exists',
 				data: error,
 			});

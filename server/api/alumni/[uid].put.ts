@@ -4,52 +4,72 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const body = await readBody<Alumni>(event);
+	const {
+		email,
+		password,
+		phoneNumber,
+		gender,
+		province,
+		city,
+		zipCode,
+		birthDate,
+		birthPlace,
+		maritalStatus,
+	} = await readBody<Alumni>(event);
 	const param = getRouterParam(event, 'uid');
 
 	try {
-		if (!body || !param) {
+		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
-				message: 'Body or id has no content',
+				statusMessage: 'no content',
+				message: 'No uid has found',
 			});
 		}
 
-		const phoneNumber = `+63${body.phoneNumber}`;
-		const user = await getAuth().updateUser(param, {
-			email: body.email,
-			password: body.password,
-			phoneNumber: phoneNumber,
+		const formatedPhoneNumber = `+63${phoneNumber}`;
+		await getAuth().updateUser(param, {
+			email,
+			password,
+			phoneNumber: formatedPhoneNumber,
 		});
 
-		const res = await db
-			.collection('alumni')
+		const userRef = await db
+			.collection('users')
 			.doc(param)
 			.set(
 				{
-					...body,
 					password: '********',
-					phoneNumber,
+					email,
+					updatedAt: Timestamp.now(),
 					isUpdated: true,
 					status: 'unemployed',
-					updatedAt: Timestamp.now(),
+					userCredentials: {
+						gender,
+						province,
+						zipCode,
+						city,
+						birthDate,
+						birthPlace,
+						maritalStatus,
+						phoneNumber: formatedPhoneNumber,
+					},
 				},
 				{ merge: true },
 			);
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
-			data: res,
+			data: userRef,
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'Conflict',
+				statusMessage: 'conflict',
 				message: 'Email already exists',
 			});
 		}

@@ -9,7 +9,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		if (!body) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'Body has no content',
 			});
 		}
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully created job',
 			data: { uid: res.id },
 		} as H3Response;

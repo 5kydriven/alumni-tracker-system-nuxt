@@ -1,5 +1,5 @@
 export default function scrambleString(str: string) {
-	const characters = str.split('');
+	const characters: string[] = str.split('');
 	for (
 		let currentIndex = characters.length - 1;
 		currentIndex > 0;
@@ -7,8 +7,8 @@ export default function scrambleString(str: string) {
 	) {
 		const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
 		[characters[currentIndex], characters[randomIndex]] = [
-			characters[randomIndex],
-			characters[currentIndex],
+			characters[randomIndex] as string,
+			characters[currentIndex] as string,
 		];
 	}
 	return characters.join('');
