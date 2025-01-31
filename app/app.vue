@@ -48,16 +48,6 @@
 			if (!user) {
 				return router.push('/auth');
 			}
-
-			if (user) {
-				const { data } = await $fetch<H3Response<any>>(
-					`/api/user/${user.uid}`,
-					{
-						method: 'GET',
-					},
-				);
-				return router.replace(`/${data.role}`);
-			}
 		});
 	});
 </script>

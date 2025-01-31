@@ -6,8 +6,11 @@ export declare global {
 		email?: string;
 		role?: string;
 		password?: string;
+		course?: string;
+		batch?: string;
 		userCredentials?: T;
 		searchKeywords?: string[];
 		createdAt?: any;
+		updatedAt?: any;
 	}
 }

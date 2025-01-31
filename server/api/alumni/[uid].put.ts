@@ -4,59 +4,65 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const body = await readBody<Alumni>(event);
+	const {
+		email,
+		password,
+		phoneNumber,
+		gender,
+		province,
+		city,
+		zipCode,
+		birthDate,
+		birthPlace,
+		maritalStatus,
+	} = await readBody<Alumni>(event);
 	const param = getRouterParam(event, 'uid');
-	const batch = db.batch();
+
 	try {
-		if (!body || !param) {
+		if (!param) {
 			throw createError({
 				statusCode: 204,
 				statusMessage: 'no content',
-				message: 'Body or id has no content',
+				message: 'No uid has found',
 			});
 		}
 
-		const phoneNumber = `+63${body.phoneNumber}`;
+		const formatedPhoneNumber = `+63${phoneNumber}`;
 		await getAuth().updateUser(param, {
-			email: body.email,
-			password: body.password,
-			phoneNumber: phoneNumber,
+			email,
+			password,
+			phoneNumber: formatedPhoneNumber,
 		});
 
-		const alumniRef = db.collection('alumni').doc(param);
-		batch.set(
-			alumniRef,
-			{
-				...body,
-				password: '********',
-				phoneNumber,
-				isUpdated: true,
-				status: 'unemployed',
-				updatedAt: Timestamp.now(),
-			},
-			{ merge: true },
-		);
-
-		const userRef = db.collection('users').doc(param);
-		batch.update(userRef, {
-			password: '********',
-			email: body.email,
-			userCredentials: {
-				...body,
-				phoneNumber,
-				updatedAt: Timestamp.now(),
-				isUpdated: true,
-				status: 'unemployed',
-			},
-		});
-
-		const result = await batch.commit();
+		const userRef = await db
+			.collection('users')
+			.doc(param)
+			.set(
+				{
+					password: '********',
+					email,
+					updatedAt: Timestamp.now(),
+					isUpdated: true,
+					status: 'unemployed',
+					userCredentials: {
+						gender,
+						province,
+						zipCode,
+						city,
+						birthDate,
+						birthPlace,
+						maritalStatus,
+						phoneNumber: formatedPhoneNumber,
+					},
+				},
+				{ merge: true },
+			);
 
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
-			data: result,
+			data: userRef,
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);

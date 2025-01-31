@@ -82,12 +82,12 @@
 
 		if (stepper.isCurrent('alumni-credential')) {
 			isLoading.value = true;
-			const res = await $fetch<H3Response>('/api/alumni', {
+			const res = await $fetch<H3Response>(`/api/alumni/${user.value.uid}`, {
 				method: 'PUT',
-				body: JSON.stringify({ ...form, uid: user.value.uid }),
+				body: JSON.stringify({ ...form }),
 			});
 			isLoading.value = false;
-			if (res.statusCode === 200) {
+			if (res.statusCode == 200) {
 				stepper.goTo('alumni-done');
 				progres.value++;
 			} else {

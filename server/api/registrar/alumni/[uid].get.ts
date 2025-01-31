@@ -13,7 +13,7 @@ export default eventHandler(async (event: H3Event) => {
 			});
 		}
 
-		const alumniDoc = await db.collection('alumni').doc(param).get();
+		const alumniDoc = await db.collection('users').doc(param).get();
 
 		if (!alumniDoc.exists) {
 			throw createError({

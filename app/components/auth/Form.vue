@@ -21,7 +21,7 @@
 <template>
 	<div class="flex h-screen w-full">
 		<div
-			class="h-full flex-1 justify-center items-center hidden bg-primary-500 gap-4 flex-col text-white md:flex">
+			class="h-full flex-1 justify-center items-center hidden bg-primary-500 gap-4 flex-col text-white lg:flex">
 			<NuxtImg
 				src="/cpsu-logo.png"
 				class="w-52 h-52"

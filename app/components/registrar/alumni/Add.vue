@@ -1,9 +1,7 @@
 <script setup lang="ts">
 	import Papa from 'papaparse';
 	import useComposableToast from '~/composables/useToastComposables';
-	import { useRegistrarStore } from '~/stores/registrar';
 
-	const store = useRegistrarStore();
 	const { toastResponse } = useComposableToast();
 
 	const csvData = ref();

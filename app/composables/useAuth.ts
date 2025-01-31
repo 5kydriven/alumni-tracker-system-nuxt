@@ -13,7 +13,11 @@ export default function useAuth() {
 				email,
 				password,
 			);
-			// router.replace('/');
+
+			const { data } = await $fetch<H3Response<any>>(
+				`/api/user/${userCredential.user.uid}`,
+			);
+			return router.replace(`/${data.role}`);
 		} catch (err) {
 			console.error('Error during login:', err);
 			error.value = 'Incorrect email or password!';

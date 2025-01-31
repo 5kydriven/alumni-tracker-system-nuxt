@@ -3,10 +3,11 @@
 		middleware: ['personel'],
 		layout: 'registrar',
 	});
+
 	const nuxtApp = useNuxtApp();
 	const { uid } = useRoute().params;
 
-	const { data: alumni, status } = useFetch<H3Response<Alumni>>(
+	const { data: alumni, status } = useFetch<H3Response<User<Alumni>>>(
 		`/api/registrar/alumni/${uid}`,
 		{
 			key: `alumni-${uid}`,
@@ -81,40 +82,46 @@
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Phone Number: </label>
-						<span>{{ alumni?.data?.phoneNumber || 'N/A' }}</span>
+						<span>{{
+							alumni?.data?.userCredentials?.phoneNumber || 'N/A'
+						}}</span>
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Marital Status: </label>
-						<span>Single</span>
+						<span>{{
+							alumni?.data?.userCredentials?.maritalStatus || 'N/A'
+						}}</span>
 					</div>
 				</div>
 				<div class="flex flex-col gap-2">
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Gender: </label>
-						<span>Female</span>
+						<span>{{ alumni?.data?.userCredentials?.gender || 'N/A' }}</span>
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Birth Date: </label>
-						<span>11/11/2002</span>
+						<span>{{ alumni?.data?.userCredentials?.birthDate || 'N/A' }}</span>
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Birth Place: </label>
-						<span>San Carlos City</span>
+						<span>{{
+							alumni?.data?.userCredentials?.birthPlace || 'N/A'
+						}}</span>
 					</div>
 				</div>
 
 				<div class="flex flex-col gap-2">
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Province: </label>
-						<span>Negros Occidental</span>
+						<span>{{ alumni?.data?.userCredentials?.province || 'N/A' }}</span>
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">City: </label>
-						<span>San Carlos City</span>
+						<span>{{ alumni?.data?.userCredentials?.zipCode || 'N/A' }}</span>
 					</div>
 					<div class="flex gap-2 items-center">
 						<label class="font-bold">Zip Code: </label>
-						<span>6127</span>
+						<span>{{ alumni?.data?.userCredentials?.zipCode || 'N/A' }}</span>
 					</div>
 				</div>
 			</div>
