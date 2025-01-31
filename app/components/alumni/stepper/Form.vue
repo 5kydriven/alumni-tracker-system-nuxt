@@ -5,6 +5,7 @@
 	const isLoading = ref(false);
 	const router = useRouter();
 
+	const displayName = ref<string>(user.value?.displayName ?? '');
 	const form = reactive<Alumni>({
 		email: '',
 		password: '',
@@ -197,7 +198,7 @@
 									placeholder="John Doe"
 									type="text"
 									disabled
-									v-model="(user?.displayName as string)"
+									v-model="displayName"
 									:ui="{ form: 'capitalize' }" />
 							</UFormGroup>
 							<!-- <UFormGroup label="Last Name" >
