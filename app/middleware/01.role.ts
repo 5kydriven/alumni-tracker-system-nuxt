@@ -2,6 +2,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// if (import.meta.client) return;
 
 	const user = await getCurrentUser();
+
+	if (!user) {
+		return await navigateTo('/auth');
+	}
+
 	const { data } = await $fetch<H3Response<User<Alumni>>>(
 		`/api/user/${user.uid}`,
 		{
