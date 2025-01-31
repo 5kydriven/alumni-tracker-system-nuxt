@@ -1,5 +1,3 @@
-import type { Chats } from '~~/types/chats';
-
 export const useChatStore = defineStore('chatStore', () => {
 	const chats = ref([
 		{

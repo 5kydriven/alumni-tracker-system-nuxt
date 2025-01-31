@@ -3,10 +3,8 @@
 		VisXYContainer,
 		VisGroupedBar,
 		VisAxis,
-		VisTooltip,
 		VisBulletLegend,
 	} from '@unovis/vue';
-	import { GroupedBar, Axis } from '@unovis/ts';
 
 	const props = defineProps<{ data: any }>();
 	const x = (d: any) => d.year;
@@ -15,10 +13,6 @@
 		(d: any) => d.unemployed,
 		(d: any) => d.unknown,
 	];
-	const triggers = {
-		[GroupedBar.selectors.barGroup]: (d: any) =>
-			`<span>${d.employed}, ${d.unemployed}, ${d.unknown}</span>`,
-	};
 
 	const groups = [
 		{ key: 'employed', name: 'Employed' },

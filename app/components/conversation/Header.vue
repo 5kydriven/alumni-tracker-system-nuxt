@@ -4,7 +4,7 @@
 	const modal = useModal();
 
 	const emits = defineEmits<{
-		click?: [];
+		click: [];
 	}>();
 	const props = defineProps({
 		isShowButton: {

@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
 	const db = getFirestore();
 
 	try {
-		const employersSnapshot = await db.collection('employer').get();
-		const registrarsSnapshot = await db.collection('registrar').get();
+		const employersSnapshot = await db.collection('users').where('role', '==', 'employer').get();
+		const registrarsSnapshot = await db.collection('users').where('role', '==', 'registrar').get();
 		const combinedData = [
 			...employersSnapshot.docs.map((doc) => ({...doc.data(), uid: doc.id})),
 			...registrarsSnapshot.docs.map((doc) => ({...doc.data(), uid: doc.id})),

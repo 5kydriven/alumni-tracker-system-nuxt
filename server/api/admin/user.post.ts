@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
 			statusMessage: 'ok',
 			message: 'Successfully created user',
 			data: result,
-		};
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/admin/usesPost: ', error);
 		if (error.code === 'auth/email-already-exists') {

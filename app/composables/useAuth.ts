@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, type Auth } from 'firebase/auth';
 export default function useAuth() {
 	const isLoading = useState('auth-loading', () => false);
 	const router = useRouter();
-	const error = useState('auth-error', () => null);
+	const error = useState<string | undefined>('auth-error', () => undefined);
 
 	async function handleLogin(auth: Auth, email: string, password: string) {
 		isLoading.value = true;

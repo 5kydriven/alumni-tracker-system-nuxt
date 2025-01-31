@@ -8,7 +8,6 @@
 	import { Donut } from '@unovis/ts';
 
 	const props = defineProps<{ data: any }>();
-	const value = (d: any) => d.value;
 	const triggers = {
 		[Donut.selectors.segment]: (d: any) =>
 			`${d.data.label}: ${d.data.value} employed`,

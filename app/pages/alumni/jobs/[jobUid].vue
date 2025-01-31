@@ -5,7 +5,6 @@
 	});
 
 	const route = useRoute();
-	const router = useRouter();
 
 	const {
 		data: job,
@@ -25,7 +24,7 @@
 
 <template>
 	<div class="flex gap-4 flex-col xl:flex-row p-4">
-		<template v-if="status == 'success' && job.createdAt">
+		<template v-if="status == 'success' && job?.createdAt">
 			<AlumniJobHeader v-bind="job" />
 			<AlumniJobDescription v-bind="job" />
 		</template>
@@ -39,7 +38,7 @@
 						class="flex flex-wrap xl:flex-col gap-2 justify-between xl:gap-1.5">
 						<div
 							class="flex items-center gap-2"
-							v-for="(item, index) in 4"
+							v-for="index in 4"
 							:key="index">
 							<USkeleton class="w-[36px] h-[36px]" />
 							<div class="flex flex-col gap-2">

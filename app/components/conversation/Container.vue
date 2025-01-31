@@ -8,7 +8,7 @@
 	const conversationsRef = collection(db, 'conversations');
 	const q = query(
 		conversationsRef,
-		where('participants', 'array-contains', user.value.uid),
+		where('participants', 'array-contains', user.value?.uid),
 	);
 
 	const unsubcribe = fetchConversations(user, q, db);

@@ -1,7 +1,6 @@
 import initFirebase from '../utils/initFirebase';
 
 export default defineNitroPlugin((nuxtapp) => {
-	const config = useRuntimeConfig();
 	const firebaseConfig = {
 		type: 'service_account',
 		project_id: 'alumni-tracker-d7448',

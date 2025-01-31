@@ -60,7 +60,7 @@
 				<UButton
 					label="Yes, I'm sure"
 					color="red"
-					@click="onDelete(props.uid)"
+					@click="onDelete(props.uid as string)"
 					:loading="isLoading" />
 			</template>
 		</UCard>

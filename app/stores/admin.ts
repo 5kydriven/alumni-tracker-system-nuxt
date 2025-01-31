@@ -16,7 +16,7 @@ export const useAdminStore = defineStore('adminStore', () => {
 	//Actions
 	async function getUsers() {
 		try {
-			const res = await $fetch('/api/admin/user');
+			const res = await $fetch<any>('/api/admin/user');
 			users.value = res.map((user: User) => user);
 		} catch (err) {
 			console.log(err);

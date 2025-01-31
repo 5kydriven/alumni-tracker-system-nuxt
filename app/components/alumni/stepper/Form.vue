@@ -11,11 +11,11 @@
 		phoneNumber: '',
 		province: '',
 		city: '',
-		zipCode: null,
+		zipCode: '',
 		birthPlace: '',
 		birthDate: '',
 		maritalStatus: '',
-		gender: null,
+		gender: undefined,
 	});
 
 	const maritalStatus = [
@@ -28,7 +28,7 @@
 		'other',
 	];
 
-	const stepFields = {
+	const stepFields: Record<string, string[]> = {
 		'alumni-account': ['email'],
 		'alumni-credential': [
 			'province',
@@ -43,8 +43,8 @@
 
 	const isValidStep = (step: string) => {
 		const fields = stepFields[step];
-		return fields.every((field: string) => {
-			const value = form[field];
+		return fields?.every((field: string) => {
+			const value = form[field as keyof Alumni];
 			return (
 				value && (typeof value === 'string' ? value.trim().length > 0 : true)
 			);
@@ -54,12 +54,14 @@
 	const stepper = useStepper({
 		'alumni-account': {
 			title: 'Account Details',
-			isValid: () => isValidStep('alumni-account') && form.password.length >= 6,
+			isValid: () =>
+				isValidStep('alumni-account') && (form.password?.length ?? 0) >= 6,
 		},
 		'alumni-credential': {
 			title: 'Personal Details',
 			isValid: () =>
-				isValidStep('alumni-credential') && form.phoneNumber.length >= 10,
+				isValidStep('alumni-credential') &&
+				(form.phoneNumber?.length ?? 0) >= 10,
 		},
 		'alumni-done': {
 			title: 'Account Updated',
@@ -82,7 +84,7 @@
 
 		if (stepper.isCurrent('alumni-credential')) {
 			isLoading.value = true;
-			const res = await $fetch<H3Response>(`/api/alumni/${user.value.uid}`, {
+			const res = await $fetch<H3Response>(`/api/alumni/${user.value?.uid}`, {
 				method: 'PUT',
 				body: JSON.stringify({ ...form }),
 			});
@@ -110,7 +112,7 @@
 					size="sm"
 					color="black"
 					:disabled="
-						!stepper.get('alumni-credential').isValid() || stepper.isLast.value
+						!stepper.get('alumni-credential')?.isValid() || stepper.isLast.value
 					"
 					variant="link"
 					:padded="false"
@@ -126,7 +128,7 @@
 					color="black"
 					variant="link"
 					:disabled="
-						!stepper.get('alumni-credential').isValid() || stepper.isLast.value
+						!stepper.get('alumni-credential')?.isValid() || stepper.isLast.value
 					"
 					:padded="false"
 					@click="
@@ -195,7 +197,7 @@
 									placeholder="John Doe"
 									type="text"
 									disabled
-									v-model="user.displayName"
+									v-model="(user?.displayName as string)"
 									:ui="{ form: 'capitalize' }" />
 							</UFormGroup>
 							<!-- <UFormGroup label="Last Name" >

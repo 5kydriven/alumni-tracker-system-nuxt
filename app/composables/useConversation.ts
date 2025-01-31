@@ -38,12 +38,12 @@ export default function useConversation() {
 	) {
 		try {
 			const chatDoc = await getDoc(doc(db, 'conversations', conversationUid));
-			const participants = chatDoc.data().participants;
+			const participants = chatDoc.data()?.participants;
 			const participantId = participants.find(
 				(id: string) => id !== currentUid,
 			);
-			if (chatDoc.data().isGroup) {
-				return chatDoc.data().name;
+			if (chatDoc.data()?.isGroup) {
+				return chatDoc.data()?.name;
 			} else {
 				const participantDoc = await getDoc(doc(db, 'users', participantId));
 				return participantDoc.data()?.name;

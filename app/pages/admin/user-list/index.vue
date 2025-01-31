@@ -12,13 +12,12 @@
 	const { toastResponse } = useComposableToast();
 	const slideOver = useSlideover();
 
-	const people = ['Wade Cooper', 'Arlene Mccoy', 'Devon Webb'];
 	const selectedRole = ref([]);
 	const store = useAdminStore();
 
-	const { status } = useAsyncData('users', () =>
-		store.getUsers().then(() => true),
-	);
+	// const { status } = useAsyncData('users', () =>
+	// 	store.getUsers().then(() => true),
+	// );
 
 	const columns = [
 		{ key: 'id', label: 'No.' },
@@ -33,6 +32,8 @@
 		const res = await store.deleteUser(uid);
 		toastResponse(res);
 	}
+
+	const { data: users, status } = useFetch<User[]>('/api/admin/user');
 </script>
 
 <template>
@@ -83,7 +84,7 @@
 					icon: 'i-heroicons-circle-stack-20-solid',
 					label: 'No items.',
 				}"
-				:rows="store.rows"
+				:rows="users"
 				:columns="columns"
 				class="w-full">
 				<template #id-data="{ index }">{{ index + 1 }}</template>

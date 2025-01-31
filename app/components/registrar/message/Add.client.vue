@@ -19,9 +19,9 @@
 	const conversation = reactive({
 		isGroup: false,
 		message: '',
-		user: null,
-		currentUid: user.value.uid,
-		batch: null,
+		user: '',
+		currentUid: user.value?.uid,
+		batch: '',
 	});
 
 	const limit = ref(5);
@@ -49,7 +49,7 @@
 
 	function onChanged(index: any) {
 		const item = items[index];
-		if (item.label == 'Group') {
+		if (item?.label == 'Group') {
 			conversation.isGroup = true;
 		} else {
 			conversation.isGroup = false;

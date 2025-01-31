@@ -33,7 +33,7 @@
 		<UDivider class="mt-2 mb-4" />
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-1">
-				<p v-html="job.description.replace(/\n/g, '<br>')"></p>
+				<p v-html="job.description?.replace(/\n/g, '<br>')"></p>
 			</div>
 			<div class="flex justify-end">
 				<!-- <UButton>

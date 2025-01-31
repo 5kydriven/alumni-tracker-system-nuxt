@@ -12,7 +12,7 @@
 		<div class="flex justify-between items-between">
 			<label class="text-xl font-bold">Your Job Posts</label>
 			<UButton
-				v-show="props.jobs.length >= 1"
+				v-show="(props.jobs?.length ?? 0) >= 1"
 				@click="modal.open(EmployerModalAdd, { onClose: modal.close })"
 				icon="i-heroicons-plus"
 				label="Add job post"
@@ -20,7 +20,7 @@
 				:ui="{ rounded: 'rounded-full' }" />
 		</div>
 		<div
-			v-if="props.jobs.length == 0"
+			v-if="props.jobs?.length == 0"
 			class="h-80 w-full rounded flex flex-col items-center justify-center gap-4 border dark:border-gray-800 border-gray-200">
 			<div class="flex flex-col items-center">
 				<UIcon
@@ -41,7 +41,7 @@
 			v-else
 			class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 			<div
-				v-for="(job, index) in props.jobs"
+				v-for="(job) in props.jobs?"
 				class="flex flex-col gap-2 dark:bg-gray-800 bg-white shadow-lg border border-gray-300 rounded-lg p-4 col-span-1">
 				<div class="flex items-center justify-between">
 					<label

@@ -8,7 +8,7 @@
 	const nuxtApp = useNuxtApp();
 
 	const { data: jobs, status } = useLazyFetch<Job[]>(
-		`/api/employer/job/${user.value.uid}`,
+		`/api/employer/job/${user.value?.uid}`,
 		{
 			method: 'GET',
 			key: 'employer-jobs',

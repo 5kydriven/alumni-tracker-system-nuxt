@@ -81,7 +81,7 @@
 					<div class="flex flex-col">
 						<p
 							class="text-gray-500 text-sm truncate text-wrap h-36"
-							v-html="job.description.replace(/\n/g, '<br>')"></p>
+							v-html="job.description?.replace(/\n/g, '<br>')"></p>
 						<UButton
 							label="View more"
 							:to="`/alumni/jobs/${job.uid}`"
@@ -94,7 +94,7 @@
 		<template v-else>
 			<div class="flex-1 flex flex-col gap-4">
 				<div
-					v-for="(job, index) in 4"
+					v-for="index in 4"
 					:key="index"
 					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg">
 					<div class="flex justify-between">

@@ -21,7 +21,12 @@ declare global {
 		role?: string;
 	}
 
-	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';
+	type AlumniStatus =
+		| 'employed'
+		| 'unemployed'
+		| 'unknown'
+		| 'self-employed'
+		| 'freelancer';
 	type Gender = 'female' | 'male' | 'other';
 	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 

@@ -9,11 +9,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		},
 	);
 
-	if (!user && !data.role) {
+	if (!user && !data?.role) {
 		return await navigateTo('/auth');
 	}
 
-	if (to.path != `/${data.role}`) {
-		return await navigateTo(`/${data.role}`);
+	if (to.path != `/${data?.role}`) {
+		return await navigateTo(`/${data?.role}`);
 	}
 });

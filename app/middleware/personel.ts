@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// if (import.meta.server) return;
 	const user = await getCurrentUser();
 
-	const cachedUserData = useState(`user-${user.uid}`, () => null);
+	const cachedUserData = useState<any>(`user-${user.uid}`, () => null);
 
 	if (!cachedUserData.value) {
 		const { data } = await $fetch<H3Response<any>>(`/api/user/${user.uid}`);

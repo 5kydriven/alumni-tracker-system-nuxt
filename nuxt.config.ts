@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 	},
 	typescript: {
 		typeCheck: true,
-		strict: false,
+		strict: true,
 	},
 	runtimeConfig: {
 		googleApplicationCredentials: process.env.GOOGLE_APPLICATION_CREDENTIALS,

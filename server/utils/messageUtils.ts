@@ -63,5 +63,6 @@ export default function useMessageUtils() {
 	return {
 		fetchOtherUserName,
 		fetchUserConversations,
+		fetchConversationsWithDetails,
 	};
 }

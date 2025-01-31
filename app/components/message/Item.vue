@@ -44,7 +44,7 @@
 		<span
 			:class="props.currentUid == props.senderUid ? 'self-start' : 'self-end'"
 			class="text-xs text-gray-500"
-			>{{ convertMessagesTimestamp(props.createdAt) }}</span
+			>{{ convertMessagesTimestamp(props.createdAt as Timestamp) }}</span
 		>
 	</div>
 </template>

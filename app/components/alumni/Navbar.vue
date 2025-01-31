@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { AlumniSlideOver } from '#components';
-	import { signOut } from 'firebase/auth';
+	import { signOut, type Auth } from 'firebase/auth';
 
 	const auth = useFirebaseAuth();
 	const slideover = useSlideover();
@@ -19,16 +19,6 @@
 			to: '/alumni/jobs',
 		},
 	];
-
-	const colorMode = useColorMode();
-	const isDark = computed({
-		get() {
-			return colorMode.value === 'dark';
-		},
-		set() {
-			colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
-		},
-	});
 </script>
 
 <template>
@@ -43,13 +33,11 @@
 						color="white"
 						@click="
 							slideover.open(AlumniSlideOver, { onClose: slideover.close })
-						"
-					/>
+						" />
 					<NuxtImg
 						src="/cpsu-logo.png"
 						width="36"
-						height="36"
-					/>
+						height="36" />
 					<NuxtLink
 						to="/alumni"
 						class="text-lg font-bold text-white"
@@ -67,8 +55,7 @@
 					/> -->
 					<UHorizontalNavigation
 						:links="navLinks"
-						:ui="{ wrapper: 'hidden md:flex' }"
-					>
+						:ui="{ wrapper: 'hidden md:flex' }">
 						<template #default="{ link }">
 							<span class="group-hover:text-yellow-500 relative">{{
 								link.label
@@ -80,9 +67,8 @@
 						variant="solid"
 						color="yellow"
 						class="text-black"
-						@click="signOut(auth)"
-						size="xs"
-					/>
+						@click="signOut(auth as Auth)"
+						size="xs" />
 				</div>
 			</div>
 		</div>

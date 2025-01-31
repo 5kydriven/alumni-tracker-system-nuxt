@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { signOut } from 'firebase/auth';
+	import { signOut, type Auth } from 'firebase/auth';
 
 	const auth = useFirebaseAuth();
 
@@ -18,7 +18,7 @@
 
 	function handleSignOut() {
 		emits('close');
-		signOut(auth);
+		signOut(auth as Auth);
 	}
 
 	const emits = defineEmits<{

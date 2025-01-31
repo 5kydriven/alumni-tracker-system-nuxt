@@ -2,16 +2,16 @@
 	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 
 	const db = useFirestore();
-	const route = useRoute();
+	const route = useRoute().params;
 	const user = useCurrentUser();
 	const { getParticipantName } = useConversation();
 	const isLoading = ref(false);
 	const message = ref('');
 	const participant = ref();
 
-	const messages = ref([]);
+	const messages = ref<Message[]>([]);
 	const messagesRef = query(
-		collection(db, 'conversations', route.params.uid.toString(), 'messages'),
+		collection(db, 'conversations', route.uid?.toString() ?? '', 'messages'),
 		orderBy('createdAt', 'asc'),
 	);
 
@@ -19,9 +19,9 @@
 		messagesRef,
 		async (querySnapshot) => {
 			participant.value = await getParticipantName(
-				route.params.uid.toString(),
+				route.uid?.toString() ?? '',
 				db,
-				user.value.uid,
+				user.value?.uid ?? '',
 			);
 			messages.value = querySnapshot.docs.map((doc) => ({
 				uid: doc.id,
@@ -35,12 +35,12 @@
 
 	async function handleSubmit() {
 		isLoading.value = true;
-		const res = await $fetch(`/api/conversation/message/${route.params.uid}`, {
+		const res = await $fetch(`/api/conversation/message/${route.uid}`, {
 			method: 'POST',
 			body: JSON.stringify({
 				message: message.value,
-				senderUid: user.value.uid,
-				name: user.value.displayName,
+				senderUid: user.value?.uid,
+				name: user.value?.displayName,
 			}),
 		});
 		message.value = '';
@@ -48,7 +48,7 @@
 		console.log(res);
 	}
 
-	const messagesContainer = ref(null);
+	const messagesContainer = ref<HTMLElement | null>(null);
 	const scrollBottomRef = ref(null);
 	function scrollToBottom() {
 		if (messagesContainer.value) {
@@ -82,7 +82,7 @@
 				<MessageItem
 					v-for="(item, index) in messages"
 					v-bind="item"
-					:currentUid="user.uid"
+					:currentUid="user?.uid"
 					:key="index" />
 
 				<div ref="scrollBottomRef"></div>

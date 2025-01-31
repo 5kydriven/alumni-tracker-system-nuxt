@@ -45,7 +45,7 @@
 	}>();
 
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
-		const res = await store.createJob(event.data, user.value.uid);
+		const res = await store.createJob(event.data, user.value?.uid ?? '');
 		toastResponse(res);
 		emits('close');
 	}

@@ -5,7 +5,7 @@
 	});
 
 	const user = useCurrentUser();
-	const { data: alumni } = useFetch<Alumni>(`/api/alumni/${user.value.uid}`, {
+	const { data: alumni } = useFetch<Alumni>(`/api/alumni/${user.value?.uid}`, {
 		key: 'alumni-profile',
 		method: 'GET',
 	});

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-	import type { FormError, FormSubmitEvent } from '#ui/types';
+	import type { FormError } from '#ui/types';
+	import type { Auth } from 'firebase/auth';
 	const creds = reactive({
 		email: '',
 		password: '',
@@ -60,7 +61,9 @@
 					:validate="validate"
 					:state="creds"
 					class="flex flex-col gap-4"
-					@submit.prevent="handleLogin(auth, creds.email, creds.password)">
+					@submit.prevent="
+						handleLogin(auth as Auth, creds.email, creds.password)
+					">
 					<UFormGroup label="Email">
 						<UInput
 							type="email"

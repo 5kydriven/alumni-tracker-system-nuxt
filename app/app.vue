@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { onAuthStateChanged } from 'firebase/auth';
+	import { onAuthStateChanged, type Auth } from 'firebase/auth';
 
 	useSeoMeta({
 		title: 'CPSU || Welcome',
@@ -23,28 +23,11 @@
 		},
 	});
 
-	const user = useCurrentUser();
 	const router = useRouter();
 	const auth = useFirebaseAuth();
 
-	// watch(user, async (currentUser, prevUser) => {
-	// 	if (prevUser && !currentUser) {
-	// 		return router.push('/auth');
-	// 	}
-
-	// 	if (user) {
-	// 		const { data } = await $fetch<H3Response<any>>(
-	// 			`/api/user/${user.value.uid}`,
-	// 			{
-	// 				method: 'GET',
-	// 			},
-	// 		);
-	// 		return router.replace(`/${data.role}`);
-	// 	}
-	// });
-
 	onMounted(() => {
-		onAuthStateChanged(auth, async (user: any) => {
+		onAuthStateChanged(auth as Auth, async (user: any) => {
 			if (!user) {
 				return router.push('/auth');
 			}

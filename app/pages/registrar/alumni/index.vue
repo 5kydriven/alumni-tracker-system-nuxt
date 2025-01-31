@@ -232,7 +232,7 @@
 				<span class="font-medium">{{ (page - 1) * limit + 1 }}</span>
 				to
 				<span class="font-medium">{{
-					Math.min(page * limit, alumni && alumni.total)
+					Math.min(page * limit, alumni.total as number)
 				}}</span>
 				of
 				<span class="font-medium">{{ alumni && alumni.total }}</span>
@@ -242,7 +242,7 @@
 		<UPagination
 			v-model="page"
 			:page-count="10"
-			:total="alumni && alumni.total"
+			:total="alumni.total as number"
 			:to="(page: number) => ({
       query: { page },
     })" />

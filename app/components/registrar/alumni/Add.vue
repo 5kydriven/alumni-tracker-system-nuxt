@@ -9,7 +9,7 @@
 
 	const handleFileChange = (files: FileList) => {
 		const file = files.item(0);
-		Papa.parse(file, {
+		Papa.parse(file as File, {
 			header: true,
 			complete: (result: any) => {
 				const filteredData = result.data.filter((row: any) =>

@@ -1,9 +1,4 @@
 <script setup lang="ts">
-	import { breakpointsTailwind } from '@vueuse/core';
-
-	const breakpoints = useBreakpoints(breakpointsTailwind);
-	const isLaptop = breakpoints.greaterOrEqual('lg');
-
 	const props = defineProps<{
 		name?: Alumni['name'];
 		province?: Alumni['province'];
@@ -13,15 +8,13 @@
 
 <template>
 	<div
-		class="border pb-4 rounded-lg border-gray-200 shadow-lg dark:border-gray-800 bg-white"
-	>
+		class="border pb-4 rounded-lg border-gray-200 shadow-lg dark:border-gray-800 bg-white">
 		<div class="relative">
 			<div class="h-32 md:h-52 bg-primary-700 w-full relative z-0 rounded-t">
 				<UAvatar
 					:alt="props.name"
 					size="3xl"
-					class="md:w-28 md:h-28 text-large absolute bottom-[-3rem] left-6 rounded-full"
-				/>
+					class="md:w-28 md:h-28 text-large absolute bottom-[-3rem] left-6 rounded-full" />
 			</div>
 		</div>
 		<div class="mt-12 flex flex-col gap-2">

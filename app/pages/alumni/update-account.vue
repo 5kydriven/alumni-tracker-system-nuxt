@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { signOut } from 'firebase/auth';
+	import { signOut, type Auth } from 'firebase/auth';
 
 	const auth = useFirebaseAuth();
 </script>
@@ -11,7 +11,7 @@
 
 			<AlumniStepperForm />
 			<UButton
-				@click="signOut(auth)"
+				@click="signOut(auth as Auth)"
 				label="sign out(debugging)" />
 		</div>
 	</main>
