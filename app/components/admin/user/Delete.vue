@@ -4,10 +4,10 @@
 
 	async function onDelete(uid: string) {
 		isLoading.value = true;
-		const res = await $fetch<H3Response<any>>(`/api/registrar/alumni/${uid}`, {
+		const res = await $fetch<H3Response<any>>(`/api/admin/user/${uid}`, {
 			method: 'DELETE',
 		});
-		await refreshNuxtData('alumni');
+		await refreshNuxtData('users');
 		isLoading.value = false;
 		toastResponse(res);
 		emits('close');
@@ -49,7 +49,7 @@
 			<UIcon
 				name="i-heroicons-trash"
 				class="w-14 h-14 text-gray-500" />
-			<p>Are you sure you want to delete this alumni?</p>
+			<p>Are you sure you want to delete this user?</p>
 
 			<template #footer>
 				<UButton

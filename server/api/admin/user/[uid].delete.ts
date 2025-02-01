@@ -14,22 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('users').doc(param).get();
-
-		if (!doc.exists) {
-			throw createError({
-				statusCode: 404,
-				statusMessage: 'not found',
-				message: 'Alumni not found',
-			});
-		}
-
-		const role = doc.data()?.role;
-		const batch = db.batch();
-
-		batch.delete(db.collection(role).doc(param));
-		batch.delete(db.collection('users').doc(param));
-		await batch.commit();
+		const doc = await db.collection('users').doc(param).delete();
 
 		const user = await getAuth().deleteUser(param);
 
@@ -37,7 +22,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			statusCode: 200,
 			statusMessage: 'ok',
 			message: 'Successfully deleted a user',
-			data: { doc: doc, user: user },
+			data: { doc, user },
 		} as H3Response;
 	} catch (error: any) {
 		console.log('userDelete: ', error);

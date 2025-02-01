@@ -1,4 +1,4 @@
 export default defineEventHandler((event) => {
-	const id = getRouterParam(event, 'userId');
+	const id = getRouterParam(event, 'uid');
 	return { id };
 });

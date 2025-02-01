@@ -23,7 +23,7 @@
 </script>
 
 <template>
-	<div class="flex gap-4 flex-col xl:flex-row p-4">
+	<div class="flex gap-4 flex-col xl:flex-row p-4 max-w-screen-xl mx-auto">
 		<template v-if="status == 'success' && job?.createdAt">
 			<AlumniJobHeader v-bind="job" />
 			<AlumniJobDescription v-bind="job" />
