@@ -18,7 +18,7 @@ declare global {
 		maritalStatus?: string;
 		birthDate?: string;
 		birthPlace?: string;
-		role?: string;
+		role?: Roles;
 	}
 
 	type AlumniStatus =

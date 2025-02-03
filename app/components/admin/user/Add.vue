@@ -3,11 +3,11 @@
 
 	const { toastResponse } = useComposableToast();
 	const isLoading = ref(false);
-	const user = reactive({
+	const user = reactive<User>({
 		name: '',
 		email: '',
 		password: '',
-		role: '',
+		role: undefined,
 	});
 
 	const handleSubmit = async (user: User) => {

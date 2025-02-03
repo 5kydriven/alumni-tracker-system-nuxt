@@ -1,15 +1,23 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-	// if (import.meta.client) return;
+	// if (import.meta.server) return;
 
 	const user = await getCurrentUser();
 
-	const restrictedPaths = ['/alumni', '/admin', '/registrar', 'employer'];
+	const restrictedPaths = ['/alumni', '/admin', '/registrar', '/employer'];
 	const isRestricted = restrictedPaths.some((path) => to.path.startsWith(path));
+
 	if (!user && isRestricted) {
-		return await navigateTo('/auth');
+		return navigateTo('/auth');
 	}
 
-	if (user && to.path == '/auth') {
-		return await navigateTo('/');
+	// if (!user && to.path.startsWith('/auth/signup')) {
+	// 	console.log('Allowing access to signup page');
+	// 	return;
+	// }
+
+	if (user && to.path.startsWith('/auth') && to.path !== '/auth/signup') {
+		return navigateTo('/');
 	}
+
+	console.log('Middleware executed', { user, path: to.path });
 });

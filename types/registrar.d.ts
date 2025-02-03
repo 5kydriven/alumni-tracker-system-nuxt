@@ -3,5 +3,5 @@ export interface Registrar {
 	name?: string;
 	email?: string;
 	password?: string;
-	role?: string;
+	role?: Roles;
 }
