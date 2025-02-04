@@ -13,7 +13,7 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('alumni').doc(param).get();
+		const doc = await db.collection('users').doc(param).get();
 
 		if (!doc.exists) {
 			throw createError({
@@ -23,7 +23,11 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		return doc.data();
+		return {
+			statusCode: 200,
+			statusMessage: 'ok',
+			data: doc.data(),
+		} as H3Response;
 	} catch (error) {
 		console.log('/alumni.[uid].get: ', error);
 		return errorResponse(error);
