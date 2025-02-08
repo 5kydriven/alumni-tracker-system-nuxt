@@ -5,14 +5,22 @@
 	});
 
 	const route = useRoute();
+	const userCreds = useCurrentUser();
 
 	const {
 		data: job,
 		status,
 		error,
-	} = await useLazyFetch<Job>(`/api/job/${route.params.jobUid}`, {
+	} = useLazyFetch<Job>(`/api/job/${route.params.jobUid}`, {
 		method: 'GET',
 	});
+
+	const { data: user } = useLazyFetch<H3Response<User<AlumniCredentials>>>(
+		`/api/user/${userCreds.value?.uid}`,
+		{
+			method: 'GET',
+		},
+	);
 
 	if (error.value) {
 		showError({
@@ -26,7 +34,10 @@
 	<div class="flex gap-4 flex-col xl:flex-row p-4 max-w-screen-xl mx-auto">
 		<template v-if="status == 'success' && job?.createdAt">
 			<AlumniJobHeader v-bind="job" />
-			<AlumniJobDescription v-bind="job" />
+
+			<AlumniJobDescription
+				v-bind="job"
+				:alumniCredentials="user?.data?.userCredentials as AlumniCredentials" />
 		</template>
 
 		<template v-else>

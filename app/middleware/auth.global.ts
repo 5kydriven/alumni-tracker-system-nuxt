@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-	// if (import.meta.server) return;
+	if (import.meta.server) return;
 
 	const user = await getCurrentUser();
 
@@ -19,5 +19,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		return navigateTo('/');
 	}
 
-	console.log('Middleware executed', { user, path: to.path });
+	console.log('Middleware executed', { path: to.path });
 });

@@ -3,19 +3,24 @@ import { H3Event } from 'h3';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const param = getRouterParam(event, 'uid');
+	const uid = getRouterParam(event, 'uid');
 
 	try {
-		if (!param) {
+		if (!uid) {
 			throw createError({
 				statusCode: 204,
 				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
-		const doc = await db.collection('users').doc(param).get();
+		const userRef = db.collection('users').doc(uid);
+		const [docSnap, educationSnap, experienceSnap] = await Promise.all([
+			userRef.get(),
+			userRef.collection('educationHistory').get(),
+			userRef.collection('workExperience').get(),
+		]);
 
-		if (!doc.exists) {
+		if (!docSnap.exists) {
 			throw createError({
 				statusCode: 404,
 				statusMessage: 'not found',
@@ -23,13 +28,30 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
+		const education = educationSnap.empty
+			? null
+			: educationSnap.docs.map((item) => ({ ...item.data(), uid: item.id }));
+		const experience = experienceSnap.empty
+			? null
+			: experienceSnap.docs.map((item) => ({ ...item.data(), uid: item.id }));
+
+		const userData = docSnap.data();
+		const existingCredentials = userData?.userCredentials || {}; // Preserve existing userCredentials
+
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
-			data: doc.data(),
+			data: {
+				...userData,
+				userCredentials: {
+					...existingCredentials, // Keep existing keys
+					educationalBackground: education,
+					workExperience: experience,
+				},
+			},
 		} as H3Response;
 	} catch (error) {
-		console.log('/alumni.[uid].get: ', error);
+		console.error('/alumni.[uid].get:', error);
 		return errorResponse(error);
 	}
 });

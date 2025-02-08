@@ -76,7 +76,7 @@ export default function useAlumniForm() {
 		}
 
 		if (stepper.current.value === 'alumni-survey') {
-			const res = await $fetch(`/api/alumni/${user.value?.uid}`, {
+			const res = await $fetch<H3Response>(`/api/alumni/${user.value?.uid}`, {
 				method: 'PUT',
 				body: JSON.stringify({ ...form }),
 			});

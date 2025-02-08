@@ -18,7 +18,7 @@
 		{ name: 'Hybrid', key: 'R' },
 	]);
 
-	const { data: jobs, status } = await useLazyFetch<Job[]>('/api/job');
+	const { data: jobs, status } = useLazyFetch<Job[]>('/api/job');
 </script>
 
 <template>

@@ -30,5 +30,8 @@ export default defineAppConfig({
 		avatar: {
 			background: 'bg-gray-200',
 		},
+		card: {
+			divide: 'divide-gray-300 divide-y dark:divide-gray-800',
+		},
 	},
 });

@@ -1,7 +1,15 @@
 <script setup lang="ts">
+	import { AlumniAddDescription } from '#components';
+
+	const modal = useModal();
+
 	const props = defineProps<{
 		name?: User['name'];
-		userCredentials?: User['userCredentials'];
+		userCredentials?: {
+			city?: AlumniCredentials['city'];
+			province?: AlumniCredentials['province'];
+			description?: AlumniCredentials['description'];
+		};
 	}>();
 </script>
 
@@ -23,19 +31,30 @@
 						props.name
 					}}</label>
 					<span class="text-gray-400 text-sm"
-						>{{ props.userCredentials.city }},
-						{{ props.userCredentials.province }}</span
+						>{{ props.userCredentials?.city }},
+						{{ props.userCredentials?.province }}</span
 					>
 				</div>
 			</div>
 			<div class="px-8 flex flex-col">
 				<span class="font-semibold">About Me</span>
-				<p class="text-gray-400 text-sm">
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-					laboriosam iste tempora exercitationem, ab officia placeat
-					consequuntur. Accusamus, consectetur sunt. Ea illo velit voluptatum
-					numquam eveniet beatae ex, totam perspiciatis.
+				<p
+					class="text-gray-400 text-sm"
+					v-if="props.userCredentials?.description">
+					{{ props.userCredentials?.description }}
 				</p>
+				<div
+					class="w-full flex justify-center items-center p-8"
+					v-else>
+					<UButton
+						icon="i-heroicons-pencil-square-solid"
+						label="description"
+						size="sm"
+						variant="soft"
+						@click="
+							modal.open(AlumniAddDescription, { onClose: modal.close })
+						" />
+				</div>
 			</div>
 		</div>
 	</div>
