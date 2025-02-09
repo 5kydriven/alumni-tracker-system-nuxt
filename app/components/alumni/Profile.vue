@@ -4,6 +4,7 @@
 	const modal = useModal();
 
 	const props = defineProps<{
+		uid?: User['uid'];
 		name?: User['name'];
 		userCredentials?: {
 			city?: AlumniCredentials['city'];
@@ -52,7 +53,10 @@
 						size="sm"
 						variant="soft"
 						@click="
-							modal.open(AlumniAddDescription, { onClose: modal.close })
+							modal.open(AlumniAddDescription, {
+								onClose: modal.close,
+								uid: props.uid,
+							})
 						" />
 				</div>
 			</div>

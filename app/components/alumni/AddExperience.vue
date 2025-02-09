@@ -1,10 +1,34 @@
 <script setup lang="ts">
-	import type { WorkExperience } from '~~/types/alumni-credentials';
+	import VueDatePicker from '@vuepic/vue-datepicker';
+	const { toastResponse } = useToastComposables();
 	const experience = reactive<WorkExperience>({});
+	const isLoading = ref(false);
+	const currentDate = new Date();
+	const endDate = ref(
+		new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+	);
+
+	async function onSubmit() {
+		isLoading.value = true;
+		const res = await $fetch(`/api/alumni/experience/${props.uid}`, {
+			method: 'POST',
+			body: JSON.stringify(experience),
+		});
+		await refreshNuxtData('alumni-profile');
+		toastResponse(res);
+		emits('close');
+		isLoading.value = false;
+	}
 
 	const emits = defineEmits<{
 		close: [];
 	}>();
+
+	const props = defineProps({
+		uid: {
+			type: String,
+		},
+	});
 </script>
 
 <template>
@@ -13,7 +37,8 @@
 			:ui="{
 				ring: '',
 			}"
-			as="form">
+			as="form"
+			@submit.prevent="onSubmit">
 			<template #header>
 				<div class="flex items-center justify-between">
 					<h3
@@ -55,20 +80,24 @@
 					<UFormGroup
 						label="From"
 						class="w-full">
-						<UInput
+						<!-- <UInput
 							required
 							type="text"
 							v-model="experience.startDate"
-							placeholder="Start date (e.g., Jan 2023)" />
+							placeholder="Start date (e.g., Jan 2023)" /> -->
+						<VueDatePicker
+							month-picker
+							auto-apply
+							:teleport="true" />
 					</UFormGroup>
 					<UFormGroup
 						label="To"
 						class="w-full">
-						<UInput
-							required
-							type="text"
-							v-model="experience.endDate"
-							placeholder="End date or 'Present'" />
+						<VueDatePicker
+							v-model="endDate"
+							month-picker
+							auto-apply
+							:teleport="true" />
 					</UFormGroup>
 				</div>
 			</div>
@@ -83,7 +112,8 @@
 					<UButton
 						variant="solid"
 						label="Save"
-						type="submit" />
+						type="submit"
+						:loading="isLoading" />
 				</div>
 			</template>
 		</UCard>

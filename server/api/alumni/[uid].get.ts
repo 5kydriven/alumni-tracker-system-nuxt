@@ -36,15 +36,16 @@ export default defineEventHandler(async (event: H3Event) => {
 			: experienceSnap.docs.map((item) => ({ ...item.data(), uid: item.id }));
 
 		const userData = docSnap.data();
-		const existingCredentials = userData?.userCredentials || {}; // Preserve existing userCredentials
+		const existingCredentials = userData?.userCredentials || {};
 
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
 			data: {
 				...userData,
+				uid: docSnap.id,
 				userCredentials: {
-					...existingCredentials, // Keep existing keys
+					...existingCredentials,
 					educationalBackground: education,
 					workExperience: experience,
 				},

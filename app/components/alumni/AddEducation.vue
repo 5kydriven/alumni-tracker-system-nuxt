@@ -1,7 +1,29 @@
 <script setup lang="ts">
+	const background = reactive<EduactionalBackground>({});
+	const isLoading = ref(false);
+	const { toastResponse } = useToastComposables();
+
+	async function onSubmit() {
+		isLoading.value = true;
+		const res = await $fetch(`/api/alumni/education/${props.uid}`, {
+			method: 'POST',
+			body: JSON.stringify(background),
+		});
+		await refreshNuxtData('alumni-profile');
+		toastResponse(res);
+		emits('close');
+		isLoading.value = false;
+	}
+
 	const emits = defineEmits<{
 		close: [];
 	}>();
+
+	const props = defineProps({
+		uid: {
+			type: String,
+		},
+	});
 </script>
 
 <template>
@@ -10,7 +32,8 @@
 			:ui="{
 				ring: '',
 			}"
-			as="form">
+			as="form"
+			@submit.prevent="onSubmit">
 			<template #header>
 				<div class="flex items-center justify-between">
 					<h3
@@ -31,12 +54,14 @@
 					<UInput
 						required
 						type="text"
+						v-model="background.schoolName"
 						placeholder="Enter the name of your school" />
 				</UFormGroup>
 				<UFormGroup label="School Address">
 					<UInput
 						required
 						type="text"
+						v-model="background.schoolAddress"
 						placeholder="Enter the school address" />
 				</UFormGroup>
 				<div class="flex items-center gap-4">
@@ -45,7 +70,8 @@
 						class="w-full">
 						<UInput
 							required
-							type="text"
+							type="number"
+							v-model="background.startDate"
 							placeholder="Start year (e.g., 2018)" />
 					</UFormGroup>
 					<UFormGroup
@@ -53,7 +79,8 @@
 						class="w-full">
 						<UInput
 							required
-							type="text"
+							type="number"
+							v-model="background.endDate"
 							placeholder="End year (e.g., 2021)" />
 					</UFormGroup>
 				</div>
@@ -69,7 +96,8 @@
 					<UButton
 						variant="solid"
 						label="Save"
-						type="submit" />
+						type="submit"
+						:loading="isLoading" />
 				</div>
 			</template>
 		</UCard>

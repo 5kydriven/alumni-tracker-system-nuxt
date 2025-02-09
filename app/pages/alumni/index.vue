@@ -75,7 +75,12 @@
 					icon="i-heroicons-plus"
 					size="sm"
 					label="Add experience"
-					@click="modal.open(AlumniAddExperience, { onClose: modal.close })"
+					@click="
+						modal.open(AlumniAddExperience, {
+							onClose: modal.close,
+							uid: alumni?.data?.uid,
+						})
+					"
 					variant="soft" />
 			</div>
 		</div>
@@ -132,7 +137,12 @@
 				<UButton
 					icon="i-heroicons-plus"
 					size="sm"
-					@click="modal.open(AlumniAddEducation, { onClose: modal.close })"
+					@click="
+						modal.open(AlumniAddEducation, {
+							onClose: modal.close,
+							uid: alumni?.data?.uid,
+						})
+					"
 					label="Add education"
 					variant="soft" />
 			</div>

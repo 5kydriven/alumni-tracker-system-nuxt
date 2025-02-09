@@ -6,6 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
 	const uid = getRouterParam(event, 'uid');
 	const db = getFirestore();
 	try {
+		console.log(uid);
 		if (!uid || !body) {
 			throw createError({
 				statusCode: 204,

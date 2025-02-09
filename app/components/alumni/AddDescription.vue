@@ -1,5 +1,4 @@
 <script setup lang="ts">
-	const user = useCurrentUser();
 	const { toastResponse } = useToastComposables();
 	const description = ref<string>();
 	const isLoading = ref(false);
@@ -7,12 +6,13 @@
 	async function onSubmit() {
 		isLoading.value = true;
 		const res = await $fetch<H3Response>(
-			`/api/alumni/description/${user.value?.uid}`,
+			`/api/alumni/description/${props.uid}`,
 			{
 				method: 'POST',
 				body: JSON.stringify(description.value),
 			},
 		);
+		console.log(props.uid);
 		await refreshNuxtData('alumni-profile');
 		toastResponse(res);
 		isLoading.value = false;
@@ -22,6 +22,12 @@
 	const emits = defineEmits<{
 		close: [];
 	}>();
+
+	const props = defineProps({
+		uid: {
+			type: String,
+		},
+	});
 </script>
 
 <template>
