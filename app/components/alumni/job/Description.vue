@@ -1,6 +1,4 @@
 <script setup lang="ts">
-	const isApplicable = ref(false);
-
 	const props = defineProps<{
 		title?: Job['title'];
 		contactPerson?: Job['contactPerson'];
@@ -11,18 +9,15 @@
 		alumniCredentials: AlumniCredentials;
 	}>();
 
-	if (
-		props.alumniCredentials.description != '' ||
-		(props.alumniCredentials.workExperience?.length ?? 0) > 1
-	) {
-		isApplicable.value = true;
-	}
+	const isApplicable = computed(() => {
+		return props.alumniCredentials?.description !== '';
+	});
 </script>
 
 <template>
 	<div class="flex flex-col gap-4">
 		<div
-			v-if="isApplicable"
+			v-if="!isApplicable"
 			class="border-red-300 border-2 bg-red-500/20 p-2 text-center text-red-500 rounded-lg">
 			<span>Complete all your information to apply a job</span>
 		</div>
@@ -46,7 +41,7 @@
 				<div>
 					<UButton
 						label="Apply"
-						:disabled="isApplicable"
+						:disabled="!isApplicable"
 						@click="() => console.log(props.employerUid)" />
 				</div>
 			</div>

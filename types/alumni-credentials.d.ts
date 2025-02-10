@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 declare global {
 	interface AlumniCredentials {
 		phoneNumber?: string;
@@ -10,7 +12,7 @@ declare global {
 		birthPlace?: string;
 		description?: string;
 		workExperience?: WorkExperience[];
-		educationalBackground?: EduactionalBackground[];
+		educationalBackground?: EducationalBackground[];
 	}
 
 	interface WorkExperience {
@@ -18,16 +20,18 @@ declare global {
 		companyName?: string;
 		companyAddress?: string;
 		jobTitle?: string;
-		startDate?: string;
-		endDate?: string;
+		startDate?: any;
+		endDate?: any;
+		createdAt?: Timestamp;
 	}
 
-	interface EduactionalBackground {
+	interface EducationalBackground {
 		uid?: string;
 		schoolName?: string;
 		schoolAddress?: string;
-		startDate?: string;
-		endDate?: string;
+		startDate?: any;
+		endDate?: any;
+		createdAt?: Timestamp;
 	}
 }
 

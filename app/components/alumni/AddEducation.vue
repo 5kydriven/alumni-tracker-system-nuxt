@@ -1,5 +1,6 @@
 <script setup lang="ts">
-	const background = reactive<EduactionalBackground>({});
+	import VueDatePicker from '@vuepic/vue-datepicker';
+	const background = reactive<EducationalBackground>({});
 	const isLoading = ref(false);
 	const { toastResponse } = useToastComposables();
 
@@ -38,7 +39,7 @@
 				<div class="flex items-center justify-between">
 					<h3
 						class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-						Backgroung Education Details
+						Background Education Details
 					</h3>
 					<UButton
 						color="gray"
@@ -68,20 +69,22 @@
 					<UFormGroup
 						label="From"
 						class="w-full">
-						<UInput
-							required
-							type="number"
+						<VueDatePicker
+							year-picker
 							v-model="background.startDate"
-							placeholder="Start year (e.g., 2018)" />
+							auto-apply
+							required
+							:teleport="true"></VueDatePicker>
 					</UFormGroup>
 					<UFormGroup
 						label="To"
 						class="w-full">
-						<UInput
-							required
-							type="number"
+						<VueDatePicker
+							year-picker
 							v-model="background.endDate"
-							placeholder="End year (e.g., 2021)" />
+							auto-apply
+							required
+							:teleport="true"></VueDatePicker>
 					</UFormGroup>
 				</div>
 			</div>

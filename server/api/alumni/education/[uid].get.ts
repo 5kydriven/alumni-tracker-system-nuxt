@@ -1,12 +1,11 @@
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 
 export default defineEventHandler(async (event: H3Event) => {
-	const body = await readBody(event);
 	const uid = getRouterParam(event, 'uid');
 	const db = getFirestore();
 	try {
-		if (!uid || !body) {
+		if (!uid) {
 			throw createError({
 				statusCode: 204,
 				statusMessage: 'No content',
@@ -18,13 +17,18 @@ export default defineEventHandler(async (event: H3Event) => {
 			.collection('users')
 			.doc(uid)
 			.collection('education')
-			.add({ ...body, createdAt: Timestamp.now() });
+			.orderBy('endDate', 'desc')
+			.get();
+
+		const education = educationSnapshot.docs.map((doc) => ({
+			uid: doc.id,
+			...doc.data(),
+		}));
 
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
-			message: 'Successfully added education',
-			data: educationSnapshot,
+			data: education as EducationalBackground[],
 		} as H3Response;
 	} catch (error: any) {
 		return errorResponse(error);

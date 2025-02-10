@@ -1,12 +1,15 @@
 <script setup lang="ts">
 	import VueDatePicker from '@vuepic/vue-datepicker';
 	const { toastResponse } = useToastComposables();
-	const experience = reactive<WorkExperience>({});
-	const isLoading = ref(false);
 	const currentDate = new Date();
-	const endDate = ref(
-		new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-	);
+
+	const experience = reactive<WorkExperience>({
+		endDate: {
+			month: currentDate.getMonth(),
+			year: currentDate.getFullYear(),
+		},
+	});
+	const isLoading = ref(false);
 
 	async function onSubmit() {
 		isLoading.value = true;
@@ -80,23 +83,21 @@
 					<UFormGroup
 						label="From"
 						class="w-full">
-						<!-- <UInput
-							required
-							type="text"
-							v-model="experience.startDate"
-							placeholder="Start date (e.g., Jan 2023)" /> -->
 						<VueDatePicker
+							v-model="experience.startDate"
 							month-picker
 							auto-apply
+							required
 							:teleport="true" />
 					</UFormGroup>
 					<UFormGroup
 						label="To"
 						class="w-full">
 						<VueDatePicker
-							v-model="endDate"
+							v-model="experience.endDate"
 							month-picker
 							auto-apply
+							required
 							:teleport="true" />
 					</UFormGroup>
 				</div>
