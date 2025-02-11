@@ -25,7 +25,7 @@
 					class="md:w-28 md:h-28 text-large absolute bottom-[-3rem] left-6 rounded-full" />
 			</div>
 		</div>
-		<div class="mt-12 flex flex-col gap-2">
+		<div class="mt-12 flex flex-col gap-4">
 			<div class="px-8 pb-0">
 				<div class="flex flex-col">
 					<label class="lg:text-2xl font-bold text-lg capitalize">{{
@@ -37,8 +37,21 @@
 					>
 				</div>
 			</div>
-			<div class="px-8 flex flex-col">
-				<span class="font-semibold">About Me</span>
+			<div class="px-8 flex flex-col gap-2">
+				<div class="flex items-center gap-2">
+					<span class="font-semibold">About Me</span>
+					<UButton
+						v-show="props.userCredentials?.description"
+						icon="i-heroicons-pencil-square-solid"
+						size="2xs"
+						@click="
+							modal.open(AlumniAddDescription, {
+								onClose: modal.close,
+								uid: props.uid,
+								description: props.userCredentials?.description,
+							})
+						" />
+				</div>
 				<p
 					class="text-gray-400 text-sm"
 					v-if="props.userCredentials?.description">

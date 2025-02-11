@@ -6,12 +6,40 @@
 		description?: Job['description'];
 		employerUid?: Job['employerUid'];
 		uid?: Job['uid'];
-		alumniCredentials: AlumniCredentials;
+		companyName?: Job['companyName'];
+		applicants?: Job['applicants'];
+		alumni?: User<AlumniCredentials>;
 	}>();
 
-	const isApplicable = computed(() => {
-		return props.alumniCredentials?.description !== '';
+	const isLoading = ref(false);
+	const { toastResponse } = useToastComposables();
+
+	const hasApplied = computed(() => {
+		return props.applicants?.includes(props.alumni?.uid ?? '') ?? false;
 	});
+
+	const isApplicable = computed(() => {
+		return props.alumni?.userCredentials?.description !== '';
+	});
+
+	async function onApplied() {
+		isLoading.value = true;
+		const res = await $fetch<H3Response>(`/api/alumni/message`, {
+			method: 'POST',
+			body: JSON.stringify({
+				employerUid: props.employerUid,
+				alumniUid: props.alumni?.uid,
+				alumniName: props.alumni?.name,
+				jobUid: props.uid,
+				employerName: props.contactPerson,
+				companyName: props.companyName,
+				jobTitle: props.title,
+			}),
+		});
+		await refreshNuxtData(`job-${props.uid}`);
+		toastResponse(res);
+		isLoading.value = false;
+	}
 </script>
 
 <template>
@@ -23,7 +51,8 @@
 		</div>
 		<div
 			class="flex-1 flex flex-col bg-white border border-gray-300 shadow-lg p-4 rounded-lg">
-			<div class="flex justify-between items-center">
+			<div
+				class="flex justify-between items-center w-full flex-wrap gap-4 md:gap-0">
 				<div class="flex items-center gap-2">
 					<UAvatar
 						:alt="props.title"
@@ -38,22 +67,19 @@
 						>
 					</div>
 				</div>
-				<div>
+				<div class="md:w-fit w-full">
 					<UButton
-						label="Apply"
-						:disabled="!isApplicable"
-						@click="() => console.log(props.employerUid)" />
+						:loading="isLoading"
+						block
+						:label="hasApplied ? 'Applied' : 'Apply'"
+						:disabled="!isApplicable || hasApplied"
+						@click="onApplied" />
 				</div>
 			</div>
 			<UDivider class="mt-2 mb-4" />
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-col gap-1">
 					<p v-html="props.description?.replace(/\n/g, '<br>')"></p>
-				</div>
-				<div class="flex justify-end">
-					<!-- <UButton>
-								Apply Now
-							</UButton> -->
 				</div>
 			</div>
 		</div>

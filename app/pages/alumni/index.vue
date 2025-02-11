@@ -16,14 +16,6 @@
 	const { formatMonthYear } = useFormatter();
 	const { calculateDuration } = useCalculator();
 
-	// const { data: alumni } = useLazyFetch<H3Response<User<AlumniCredentials>>>(
-	// 	`/api/alumni/${user.value?.uid}`,
-	// 	{
-	// 		key: 'alumni-profile',
-	// 		method: 'GET',
-	// 	},
-	// );
-
 	const { data: alumni } = useAsyncData('alumni-profile', async () => {
 		if (!user.value?.uid) return null;
 
@@ -48,8 +40,6 @@
 			},
 		};
 	});
-
-	watch(alumni, () => console.log(alumni.value));
 </script>
 
 <template>
@@ -91,12 +81,14 @@
 							})
 						" />
 					<UAvatar
-						:alt="experience.companyName"
+						:alt="experience.companyName?.toUpperCase()"
 						class="!rounded"
 						size="lg" />
 					<div class="flex flex-col text-base/5">
-						<label class="font-bold">{{ experience.companyName }}</label>
-						<span class="font-thin">{{ experience.jobTitle }}</span>
+						<label class="font-bold capitalize">{{
+							experience.companyName
+						}}</label>
+						<span class="font-thin capitalize">{{ experience.jobTitle }}</span>
 						<span class="dark:text-gray-400 text-xs"
 							>{{ formatMonthYear(experience.startDate) }} -
 							{{ formatMonthYear(experience.endDate) }} .
@@ -161,12 +153,16 @@
 							})
 						" />
 					<UAvatar
-						:alt="education.schoolName"
+						:alt="education.schoolName?.toUpperCase()"
 						class="!rounded"
 						size="lg" />
 					<div class="flex flex-col text-base/5">
-						<label class="font-bold">{{ education.schoolName }}</label>
-						<span class="font-thin">{{ education.schoolAddress }}</span>
+						<label class="font-bold capitalize">{{
+							education.schoolName
+						}}</label>
+						<span class="font-thin capitalize">{{
+							education.schoolAddress
+						}}</span>
 						<span class="dark:text-gray-400 text-xs"
 							>{{ education.startDate }} - {{ education.endDate }}</span
 						>

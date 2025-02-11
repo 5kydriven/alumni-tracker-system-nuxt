@@ -35,4 +35,4 @@ declare global {
 	}
 }
 
-export { AlumniCredentials, EduactionalBackground, WorkExperience };
+export { AlumniCredentials, EducationalBackground, WorkExperience };

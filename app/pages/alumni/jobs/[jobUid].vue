@@ -11,7 +11,8 @@
 		data: job,
 		status,
 		error,
-	} = useLazyFetch<Job>(`/api/job/${route.params.jobUid}`, {
+	} = useLazyFetch<H3Response<Job>>(`/api/job/${route.params.jobUid}`, {
+		key: `job-${route.params.jobUid}`,
 		method: 'GET',
 	});
 
@@ -32,12 +33,12 @@
 
 <template>
 	<div class="flex gap-4 flex-col md:flex-row p-4 max-w-screen-xl mx-auto">
-		<template v-if="status == 'success' && job?.createdAt">
-			<AlumniJobHeader v-bind="job" />
+		<template v-if="status == 'success' && job?.data?.createdAt">
+			<AlumniJobHeader v-bind="job.data" />
 
 			<AlumniJobDescription
-				v-bind="job"
-				:alumniCredentials="user?.data?.userCredentials as AlumniCredentials" />
+				v-bind="job.data"
+				:alumni="user?.data as User<AlumniCredentials>" />
 		</template>
 
 		<template v-else>

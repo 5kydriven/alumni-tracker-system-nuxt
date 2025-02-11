@@ -24,9 +24,13 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		return doc.data();
+		return {
+			statusCode: 200,
+			statusMessage: 'ok',
+			data: { ...doc.data(), uid: doc.id },
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/job.[uid].get', error);
-		return error;
+		return errorResponse(error);
 	}
 });

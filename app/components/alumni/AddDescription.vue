@@ -1,6 +1,11 @@
 <script setup lang="ts">
 	const { toastResponse } = useToastComposables();
-	const description = ref<string>();
+	const props = defineProps<{
+		uid?: string;
+		description?: string;
+	}>();
+	const description = ref<string>(props.description ?? '');
+
 	const isLoading = ref(false);
 
 	async function onSubmit() {
@@ -12,7 +17,6 @@
 				body: JSON.stringify(description.value),
 			},
 		);
-		console.log(props.uid);
 		await refreshNuxtData('alumni-profile');
 		toastResponse(res);
 		isLoading.value = false;
@@ -22,12 +26,6 @@
 	const emits = defineEmits<{
 		close: [];
 	}>();
-
-	const props = defineProps({
-		uid: {
-			type: String,
-		},
-	});
 </script>
 
 <template>
@@ -42,7 +40,7 @@
 				<div class="flex items-center justify-between">
 					<h3
 						class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-						Add Description
+						{{ props.description ? 'Edit Description' : 'Add Description' }}
 					</h3>
 					<UButton
 						color="gray"
