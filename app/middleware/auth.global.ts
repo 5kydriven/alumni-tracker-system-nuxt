@@ -19,5 +19,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		return navigateTo('/');
 	}
 
-	console.log('Middleware executed', { user, path: to.path });
+	// console.log('Middleware executed', { user, path: to.path });
 });
