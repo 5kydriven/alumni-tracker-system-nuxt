@@ -27,7 +27,7 @@
 		},
 		'alumni-survey': {
 			title: 'Survey Form',
-			isValid: () => true,
+			isValid: () => store.survey.employmentStatus != undefined,
 		},
 		'alumni-done': {
 			title: 'Account Updated',
@@ -45,7 +45,10 @@
 			isLoading.value = true;
 			const res = await $fetch<H3Response>(`/api/alumni/${user.value?.uid}`, {
 				method: 'PUT',
-				body: JSON.stringify({ ...store.form }),
+				body: JSON.stringify({
+					form: { ...store.form },
+					survey: { ...store.survey },
+				}),
 			});
 			isLoading.value = false;
 			if (res.statusCode == 200) {
@@ -144,16 +147,16 @@
 							class="my-2"
 							:ui="{ border: { base: 'dark:border-gray-500' } }" />
 
-						<AlumniStepperAccount
-							v-show="stepper.isCurrent('alumni-account')" />
+						<AlumniStepperAccount v-if="stepper.isCurrent('alumni-account')" />
 
 						<AlumniStepperCredentials
 							:name="user?.displayName as string"
-							v-show="stepper.isCurrent('alumni-credential')" />
+							v-else-if="stepper.isCurrent('alumni-credential')" />
 
-						<AlumniStepperSurvey v-show="stepper.isCurrent('alumni-survey')" />
+						<AlumniStepperSurvey
+							v-else-if="stepper.isCurrent('alumni-survey')" />
 
-						<AlumniStepperLast v-show="stepper.isCurrent('alumni-done')" />
+						<AlumniStepperLast v-else />
 					</div>
 
 					<UButton

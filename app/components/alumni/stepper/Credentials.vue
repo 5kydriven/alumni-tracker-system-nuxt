@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import VueDatePicker from '@vuepic/vue-datepicker';
 	const store = useStepperStore();
 
 	const maritalStatus = [
@@ -88,10 +89,14 @@
 				label="Date of birth"
 				class="col-span-6"
 				required>
-				<UInput
+				<VueDatePicker
+					:enable-time-picker="false"
+					auto-apply
+					v-model="(store.form.userCredentials as AlumniCredentials).birthDate" />
+				<!-- <UInput
 					placeholder="you@example.com"
 					type="text"
-					v-model="(store.form.userCredentials as AlumniCredentials).birthDate" />
+					v-model="(store.form.userCredentials as AlumniCredentials).birthDate" /> -->
 			</UFormGroup>
 			<UFormGroup
 				label="Place of birth"

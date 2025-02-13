@@ -12,7 +12,7 @@ declare global {
 		zipCode?: string;
 		gender?: string;
 		maritalStatus?: string;
-		birthDate?: string;
+		birthDate?: any;
 		birthPlace?: string;
 		description?: string;
 		workExperience?: WorkExperience[];

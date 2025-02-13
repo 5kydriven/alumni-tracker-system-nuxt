@@ -16,7 +16,6 @@ export const useStepperStore = defineStore('stepper-store', () => {
 		email: '',
 		password: '',
 		userCredentials: {
-			status: '',
 			phoneNumber: '',
 			province: '',
 			city: '',
@@ -25,15 +24,19 @@ export const useStepperStore = defineStore('stepper-store', () => {
 			gender: undefined,
 			maritalStatus: '',
 			birthDate: '',
-			currentWork: {
-				companyName: '',
-				companyAddress: '',
-				jobTitle: '',
-				jobType: '',
-				startDate: undefined,
-				endDate: undefined,
-			},
 		},
+	});
+	const survey = ref<Survey>({
+		employmentStatus: undefined,
+		employmentType: undefined,
+		jobTitle: undefined,
+		companyName: undefined,
+		companyAddress: undefined,
+		yearsInJob: undefined,
+		workNature: undefined,
+		urlLink: undefined,
+		bussinessName: undefined,
+		isRegistered: undefined,
 	});
 	const progress = ref(0);
 
@@ -60,5 +63,5 @@ export const useStepperStore = defineStore('stepper-store', () => {
 		});
 	}
 
-	return { form, isValidStep, progress };
+	return { form, isValidStep, progress, survey };
 });
