@@ -2,6 +2,10 @@ import type { Timestamp } from 'firebase/firestore';
 
 declare global {
 	interface AlumniCredentials {
+		id?: string;
+		status?: string;
+		course?: string;
+		batch?: string;
 		phoneNumber?: string;
 		province?: string;
 		city?: string;
@@ -13,6 +17,7 @@ declare global {
 		description?: string;
 		workExperience?: WorkExperience[];
 		educationalBackground?: EducationalBackground[];
+		currentWork?: WorkExperience;
 	}
 
 	interface WorkExperience {
@@ -22,6 +27,7 @@ declare global {
 		jobTitle?: string;
 		startDate?: any;
 		endDate?: any;
+		jobType?: string;
 		createdAt?: Timestamp;
 	}
 

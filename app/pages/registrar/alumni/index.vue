@@ -188,11 +188,17 @@
 		<template #name-data="{ row }"
 			><span class="capitalize">{{ row.name }}</span></template
 		>
+		<template #course-data="{ row }">
+			{{ row.userCredentials.course }}
+		</template>
+		<template #batch-data="{ row }">
+			{{ row.userCredentials.batch }}
+		</template>
 		<template #status-data="{ row }">
 			<UBadge
 				variant="subtle"
-				:color="statusColors(row.status)"
-				>{{ row.status }}</UBadge
+				:color="statusColors(row.userCredentials.status)"
+				>{{ row.userCredentials.status }}</UBadge
 			>
 		</template>
 		<template #actions-data="{ row }">

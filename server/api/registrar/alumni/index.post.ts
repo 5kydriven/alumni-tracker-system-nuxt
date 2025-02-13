@@ -33,21 +33,6 @@ export default eventHandler(async (event: H3Event) => {
 					displayName: item.name,
 				});
 
-				// const docRef = db.collection('alumni').doc(userCreds.uid);
-				// batch.set(
-				// 	docRef,
-				// 	{
-				// 		...item,
-				// 		name: item.name.toLowerCase(),
-				// 		searchKeywords: generateSearchKeywords(item.name),
-				// 		email,
-				// 		password,
-				// 		isUpdated: false,
-				// 		createdAt: Timestamp.now(),
-				// 	},
-				// 	{ merge: true },
-				// );
-
 				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
 				batch.set(
 					accountRolesDocRef,
@@ -59,9 +44,11 @@ export default eventHandler(async (event: H3Event) => {
 						searchKeywords: generateSearchKeywords(item.name),
 						createdAt: Timestamp.now(),
 						isUpdated: false,
-						batch: item.batch,
-						course: item.course,
-						status: 'unknown',
+						userCredentials: {
+							status: 'unknown',
+							course: item.course,
+							batch: item.batch,
+						},
 					},
 					{ merge: true },
 				);
