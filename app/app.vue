@@ -46,3 +46,10 @@
 		<UNotifications />
 	</div>
 </template>
+
+<style>
+	::selection {
+		background-color: yellow;
+		color: #000;
+	}
+</style>

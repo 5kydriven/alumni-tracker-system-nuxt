@@ -32,7 +32,7 @@
 					>{{ name }}</label
 				>
 				<p
-					class="px-2 py-1 text-wrap text"
+					class="px-2 py-1 text-wrap text pointer-events-auto"
 					:class="
 						props.currentUid == props.senderUid
 							? 'bg-primary-500 text-white rounded-tr-none  rounded-lg'

@@ -25,7 +25,7 @@
 						>{{ props.lastMessage.name }}: </span
 					>{{ props.lastMessage.message }}
 				</p>
-				<span class="w-[85px]">
+				<span class="w-auto shrink-0">
 					{{ convertConversationTimestamp(props.lastMessage.createdAt) }}
 				</span>
 			</div>

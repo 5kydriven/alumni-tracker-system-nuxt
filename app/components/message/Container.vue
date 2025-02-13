@@ -75,7 +75,7 @@
 		<MessageHeader :participantName="participant" />
 
 		<div
-			class="border-y border-gray-200 dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1">
+			class="dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1">
 			<div
 				ref="messagesContainer"
 				class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2">
@@ -92,12 +92,16 @@
 		<form
 			@submit.prevent="handleSubmit"
 			class="flex gap-2 p-4 bg-white border-t border-gray-300">
-			<UInput
+			<UTextarea
+				autoresize
+				:rows="1"
+				:maxrows="3"
 				placeholder="Type a message"
 				v-model="message"
 				class="w-full"
 				required />
 			<UButton
+				class="self-end"
 				:loading="isLoading"
 				label="send"
 				icon="i-heroicons-paper-airplane"
