@@ -18,9 +18,18 @@ export default function useAuth() {
 				`/api/user/${userCredential.user.uid}`,
 			);
 			return router.replace(`/${data.role}`);
-		} catch (err) {
+		} catch (err: any) {
 			console.error('Error during login:', err);
-			error.value = 'Incorrect email or password!';
+			switch (err.code) {
+				case 'auth/invalid-credential':
+					error.value = 'Incorrect email or password. Please try again.';
+					break;
+				// case 'auth/user-disabled':
+				// 	error.value = 'Incorrect password. Please try again.';
+				// 	break;
+				default:
+					error.value = 'An error occurred. Please try again later.';
+			}
 		} finally {
 			isLoading.value = false;
 		}

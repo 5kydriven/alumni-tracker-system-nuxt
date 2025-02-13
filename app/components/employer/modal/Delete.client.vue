@@ -1,11 +1,17 @@
 <script setup lang="ts">
-	const store = useEmployerStore();
 	const { toastResponse } = useToastComposables();
 
+	const isLoading = ref(false);
+
 	async function onDelete(uid: string) {
-		const res = await store.deleteJob(uid);
+		isLoading.value = true;
+		const res = await $fetch(`/api/employer/job/${uid}`, {
+			method: 'DELETE',
+		});
+		await refreshNuxtData('employer-jobs');
 		toastResponse(res);
 		emits('close');
+		isLoading.value = false;
 	}
 
 	const emits = defineEmits<{
@@ -56,7 +62,7 @@
 					label="Yes, I'm sure"
 					color="red"
 					@click="onDelete(props.uid ?? '')"
-					:loading="store.isLoading" />
+					:loading="isLoading" />
 			</template>
 		</UCard>
 	</UModal>

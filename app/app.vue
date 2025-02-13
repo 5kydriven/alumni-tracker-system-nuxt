@@ -15,9 +15,9 @@
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
 		],
-		bodyAttrs: {
-			class: 'dark:bg-gray-900 dark:text-gray-200 text-gray-900',
-		},
+		// bodyAttrs: {
+		// 	class: 'dark:bg-gray-900 dark:text-gray-200 text-gray-900',
+		// },
 		htmlAttrs: {
 			lang: 'en',
 		},
@@ -46,3 +46,10 @@
 		<UNotifications />
 	</div>
 </template>
+
+<style>
+	::selection {
+		background-color: yellow;
+		color: #000;
+	}
+</style>

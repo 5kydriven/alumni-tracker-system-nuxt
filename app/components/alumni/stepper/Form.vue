@@ -64,6 +64,12 @@
 				isValidStep('alumni-credential') &&
 				(form.phoneNumber?.length ?? 0) >= 10,
 		},
+		'alumni-survey': {
+			title: 'Survey Form',
+			isValid: () =>
+				isValidStep('alumni-credential') &&
+				(form.phoneNumber?.length ?? 0) >= 10,
+		},
 		'alumni-done': {
 			title: 'Account Updated',
 			isValid: () => true,
@@ -83,7 +89,7 @@
 			return;
 		}
 
-		if (stepper.isCurrent('alumni-credential')) {
+		if (stepper.isCurrent('alumni-survey')) {
 			isLoading.value = true;
 			const res = await $fetch<H3Response>(`/api/alumni/${user.value?.uid}`, {
 				method: 'PUT',
@@ -144,7 +150,7 @@
 				class="flex rounded-full p-1 z-10"
 				:class="progres >= 2 ? 'bg-green-400' : 'bg-gray-500'">
 				<UButton
-					icon="i-heroicons-document-check"
+					icon="i-heroicons-document-text"
 					size="sm"
 					color="black"
 					variant="link"
@@ -152,10 +158,22 @@
 					disabled
 					:class="progres >= 2 ? '!text-black' : ''" />
 			</div>
+			<div
+				class="flex rounded-full p-1 z-10"
+				:class="progres >= 3 ? 'bg-green-400' : 'bg-gray-500'">
+				<UButton
+					icon="i-heroicons-document-check"
+					size="sm"
+					color="black"
+					variant="link"
+					:padded="false"
+					disabled
+					:class="progres >= 3 ? '!text-black' : ''" />
+			</div>
 			<UProgress
 				:value="progres"
 				class="absolute left-0 z-0 px-4"
-				:max="2" />
+				:max="3" />
 		</div>
 
 		<form @submit.prevent="onSubmit">
@@ -165,6 +183,7 @@
 					class="my-2"
 					:ui="{ border: { base: 'dark:border-gray-500' } }" />
 
+				<!-- Account Details -->
 				<div
 					class="flex flex-col gap-2"
 					v-if="stepper.isCurrent('alumni-account')">
@@ -186,6 +205,7 @@
 					</UFormGroup>
 				</div>
 
+				<!-- Personal Details -->
 				<div
 					class="flex flex-col gap-2"
 					v-if="stepper.isCurrent('alumni-credential')">
@@ -201,9 +221,6 @@
 									v-model="displayName"
 									:ui="{ form: 'capitalize' }" />
 							</UFormGroup>
-							<!-- <UFormGroup label="Last Name" >
-            <UInput placeholder="you@example.com" />
-          </UFormGroup> -->
 						</div>
 					</div>
 					<div class="grid grid-cols-12 gap-2">
@@ -274,7 +291,7 @@
 							label="Gender"
 							class="col-span-6"
 							required>
-							<USelect
+							<USelectMenu
 								placeholder="Select gender"
 								v-model="form.gender"
 								:options="['male', 'female', 'other']" />
@@ -283,10 +300,74 @@
 							label="Marital status"
 							class="col-span-6"
 							required>
-							<USelect
+							<USelectMenu
 								v-model="form.maritalStatus"
 								placeholder="Select status"
 								:options="maritalStatus" />
+						</UFormGroup>
+					</div>
+				</div>
+
+				<div
+					class="flex flex-col gap-2"
+					v-if="stepper.isCurrent('alumni-survey')">
+					<UFormGroup
+						label="What is your current employment status"
+						required
+						class="col-span-6">
+						<USelectMenu
+							:options="['employed', 'unemployed']"
+							placeholder="Select status" />
+					</UFormGroup>
+					<div class="grid grid-cols-12 gap-2">
+						<UFormGroup
+							label="Job Type"
+							class="col-span-6"
+							required>
+							<USelectMenu
+								:options="[
+									'full-time',
+									'part-time',
+									'freelancer',
+									'contractual',
+									'casual',
+									'self-employed',
+								]" />
+						</UFormGroup>
+						<UFormGroup
+							label="Company Name"
+							class="col-span-6"
+							required>
+							<UInput type="text" />
+						</UFormGroup>
+						<UFormGroup
+							label="Company Address"
+							class="col-span-6"
+							required>
+							<UInput type="text" />
+						</UFormGroup>
+						<UFormGroup
+							label="Job Title"
+							class="col-span-6"
+							required>
+							<UInput type="text" />
+						</UFormGroup>
+
+						<UFormGroup
+							label="How long have you been in your current job?"
+							class="col-span-12"
+							required
+							:ui="{ container: 'flex gap-2' }">
+							<UFormGroup
+								description="from: (month/year)"
+								class="w-full">
+								<UInput type="text" />
+							</UFormGroup>
+							<UFormGroup
+								description="to: (month/year)"
+								class="w-full">
+								<UInput type="text" />
+							</UFormGroup>
 						</UFormGroup>
 					</div>
 				</div>

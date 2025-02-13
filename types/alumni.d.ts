@@ -14,11 +14,11 @@ declare global {
 		province?: string;
 		city?: string;
 		zipCode?: string;
-		gender?: Gender;
+		gender?: string;
 		maritalStatus?: string;
 		birthDate?: string;
 		birthPlace?: string;
-		role?: string;
+		role?: Roles;
 	}
 
 	type AlumniStatus =

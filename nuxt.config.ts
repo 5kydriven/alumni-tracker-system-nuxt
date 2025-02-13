@@ -89,4 +89,8 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	css: ['@vuepic/vue-datepicker/dist/main.css'],
+	build: {
+		transpile: ['@vuepic/vue-datepicker'],
+	},
 });

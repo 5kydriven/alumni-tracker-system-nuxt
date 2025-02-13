@@ -13,23 +13,25 @@
 			.string()
 			.nonempty('Description is required')
 			.min(50, 'Description must be at least 50 characters'),
+		companyName: z.string().nonempty('Company name is required'),
 	});
 
 	type Schema = z.output<typeof schema>;
 
+	const user = useCurrentUser();
+	const { toastResponse } = useToastComposables();
+
+	const isLoading = ref(false);
 	const form = reactive<Job>({
+		companyName: '',
 		title: '',
 		type: '',
-		email: '',
-		contactPerson: '',
+		email: user.value?.email ?? '',
+		contactPerson: user.value?.displayName ?? '',
 		salary: '',
 		desiredWeeklyHours: '',
 		description: '',
 	});
-
-	const user = useCurrentUser();
-	const store = useEmployerStore();
-	const { toastResponse } = useToastComposables();
 
 	const employmentTypes = [
 		{ name: 'Full-Time', value: 'full time' },
@@ -37,7 +39,7 @@
 		{ name: 'Internship', value: 'internship' },
 		{ name: 'Contract', value: 'contract' },
 		{ name: 'Freelance', value: 'freelance' },
-		{ name: 'Other', value: 'other' },
+		// { name: 'Other', value: 'other' },
 	];
 
 	const emits = defineEmits<{
@@ -45,9 +47,15 @@
 	}>();
 
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
-		const res = await store.createJob(event.data, user.value?.uid ?? '');
+		isLoading.value = true;
+		const res = await $fetch<H3Response>('/api/employer/job', {
+			method: 'POST',
+			body: JSON.stringify({ ...event.data, employerUid: user.value?.uid }),
+		});
+		await refreshNuxtData('employer-jobs');
 		toastResponse(res);
 		emits('close');
+		isLoading.value = false;
 	}
 </script>
 
@@ -62,7 +70,6 @@
 				class="flex flex-col h-full"
 				:ui="{
 					ring: '',
-					divide: 'divide-y divide-gray-100 dark:divide-gray-800',
 					body: {
 						base: 'h-full flex flex-col gap-2 overflow-auto',
 					},
@@ -84,6 +91,14 @@
 					</div>
 				</template>
 
+				<UFormGroup
+					label="Company Name"
+					name="companyName"
+					required>
+					<UInput
+						placeholder="Enter company name"
+						v-model="form.companyName" />
+				</UFormGroup>
 				<div class="flex md:flex-row flex-col gap-2 w-full">
 					<UFormGroup
 						label="Job title"
@@ -99,9 +114,10 @@
 						name="type"
 						class="w-full"
 						required>
-						<USelect
+						<USelectMenu
 							placeholder="Select employment"
 							:options="employmentTypes"
+							value-attribute="value"
 							option-attribute="name"
 							v-model="form.type" />
 					</UFormGroup>
@@ -113,6 +129,8 @@
 						class="w-full"
 						required>
 						<UInput
+							color="primary"
+							disabled
 							placeholder="example@gmail.com"
 							v-model="form.email" />
 					</UFormGroup>
@@ -122,6 +140,8 @@
 						class="w-full"
 						required>
 						<UInput
+							color="primary"
+							disabled
 							placeholder="John Doe"
 							v-model="form.contactPerson" />
 					</UFormGroup>
@@ -154,7 +174,20 @@
 					<UTextarea
 						class="h-52"
 						:ui="{ form: 'h-full' }"
-						placeholder="Search..."
+						placeholder="About Us:
+	- Introduce your company, its mission, and what makes it unique.
+
+Responsibilities:
+	- Outline key tasks and projects.
+
+Requirements:
+	- List necessary skills, experience, and qualifications.
+
+Benefits:
+	- Highlight salary, perks, and work arrangements.
+
+How to Apply:
+	- Include application instructions and contact details."
 						v-model="form.description" />
 				</UFormGroup>
 
@@ -169,7 +202,7 @@
 							variant="solid"
 							type="submit"
 							label="Create job"
-							:loading="store.isLoading" />
+							:loading="isLoading" />
 					</div>
 				</template>
 			</UCard>

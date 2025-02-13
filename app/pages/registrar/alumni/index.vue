@@ -172,7 +172,7 @@
 			icon: 'i-heroicons-circle-stack-20-solid',
 			label: 'No items.',
 		}"
-		:rows="alumni ? alumni.data : []"
+		:rows="alumni.data || []"
 		:columns="columns"
 		v-model="selected"
 		:ui="{

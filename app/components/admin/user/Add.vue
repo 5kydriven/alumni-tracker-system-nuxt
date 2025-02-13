@@ -1,28 +1,30 @@
 <script setup lang="ts">
 	import useComposableToast from '~/composables/useToastComposables';
-	import { useAdminStore } from '~/stores/admin';
 
-	const modal = useModal();
-	const store = useAdminStore();
 	const { toastResponse } = useComposableToast();
-
-	const user = reactive({
+	const isLoading = ref(false);
+	const user = reactive<User>({
 		name: '',
 		email: '',
 		password: '',
-		role: '',
+		role: undefined,
 	});
 
 	const handleSubmit = async (user: User) => {
-		const res = await store.createUser(user);
-
-		if (res) {
-			toastResponse(res);
-		} else {
-			toastResponse({ statusCode: 500, message: 'An error occurred' });
-		}
-		modal.close();
+		isLoading.value = true;
+		const res = await $fetch('/api/admin/user', {
+			method: 'POST',
+			body: JSON.stringify(user),
+		});
+		await refreshNuxtData('users');
+		toastResponse(res);
+		isLoading.value = false;
+		emits('close');
 	};
+
+	const emits = defineEmits<{
+		close: [];
+	}>();
 </script>
 
 <template>
@@ -44,7 +46,7 @@
 							variant="ghost"
 							icon="i-heroicons-x-mark-20-solid"
 							class="-my-1"
-							@click="modal.close()" />
+							@click="emits('close')" />
 					</div>
 				</template>
 
@@ -83,14 +85,14 @@
 					<div class="flex justify-end gap-2">
 						<UButton
 							color="gray"
-							@click="modal.close()"
+							@click="emits('close')"
 							variant="solid"
 							label="Cancel" />
 						<UButton
 							variant="solid"
 							type="submit"
 							label="Create"
-							:loading="store.isLoading" />
+							:loading="isLoading" />
 					</div>
 				</template>
 			</UCard>

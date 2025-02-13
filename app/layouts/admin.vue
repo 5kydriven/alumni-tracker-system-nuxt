@@ -15,7 +15,7 @@
 </script>
 
 <template>
-	<div class="w-full flex h-full">
+	<div class="flex h-screen">
 		<aside
 			class="hidden w-[250px] flex-col lg:flex bg-zuccini-500 h-screen px-4">
 			<div class="h-16 flex items-center gap-2">

@@ -5,14 +5,23 @@
 	});
 
 	const route = useRoute();
+	const userCreds = useCurrentUser();
 
 	const {
 		data: job,
 		status,
 		error,
-	} = await useLazyFetch<Job>(`/api/job/${route.params.jobUid}`, {
+	} = useLazyFetch<H3Response<Job>>(`/api/job/${route.params.jobUid}`, {
+		key: `job-${route.params.jobUid}`,
 		method: 'GET',
 	});
+
+	const { data: user } = useLazyFetch<H3Response<User<AlumniCredentials>>>(
+		`/api/user/${userCreds.value?.uid}`,
+		{
+			method: 'GET',
+		},
+	);
 
 	if (error.value) {
 		showError({
@@ -23,14 +32,17 @@
 </script>
 
 <template>
-	<div class="flex gap-4 flex-col xl:flex-row p-4">
-		<template v-if="status == 'success' && job?.createdAt">
-			<AlumniJobHeader v-bind="job" />
-			<AlumniJobDescription v-bind="job" />
+	<div class="flex gap-4 flex-col md:flex-row p-4 max-w-screen-xl mx-auto">
+		<template v-if="status == 'success' && job?.data?.createdAt">
+			<AlumniJobHeader v-bind="job.data" />
+
+			<AlumniJobDescription
+				v-bind="job.data"
+				:alumni="user?.data as User<AlumniCredentials>" />
 		</template>
 
 		<template v-else>
-			<div class="w-full xl:w-80">
+			<div class="w-full md:max-w-80">
 				<div
 					class="flex flex-col xl:gap-4 gap-2 p-4 border border-gray-300 shadow-lg dark:border-gray-800 rounded sticky top-4 bg-white">
 					<USkeleton class="w-[110px] h-[24px]" />

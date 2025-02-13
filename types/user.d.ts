@@ -4,7 +4,7 @@ export declare global {
 		uid?: string;
 		name?: string;
 		email?: string;
-		role?: string;
+		role?: Roles;
 		password?: string;
 		course?: string;
 		batch?: string;

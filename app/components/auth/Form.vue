@@ -66,6 +66,7 @@
 					">
 					<UFormGroup label="Email">
 						<UInput
+							autocomplete="username"
 							type="email"
 							v-model="creds.email"
 							name="email"
@@ -76,6 +77,7 @@
 
 					<UFormGroup label="Password">
 						<UInput
+							autocomplete="current-password"
 							type="password"
 							v-model="creds.password"
 							name="password"

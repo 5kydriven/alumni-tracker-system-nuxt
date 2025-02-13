@@ -1,10 +1,10 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import generateSearchKeywords from '~~/server/utils/searchKeywords';
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 	const db = getFirestore();
-	const batch = db.batch();
 	try {
 		if (!body) {
 			throw createError({
@@ -20,23 +20,23 @@ export default defineEventHandler(async (event) => {
 			displayName: body.name,
 		});
 
-		const userRef = db.collection('users').doc(userDetails.uid);
-		batch.set(
-			userRef,
-			{ ...body, createdAt: Timestamp.now() },
-			{ merge: true },
-		);
-
-		const roleRef = db.collection(body.role).doc(userDetails.uid);
-		batch.set(roleRef, { ...body, uid: userDetails.uid }, { merge: true });
-
-		const result = await batch.commit();
+		const userRef = await db
+			.collection('users')
+			.doc(userDetails.uid)
+			.set(
+				{
+					...body,
+					createdAt: Timestamp.now(),
+					searchKeywords: generateSearchKeywords(body.name),
+				},
+				{ merge: true },
+			);
 
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
 			message: 'Successfully created user',
-			data: result,
+			data: userRef,
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/admin/usesPost: ', error);
