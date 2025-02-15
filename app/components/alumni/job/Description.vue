@@ -19,7 +19,7 @@
 	});
 
 	const isApplicable = computed(() => {
-		return props.alumni?.userCredentials?.description !== '';
+		return props.alumni?.userCredentials?.description != null;
 	});
 
 	async function onApplied() {

@@ -47,6 +47,9 @@ export default defineEventHandler(async (event: H3Event) => {
 						birthPlace: userCredentials?.birthPlace,
 						maritalStatus: userCredentials?.maritalStatus,
 						phoneNumber: formatedPhoneNumber,
+						description: null,
+						workExperience: null,
+						educationalBackground: null,
 					},
 				},
 				{ merge: true },
@@ -54,7 +57,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		const surveyRef = await db
 			.collection('surveys')
-			.add({ ...survey, alumniUid: user.uid, createdAt: Timestamp.now });
+			.add({ ...survey, alumniUid: user.uid, createdAt: Timestamp.now() });
 
 		return {
 			statusCode: 200,

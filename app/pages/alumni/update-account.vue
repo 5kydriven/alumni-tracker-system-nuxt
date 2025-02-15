@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { signOut, type Auth } from 'firebase/auth';
+	// import { signOut, type Auth } from 'firebase/auth';
 
 	const { toastResponse } = useToastComposables();
-	const auth = useFirebaseAuth();
+	// const auth = useFirebaseAuth();
 	const router = useRouter();
 	const store = useStepperStore();
 	const user = useCurrentUser();
@@ -37,7 +37,7 @@
 
 	async function onSubmit() {
 		if (stepper.isCurrent('alumni-done')) {
-			router.replace('/alumni');
+			router.replace('/auth');
 			return;
 		}
 
@@ -63,9 +63,6 @@
 		stepper.goToNext();
 		store.progress++;
 	}
-	console.log(user.value?.displayName);
-
-	watch(store.form, () => console.log(stepper.current.value.isValid()));
 </script>
 
 <template>
@@ -169,9 +166,9 @@
 						class="mt-4" />
 				</form>
 			</div>
-			<UButton
+			<!-- <UButton
 				@click="signOut(auth as Auth)"
-				label="sign out(debugging)" />
+				label="sign out(debugging)" /> -->
 		</div>
 	</main>
 </template>

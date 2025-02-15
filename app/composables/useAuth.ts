@@ -17,6 +17,7 @@ export default function useAuth() {
 			const { data } = await $fetch<H3Response<any>>(
 				`/api/user/${userCredential.user.uid}`,
 			);
+			error.value = '';
 			return router.replace(`/${data.role}`);
 		} catch (err: any) {
 			console.error('Error during login:', err);

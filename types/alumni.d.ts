@@ -26,7 +26,8 @@ declare global {
 		| 'unemployed'
 		| 'unknown'
 		| 'self-employed'
-		| 'freelancer';
+		| 'freelancer'
+		| undefined;
 	type Gender = 'female' | 'male' | 'other';
 	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 

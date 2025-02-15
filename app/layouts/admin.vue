@@ -9,7 +9,7 @@
 		},
 		{
 			label: 'User',
-			to: '/admin/user-list',
+			to: '/admin/users',
 		},
 	]);
 </script>
