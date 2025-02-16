@@ -22,7 +22,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		});
 		const res = await sendMail({
 			subject: 'Your Account Has Been Approved!',
-			text: 'Hello, your account has been approved. You can now log in and access our services.',
+			text: `Hello ${user.displayName}, your account has been approved. You can now log in and access our services.`,
 			html: `<p>Hello,</p><p>Your account has been approved. You can now <a href="${config.public.appUrl}">log in</a> and access our services.</p>`,
 			to: user.email,
 		});
@@ -47,6 +47,8 @@ export default defineEventHandler(async (event: H3Event) => {
 			.set({
 				...snap.data(),
 			});
+
+		await db.collection('queues').doc(uid).delete();
 
 		return {
 			statusCode: 200,

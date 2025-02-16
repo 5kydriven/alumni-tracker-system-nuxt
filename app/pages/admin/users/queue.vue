@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	const { convertToDate } = useConverter();
 	const { q } = useSearch();
-
+	const { toastResponse } = useToastComposables();
 	const page = ref(1);
-	const limit = ref(20);
+	const limit = ref(15);
+	const isLoading = ref(false);
 
 	const offset = computed(() => (page.value - 1) * limit.value);
 
@@ -39,6 +40,16 @@
 		row: {},
 	});
 
+	async function onApproved(uid: string) {
+		isLoading.value = true;
+		const res = await $fetch(`/api/admin/user/queue/${uid}`, {
+			method: 'PUT',
+		});
+		await refreshNuxtData('employer-queue');
+		toastResponse(res);
+		isLoading.value = false;
+	}
+
 	onUnmounted(() => {
 		q.value = '';
 	});
@@ -71,12 +82,15 @@
 		<template #created-data="{ row }">
 			<label class="capitalize">{{ convertToDate(row.createdAt) }}</label>
 		</template>
-		<template #actions-data>
+		<template #actions-data="{ row }">
 			<div class="flex gap-2 items-center">
 				<UButton
+					:key="row.uid"
 					variant="outline"
 					:ui="{ rounded: 'rounded-full' }"
-					label="Approved" />
+					label="Approved"
+					:loading="isLoading"
+					@click="onApproved(row.uid)" />
 				<UButton
 					variant="outline"
 					color="red"
