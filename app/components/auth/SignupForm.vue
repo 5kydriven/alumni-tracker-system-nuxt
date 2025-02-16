@@ -122,7 +122,7 @@
 					label="Number of Branches"
 					name="numberBranches">
 					<UInput
-						type="text"
+						type="number"
 						v-model="employer.numberBranches"
 						placeholder="12"></UInput>
 				</UFormGroup>
@@ -130,7 +130,7 @@
 					label="Number of Employees"
 					name="numberEmployees">
 					<UInput
-						type="text"
+						type="number"
 						v-model="employer.numberEmployees"
 						placeholder="100"></UInput>
 				</UFormGroup>

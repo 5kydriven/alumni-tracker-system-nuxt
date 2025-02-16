@@ -36,5 +36,8 @@ export default defineAppConfig({
 		input: {
 			base: '[&::-webkit-inner-spin-button]:appearance-none',
 		},
+		table: {
+			thead: 'bg-gray-100',
+		},
 	},
 });
