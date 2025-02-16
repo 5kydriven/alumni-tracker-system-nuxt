@@ -1,5 +1,4 @@
-import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { serverTimestamp } from 'firebase/firestore';
+import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 import initialMessage from '~~/server/utils/initialMessage';
 
@@ -31,13 +30,13 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 
 		const conversation = await db.collection('conversations').add({
-			createdAt: serverTimestamp(),
+			createdAt: Timestamp.now(),
 			isGroup: false,
 			participants: [body.employerUid, body.alumniUid],
 			lastMessage: {
 				name: body.alumniName,
 				senderUid: body.alumniUid,
-				createdAt: serverTimestamp(),
+				createdAt: Timestamp.now(),
 				message: initialMessage(
 					{
 						contactPerson: body.employerName,
@@ -58,7 +57,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			.add({
 				name: body.alumniName,
 				senderUid: body.alumniUid,
-				createdAt: serverTimestamp(),
+				createdAt: Timestamp.now(),
 				message: initialMessage(
 					{
 						contactPerson: body.employerName,

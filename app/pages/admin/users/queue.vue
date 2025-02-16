@@ -1,7 +1,10 @@
 <script setup lang="ts">
+	import RejectModal from '~/components/admin/RejectModal.vue';
+
 	const { convertToDate } = useConverter();
 	const { q } = useSearch();
 	const { toastResponse } = useToastComposables();
+	const modal = useModal();
 	const page = ref(1);
 	const limit = ref(15);
 	const isLoading = ref(false);
@@ -86,15 +89,23 @@
 			<div class="flex gap-2 items-center">
 				<UButton
 					:key="row.uid"
-					variant="outline"
-					:ui="{ rounded: 'rounded-full' }"
+					variant="solid"
+					:ui="{ rounded: 'rounded-lg' }"
 					label="Approved"
 					:loading="isLoading"
 					@click="onApproved(row.uid)" />
 				<UButton
-					variant="outline"
+					variant="solid"
 					color="red"
-					:ui="{ rounded: 'rounded-full' }"
+					:ui="{ rounded: 'rounded-lg' }"
+					@click="
+						modal.open(RejectModal, {
+							onClose: modal.close,
+							uid: row.uid,
+							email: row.email,
+							displayName: row.name,
+						})
+					"
 					label="Reject" />
 			</div>
 		</template>
