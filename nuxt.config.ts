@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 		'nuxt-vuefire',
 		'@nuxt/image',
 		'nuxt-nodemailer',
+		'@vite-pwa/nuxt',
 	],
 	colorMode: {
 		preference: 'light',
