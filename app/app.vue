@@ -18,6 +18,7 @@
 		// },
 		htmlAttrs: {
 			lang: 'en',
+			class: 'light',
 		},
 	});
 
