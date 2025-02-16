@@ -7,7 +7,7 @@
 	const router = useRouter();
 
 	function handleClick(uid: string) {
-		router.push(`/registrar/messages/${uid}`);
+		router.push(`/alumni/messages/${uid}`);
 	}
 </script>
 

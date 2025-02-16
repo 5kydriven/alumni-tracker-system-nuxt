@@ -11,7 +11,7 @@
 		},
 		{
 			label: 'User',
-			to: '/admin/user-list',
+			to: '/admin/users',
 			click: () => emits('close'),
 		},
 	]);

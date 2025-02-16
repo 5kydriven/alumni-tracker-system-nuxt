@@ -37,7 +37,8 @@
 					<NuxtImg
 						src="/cpsu-logo.png"
 						width="36"
-						height="36" />
+						height="36"
+						preload />
 					<NuxtLink
 						to="/alumni"
 						class="text-lg font-bold text-white"

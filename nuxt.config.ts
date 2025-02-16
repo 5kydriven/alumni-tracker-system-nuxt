@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'nuxt-vuefire',
 		'@nuxt/image',
+		'nuxt-nodemailer',
 	],
 	colorMode: {
 		preference: 'light',
@@ -27,7 +28,9 @@ export default defineNuxtConfig({
 		projectId: process.env.NUXT_FIREBASE_PROJECT_ID,
 		privateKey: process.env.NUXT_FIREBASE_PRIVATE_KEY,
 		clientEmail: process.env.NUXT_FIREBASE_CLIENT_EMAIL,
-		public: {},
+		public: {
+			appUrl: 'https://cpsu-alumni-tracker.vercel.app',
+		},
 	},
 	// routeRules: {
 	// 	'/': { prerender: true },
@@ -49,6 +52,16 @@ export default defineNuxtConfig({
 			storageBucket: 'alumni-tracker-d7448.firebasestorage.app',
 			messagingSenderId: '970820206424',
 			appId: '1:970820206424:web:f19ab209528edbf7b5ef2d',
+		},
+	},
+	nodemailer: {
+		from: 'Alumni Tracker <foobar@example.com>',
+		host: 'smtp.gmail.com',
+		port: 587,
+		secure: false,
+		auth: {
+			user: process.env.NUXT_EMAIL,
+			pass: process.env.NUXT_PASSWORD,
 		},
 	},
 	tailwindcss: {
@@ -88,5 +101,9 @@ export default defineNuxtConfig({
 				},
 			},
 		},
+	},
+	css: ['@vuepic/vue-datepicker/dist/main.css'],
+	build: {
+		transpile: ['@vuepic/vue-datepicker'],
 	},
 });

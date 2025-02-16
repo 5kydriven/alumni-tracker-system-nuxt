@@ -1,6 +1,4 @@
 <script setup lang="ts">
-	import { onAuthStateChanged, type Auth } from 'firebase/auth';
-
 	useSeoMeta({
 		title: 'CPSU || Welcome',
 		ogTitle: 'CPSU',
@@ -24,14 +22,12 @@
 	});
 
 	const router = useRouter();
-	const auth = useFirebaseAuth();
+	const user = useCurrentUser();
 
-	onMounted(() => {
-		onAuthStateChanged(auth as Auth, async (user: any) => {
-			if (!user) {
-				return router.push('/auth');
-			}
-		});
+	watch(user, async (currentUser, prevUser) => {
+		if (prevUser && !currentUser) {
+			return router.replace('/auth');
+		}
 	});
 </script>
 
@@ -46,3 +42,10 @@
 		<UNotifications />
 	</div>
 </template>
+
+<style>
+	::selection {
+		background-color: yellow;
+		color: #000;
+	}
+</style>

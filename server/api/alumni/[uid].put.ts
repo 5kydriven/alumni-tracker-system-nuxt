@@ -4,18 +4,10 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const {
-		email,
-		password,
-		phoneNumber,
-		gender,
-		province,
-		city,
-		zipCode,
-		birthDate,
-		birthPlace,
-		maritalStatus,
-	} = await readBody<Alumni>(event);
+	const { form, survey } = await readBody<{
+		form: User<AlumniCredentials>;
+		survey: Survey;
+	}>(event);
 	const param = getRouterParam(event, 'uid');
 
 	try {
@@ -27,8 +19,10 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		const formatedPhoneNumber = `+63${phoneNumber}`;
-		await getAuth().updateUser(param, {
+		const { email, password, userCredentials } = form;
+
+		const formatedPhoneNumber = `+63${userCredentials?.phoneNumber}`;
+		const user = await getAuth().updateUser(param, {
 			email,
 			password,
 			phoneNumber: formatedPhoneNumber,
@@ -43,26 +37,33 @@ export default defineEventHandler(async (event: H3Event) => {
 					email,
 					updatedAt: Timestamp.now(),
 					isUpdated: true,
-					status: 'unemployed',
 					userCredentials: {
-						gender,
-						province,
-						zipCode,
-						city,
-						birthDate,
-						birthPlace,
-						maritalStatus,
+						status: survey.employmentStatus,
+						gender: userCredentials?.gender,
+						province: userCredentials?.province,
+						zipCode: userCredentials?.zipCode,
+						city: userCredentials?.city,
+						birthDate: userCredentials?.birthDate,
+						birthPlace: userCredentials?.birthPlace,
+						maritalStatus: userCredentials?.maritalStatus,
 						phoneNumber: formatedPhoneNumber,
+						description: null,
+						workExperience: null,
+						educationalBackground: null,
 					},
 				},
 				{ merge: true },
 			);
 
+		const surveyRef = await db
+			.collection('surveys')
+			.add({ ...survey, alumniUid: user.uid, createdAt: Timestamp.now() });
+
 		return {
 			statusCode: 200,
 			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
-			data: userRef,
+			data: [userRef, surveyRef],
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);

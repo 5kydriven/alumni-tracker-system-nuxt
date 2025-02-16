@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import generateSearchKeywords from '~~/server/utils/searchKeywords';
 import type { Employer } from '~~/types/employer';
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -25,16 +26,18 @@ export default defineEventHandler(async (event: H3Event) => {
 		});
 
 		const usersRef = await db
-			.collection('users')
+			.collection('queues')
 			.doc(user.uid)
 			.set(
 				{
-					name: body.name,
+					name: body.name?.toLowerCase(),
 					role: 'employer',
 					password: '*******',
 					email: body.email,
 					createdAt: Timestamp.now(),
-					isAccepted: false,
+					searchKeywords: generateSearchKeywords(
+						body.name?.toLowerCase() as string,
+					),
 					userCredentials: {
 						companyName: body.companyName,
 						companyAddress: body.companyAddress,

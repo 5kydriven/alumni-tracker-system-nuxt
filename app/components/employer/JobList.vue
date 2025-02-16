@@ -21,7 +21,7 @@
 		</div>
 		<div
 			v-if="props.jobs?.length == 0"
-			class="h-80 w-full rounded flex flex-col items-center justify-center gap-4 border dark:border-gray-800 border-gray-200">
+			class="h-80 w-full rounded-lg flex flex-col items-center justify-center gap-4 border dark:border-gray-800 border-gray-200 shadow-lg bg-white">
 			<div class="flex flex-col items-center">
 				<UIcon
 					name="i-heroicons-briefcase"

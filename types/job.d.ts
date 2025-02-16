@@ -16,5 +16,7 @@ export declare global {
 		desiredWeeklyHours?: string;
 		createdAt?: any;
 		updatedAt?: string;
+		companyName?: string;
+		applicants?: string[];
 	}
 }

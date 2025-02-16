@@ -18,7 +18,7 @@
 		{ name: 'Hybrid', key: 'R' },
 	]);
 
-	const { data: jobs, status } = await useLazyFetch<Job[]>('/api/job');
+	const { data: jobs, status } = useLazyFetch<Job[]>('/api/job');
 </script>
 
 <template>
@@ -26,7 +26,7 @@
 		class="flex gap-4 p-4 flex-col md:flex-row max-w-screen-xl justify-center w-full mx-auto">
 		<div class="w-full md:w-80">
 			<div
-				class="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg sticky top-4 bg-white">
+				class="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg sticky top-4 bg-white shadow">
 				<UInput
 					placeholder="Search..."
 					type="text"

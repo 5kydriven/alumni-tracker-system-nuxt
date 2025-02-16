@@ -17,12 +17,13 @@ export default function useAuth() {
 			const { data } = await $fetch<H3Response<any>>(
 				`/api/user/${userCredential.user.uid}`,
 			);
+			error.value = '';
 			return router.replace(`/${data.role}`);
 		} catch (err: any) {
 			console.error('Error during login:', err);
 			switch (err.code) {
 				case 'auth/invalid-credential':
-					error.value = 'Incorrect password. Please try again.';
+					error.value = 'Incorrect email or password. Please try again.';
 					break;
 				// case 'auth/user-disabled':
 				// 	error.value = 'Incorrect password. Please try again.';

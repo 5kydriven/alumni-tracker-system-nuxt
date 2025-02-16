@@ -1,112 +1,188 @@
 <script setup lang="ts">
+	import {
+		AlumniAddEducation,
+		AlumniAddExperience,
+		AlumniDeleteExperience,
+		AlumniDeleteEducation,
+	} from '#components';
+
 	definePageMeta({
 		middleware: ['alumni'],
 		layout: 'user',
 	});
 
 	const user = useCurrentUser();
-	const { data: alumni } = useFetch<H3Response<User>>(
-		`/api/alumni/${user.value?.uid}`,
-		{
-			key: 'alumni-profile',
-			method: 'GET',
-		},
-	);
+	const modal = useModal();
+	const { formatMonthYear } = useFormatter();
+	const { calculateDuration } = useCalculator();
+
+	const { data: alumni } = useAsyncData('alumni-profile', async () => {
+		if (!user.value?.uid) return null;
+
+		const [data, experience, education] = await Promise.all([
+			$fetch<H3Response<User<AlumniCredentials>>>(
+				`/api/alumni/${user.value.uid}`,
+			),
+			$fetch<H3Response<WorkExperience[]>>(
+				`/api/alumni/experience/${user.value.uid}`,
+			),
+			$fetch<H3Response<EducationalBackground[]>>(
+				`/api/alumni/education/${user.value.uid}`,
+			),
+		]);
+
+		return {
+			...data.data,
+			userCredentials: {
+				...data.data?.userCredentials,
+				workExperience: experience.data,
+				educationalBackground: education.data,
+			},
+		};
+	});
 </script>
 
 <template>
 	<div class="flex flex-col gap-4 p-4 lg:max-w-screen-xl lg:mx-auto w-full">
-		<AlumniProfile v-bind="alumni?.data" />
+		<AlumniProfile v-bind="alumni" />
 
 		<div
 			class="flex flex-col gap-4 w-full bg-white border-gray-300 border py-4 px-8 rounded-lg shadow-lg dark:border-gray-800">
-			<label class="font-bold text-lg">Experience</label>
-			<div class="flex flex-col gap-2">
-				<div class="flex items-start gap-2">
+			<div class="flex gap-2 items-center">
+				<label class="font-bold text-lg">Work Experience</label>
+				<UButton
+					v-show="(alumni?.userCredentials.workExperience?.length ?? 0) > 0"
+					icon="i-heroicons-plus"
+					size="2xs"
+					@click="
+						modal.open(AlumniAddExperience, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					" />
+			</div>
+			<div
+				class="flex flex-col gap-2"
+				v-if="(alumni?.userCredentials.workExperience?.length ?? 0) > 0">
+				<div
+					v-for="experience in alumni?.userCredentials.workExperience"
+					class="flex items-center gap-2">
+					<UButton
+						icon="i-heroicons-trash-solid"
+						size="2xs"
+						color="red"
+						class="mr-2"
+						variant="soft"
+						@click="
+							modal.open(AlumniDeleteExperience, {
+								onClose: modal.close,
+								userUid: user?.uid,
+								experienceUid: experience.uid,
+							})
+						" />
 					<UAvatar
-						label="P"
+						:alt="experience.companyName?.toUpperCase()"
 						class="!rounded"
 						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
+					<div class="flex flex-col text-base/5">
+						<label class="font-bold capitalize">{{
+							experience.companyName
+						}}</label>
+						<span class="font-thin capitalize">{{ experience.jobTitle }}</span>
 						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
+							>{{ formatMonthYear(experience.startDate) }} -
+							{{ formatMonthYear(experience.endDate) }} .
+							{{
+								calculateDuration(experience.startDate, experience.endDate)
+							}}</span
 						>
 					</div>
 				</div>
-				<div class="flex items-start gap-2">
-					<UAvatar
-						label="P"
-						class="!rounded"
-						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
-						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
-						>
-					</div>
-				</div>
-				<div class="flex items-start gap-2">
-					<UAvatar
-						label="P"
-						class="!rounded"
-						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
-						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
-						>
-					</div>
-				</div>
+			</div>
+			<div
+				class="flex justify-center items-center p-8"
+				v-else>
+				<UButton
+					icon="i-heroicons-plus"
+					size="sm"
+					label="Add experience"
+					@click="
+						modal.open(AlumniAddExperience, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					"
+					variant="soft" />
 			</div>
 		</div>
 
 		<div
 			class="flex flex-col gap-4 w-full bg-white border border-gray-300 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800">
-			<label class="font-bold text-lg">Education</label>
-			<div class="flex flex-col gap-2">
-				<div class="flex items-start gap-2">
+			<div class="flex gap-2 items-center">
+				<label class="font-bold text-lg">Educational Attainment</label>
+				<UButton
+					v-show="
+						(alumni?.userCredentials.educationalBackground?.length ?? 0) > 0
+					"
+					icon="i-heroicons-plus"
+					size="2xs"
+					@click="
+						modal.open(AlumniAddEducation, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					" />
+			</div>
+			<div
+				class="flex flex-col gap-2"
+				v-if="(alumni?.userCredentials.educationalBackground?.length ?? 0) > 0">
+				<div
+					class="flex items-center gap-2"
+					v-for="education in alumni?.userCredentials.educationalBackground">
+					<UButton
+						icon="i-heroicons-trash-solid"
+						size="2xs"
+						color="red"
+						class="mr-2"
+						variant="soft"
+						@click="
+							modal.open(AlumniDeleteEducation, {
+								onClose: modal.close,
+								userUid: user?.uid,
+								educationUid: education.uid,
+							})
+						" />
 					<UAvatar
-						label="P"
+						:alt="education.schoolName?.toUpperCase()"
 						class="!rounded"
 						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
+					<div class="flex flex-col text-base/5">
+						<label class="font-bold capitalize">{{
+							education.schoolName
+						}}</label>
+						<span class="font-thin capitalize">{{
+							education.schoolAddress
+						}}</span>
 						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
+							>{{ education.startDate }} - {{ education.endDate }}</span
 						>
 					</div>
 				</div>
-				<div class="flex items-start gap-2">
-					<UAvatar
-						label="P"
-						class="!rounded"
-						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
-						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
-						>
-					</div>
-				</div>
-				<div class="flex items-start gap-2">
-					<UAvatar
-						label="P"
-						class="!rounded"
-						size="lg" />
-					<div class="flex flex-col">
-						<label class="font-bold">Information Technology Intern</label>
-						<span class="font-thin">Newfold Digital</span>
-						<span class="dark:text-gray-400 text-xs"
-							>Oct 2023 - present . 1 yr 1 mo</span
-						>
-					</div>
-				</div>
+			</div>
+			<div
+				class="flex justify-center items-center p-8"
+				v-else>
+				<UButton
+					icon="i-heroicons-plus"
+					size="sm"
+					@click="
+						modal.open(AlumniAddEducation, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					"
+					label="Add education"
+					variant="soft" />
 			</div>
 		</div>
 	</div>

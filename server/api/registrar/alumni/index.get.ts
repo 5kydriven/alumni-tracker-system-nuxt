@@ -12,30 +12,28 @@ export default eventHandler(async (event: H3Event) => {
 
 		if (q) {
 			const queryLowerCase = q.toString().toLowerCase();
-			queryRef = queryRef.where(
-				'searchKeywords',
-				'array-contains',
-				queryLowerCase,
-			);
+			queryRef = queryRef
+				.where('searchKeywords', 'array-contains', queryLowerCase)
+				.limit(3);
+		} else {
+			queryRef = queryRef.limit(Number(limit));
 		}
 
 		if (courses) {
 			const courseArray = Array.isArray(courses) ? courses : [courses];
 
-			queryRef = queryRef.where('course', 'in', courseArray);
+			queryRef = queryRef.where('userCredentials.course', 'in', courseArray);
 		}
 
 		if (statuses) {
 			const statusArray = Array.isArray(statuses) ? statuses : [statuses];
 
-			queryRef = queryRef.where('status', 'in', statusArray);
+			queryRef = queryRef.where('userCredentials.status', 'in', statusArray);
 		}
 
 		if (offset) {
 			queryRef = queryRef.offset(Number(offset));
 		}
-
-		queryRef = queryRef.limit(Number(limit));
 
 		const snapShot = await queryRef.get();
 		const countSnap = await db
