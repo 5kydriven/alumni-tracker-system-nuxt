@@ -1,31 +1,114 @@
 <script setup lang="ts">
-	definePageMeta({
-		middleware: ['employer'],
-		layout: 'user',
+	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+
+	const db = useFirestore();
+	const route = useRoute().params;
+	const user = useCurrentUser();
+	const { getParticipantName } = useConversation();
+	const isLoading = ref(false);
+	const message = ref('');
+	const participant = ref('');
+
+	const messages = ref<Message[]>([]);
+	const messagesRef = query(
+		collection(db, 'conversations', route.uid?.toString() ?? '', 'messages'),
+		orderBy('createdAt', 'asc'),
+	);
+
+	const unsubscribe = onSnapshot(
+		messagesRef,
+		async (querySnapshot) => {
+			participant.value = await getParticipantName(
+				route.uid?.toString() as string,
+				db,
+				user.value?.uid as string,
+			);
+			messages.value = querySnapshot.docs.map((doc) => ({
+				uid: doc.id,
+				...doc.data(),
+			}));
+		},
+		(error) => {
+			console.error('Error listening to real-time updates:', error);
+		},
+	);
+
+	async function handleSubmit() {
+		isLoading.value = true;
+		const res = await $fetch(`/api/conversation/message/${route.uid}`, {
+			method: 'POST',
+			body: JSON.stringify({
+				message: message.value,
+				senderUid: user.value?.uid,
+				name: user.value?.displayName,
+			}),
+		});
+		message.value = '';
+		isLoading.value = false;
+		console.log(res);
+	}
+
+	const messagesContainer = ref<HTMLElement | null>(null);
+	const scrollBottomRef = ref(null);
+	function scrollToBottom() {
+		if (messagesContainer.value) {
+			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+		}
+	}
+
+	watch(participant, () => console.log(participant.value));
+
+	watch(messages, async () => {
+		await nextTick();
+		scrollToBottom();
 	});
 
-	const router = useRouter();
+	onMounted(() => {
+		scrollToBottom();
+	});
 
-	function handleClick(uid: string) {
-		router.push(`/employer/messages/${uid}`);
-	}
+	onUnmounted(() => {
+		unsubscribe();
+	});
 </script>
 
 <template>
-	<div
-		class="flex h-full xl:border xl:border-b-none xl:rounded-t dark:border-gray-800">
-		<div
-			class="border-r-none w-full border-gray-300 md:border-r bg-white dark:border-gray-800 shadow-lg lg:max-w-md hidden md:flex flex-col">
-			<div
-				class="h-16 px-4 flex items-center border-b dark:border-gray-800 border-gray-200 bg-gray-300 shrink-0">
-				<div class="flex gap-2 items-center">
-					<label class="text-lg font-bold">Messages</label>
-				</div>
-			</div>
+	<div class="w-full flex flex-col">
+		{{ participant }}
+		<MessageHeader :participantName="participant" />
 
-			<ConversationContainer @itemClicked="handleClick" />
+		<div
+			class="dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1">
+			<div
+				ref="messagesContainer"
+				class="flex flex-col gap-2 overflow-auto h-auto px-4 py-2">
+				<MessageItem
+					v-for="(item, index) in messages"
+					v-bind="item"
+					:currentUid="user?.uid"
+					:key="index" />
+
+				<div ref="scrollBottomRef"></div>
+			</div>
 		</div>
 
-		<MessageContainer />
+		<form
+			@submit.prevent="handleSubmit"
+			class="flex gap-2 p-4 bg-white border-t border-gray-300">
+			<UTextarea
+				autoresize
+				:rows="1"
+				:maxrows="3"
+				placeholder="Type a message"
+				v-model="message"
+				class="w-full"
+				required />
+			<UButton
+				class="self-end"
+				:loading="isLoading"
+				label="send"
+				icon="i-heroicons-paper-airplane"
+				type="submit" />
+		</form>
 	</div>
 </template>
