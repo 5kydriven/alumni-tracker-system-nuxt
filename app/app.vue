@@ -24,11 +24,19 @@
 
 	const router = useRouter();
 	const user = useCurrentUser();
+	const toast = useToast();
 
 	watch(user, async (currentUser, prevUser) => {
 		if (prevUser && !currentUser) {
 			return router.replace('/auth');
 		}
+	});
+
+	const { $pwa } = useNuxtApp();
+
+	onMounted(() => {
+		if ($pwa?.offlineReady) toast.add({ title: 'App ready to work offline' });
+		$pwa?.showInstallPrompt;
 	});
 </script>
 

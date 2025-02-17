@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: '2025-01-07',
-	devtools: { enabled: true },
+	devtools: { enabled: false },
 	modules: [
 		'@nuxt/ui',
 		'@vueuse/nuxt',
@@ -106,5 +106,43 @@ export default defineNuxtConfig({
 	css: ['@vuepic/vue-datepicker/dist/main.css'],
 	build: {
 		transpile: ['@vuepic/vue-datepicker'],
+	},
+	pwa: {
+		registerType: 'autoUpdate',
+
+		manifest: {
+			name: 'CPSU - Alumni Tracker',
+			short_name: 'CPSU',
+			description: 'A alumni tracker for CPSU',
+			theme_color: '#4A90E2',
+
+			// icons: [
+			// 	{
+			// 		src: '/pwa-icon-192x192.png',
+			// 		sizes: '192x192',
+			// 		type: 'image/png',
+			// 	},
+			// 	{
+			// 		src: '/pwa-icon-512x512.png',
+			// 		sizes: '512x512',
+			// 		type: 'image/png',
+			// 	},
+			// ],
+		},
+		// workbox: {
+		// 	runtimeCaching: [
+		// 		{
+		// 			urlPattern: 'https://example.com/.*',
+		// 			handler: 'NetworkFirst',
+		// 			options: {
+		// 				cacheName: 'api-cache',
+		// 				expiration: {
+		// 					maxEntries: 50,
+		// 					maxAgeSeconds: 86400,
+		// 				},
+		// 			},
+		// 		},
+		// 	],
+		// },
 	},
 });
