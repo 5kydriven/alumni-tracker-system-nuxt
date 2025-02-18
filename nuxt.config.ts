@@ -114,20 +114,42 @@ export default defineNuxtConfig({
 			name: 'CPSU - Alumni Tracker',
 			short_name: 'CPSU',
 			description: 'A alumni tracker for CPSU',
-			theme_color: '#4A90E2',
+			theme_color: '#04401f',
 
-			// icons: [
-			// 	{
-			// 		src: '/pwa-icon-192x192.png',
-			// 		sizes: '192x192',
-			// 		type: 'image/png',
-			// 	},
-			// 	{
-			// 		src: '/pwa-icon-512x512.png',
-			// 		sizes: '512x512',
-			// 		type: 'image/png',
-			// 	},
-			// ],
+			icons: [
+				{
+					src: '/pwa-icon-192x192.png',
+					sizes: '192x192',
+					type: 'image/png',
+				},
+				{
+					src: '/pwa-icon-512x512.png',
+					sizes: '512x512',
+					type: 'image/png',
+				},
+				{
+					src: '/pwa-icon-512x512.png',
+					sizes: '512x512',
+					type: 'image/png',
+					purpose: 'any',
+				},
+				{
+					src: '/pwa-icon-512x512.png',
+					sizes: '512x512',
+					type: 'image/png',
+					purpose: 'maskable',
+				},
+			],
+		},
+		client: {
+			installPrompt: true,
+		},
+		devOptions: {
+			enabled: true,
+			suppressWarnings: true,
+			navigateFallback: '/',
+			navigateFallbackAllowlist: [/^\/$/],
+			type: 'module',
 		},
 		// workbox: {
 		// 	runtimeCaching: [

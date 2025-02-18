@@ -35,8 +35,7 @@
 	const { $pwa } = useNuxtApp();
 
 	onMounted(() => {
-		if ($pwa?.offlineReady) toast.add({ title: 'App ready to work offline' });
-		$pwa?.showInstallPrompt;
+		if ($pwa?.isPWAInstalled) toast.add({ title: 'PWA is installed' });
 	});
 </script>
 
