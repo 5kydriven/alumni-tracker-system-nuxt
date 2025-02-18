@@ -11,7 +11,7 @@
 		},
 		{
 			label: 'Alumni',
-			to: '/registrar/alumni-list',
+			to: '/registrar/alumni',
 			click: () => emits('close'),
 		},
 		{
