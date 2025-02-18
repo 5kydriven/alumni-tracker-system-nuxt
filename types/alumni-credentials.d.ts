@@ -39,6 +39,16 @@ declare global {
 		endDate?: any;
 		createdAt?: Timestamp;
 	}
+
+	type AlumniStatus =
+		| 'employed'
+		| 'unemployed'
+		| 'unknown'
+		| 'self-employed'
+		| 'freelancer'
+		| undefined;
+	type Gender = 'female' | 'male' | 'other';
+	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 }
 
 export { AlumniCredentials, EducationalBackground, WorkExperience };

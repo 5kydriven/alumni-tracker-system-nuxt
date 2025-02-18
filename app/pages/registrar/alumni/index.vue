@@ -128,7 +128,7 @@
 		</div>
 	</Navbar>
 	<SubNavbar>
-		<div class="flex items-center gap-2 md:gap-4 w-full">
+		<div class="flex items-center py-4 gap-2 md:gap-4 w-full">
 			<USelectMenu
 				multiple
 				v-model="selectedStatuses"

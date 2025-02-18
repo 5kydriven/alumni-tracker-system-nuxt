@@ -29,7 +29,7 @@
 				<div class="flex items-center gap-2">
 					<UButton
 						icon="i-heroicons-bars-3"
-						class="md:hidden"
+						class="md:hidden text-white hover:text-black"
 						variant="ghost"
 						color="gray"
 						@click="
