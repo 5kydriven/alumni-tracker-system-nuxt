@@ -14,7 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		}
 
 		const phoneNumber = `+63${body.phoneNumber}`;
-		const user = await getAuth().updateUser(body.uid, {
+		await getAuth().updateUser(body.uid, {
 			email: body.email,
 			password: body.password,
 			phoneNumber: phoneNumber,
@@ -35,9 +35,23 @@ export default defineEventHandler(async (event: H3Event) => {
 				{ merge: true },
 			);
 
+		await db
+			.collection('users')
+			.doc(body.uid)
+			.update({
+				password: '********',
+				email: body.email,
+				updatedAt: Timestamp.now(),
+				userCredentials: {
+					...body,
+					isUpdated: true,
+					status: 'unemployed',
+				},
+			});
+
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
 		} as H3Response;
 	} catch (error: any) {

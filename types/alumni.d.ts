@@ -14,14 +14,22 @@ declare global {
 		province?: string;
 		city?: string;
 		zipCode?: string;
-		gender?: Gender;
+		gender?: string;
 		maritalStatus?: string;
 		birthDate?: string;
 		birthPlace?: string;
+		role?: Roles;
 	}
 
-	type AlumniStatus = 'employed' | 'unemployed' | 'unknown';
+	type AlumniStatus =
+		| 'employed'
+		| 'unemployed'
+		| 'unknown'
+		| 'self-employed'
+		| 'freelancer'
+		| undefined;
 	type Gender = 'female' | 'male' | 'other';
+	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 
 	interface Address {
 		province?: string;
@@ -30,4 +38,4 @@ declare global {
 	}
 }
 
-export { Alumni, AlumniStatus, Address, Gender };
+export { Alumni, AlumniStatus, Address, Gender, Course };

@@ -4,52 +4,73 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const body = await readBody<Alumni>(event);
+	const { form, survey } = await readBody<{
+		form: User<AlumniCredentials>;
+		survey: Survey;
+	}>(event);
 	const param = getRouterParam(event, 'uid');
 
 	try {
-		if (!body || !param) {
+		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
-				message: 'Body or id has no content',
+				statusMessage: 'no content',
+				message: 'No uid has found',
 			});
 		}
 
-		const phoneNumber = `+63${body.phoneNumber}`;
+		const { email, password, userCredentials } = form;
+
+		const formatedPhoneNumber = `+63${userCredentials?.phoneNumber}`;
 		const user = await getAuth().updateUser(param, {
-			email: body.email,
-			password: body.password,
-			phoneNumber: phoneNumber,
+			email,
+			password,
+			phoneNumber: formatedPhoneNumber,
 		});
 
-		const res = await db
-			.collection('alumni')
+		const userRef = await db
+			.collection('users')
 			.doc(param)
 			.set(
 				{
-					...body,
 					password: '********',
-					phoneNumber,
-					isUpdated: true,
-					status: 'unemployed',
+					email,
 					updatedAt: Timestamp.now(),
+					isUpdated: true,
+					userCredentials: {
+						status: survey.employmentStatus,
+						gender: userCredentials?.gender,
+						province: userCredentials?.province,
+						zipCode: userCredentials?.zipCode,
+						city: userCredentials?.city,
+						birthDate: userCredentials?.birthDate,
+						birthPlace: userCredentials?.birthPlace,
+						maritalStatus: userCredentials?.maritalStatus,
+						phoneNumber: formatedPhoneNumber,
+						description: null,
+						workExperience: null,
+						educationalBackground: null,
+					},
 				},
 				{ merge: true },
 			);
 
+		const surveyRef = await db
+			.collection('surveys')
+			.add({ ...survey, alumniUid: user.uid, createdAt: Timestamp.now() });
+
 		return {
 			statusCode: 200,
-			statusMessage: 'success',
+			statusMessage: 'ok',
 			message: 'Succesfully updated personal account!',
-			data: res,
+			data: [userRef, surveyRef],
 		} as H3Response;
 	} catch (error: any) {
 		console.log('/alumni.put', error);
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'Conflict',
+				statusMessage: 'conflict',
 				message: 'Email already exists',
 			});
 		}

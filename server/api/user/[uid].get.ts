@@ -8,17 +8,27 @@ export default eventHandler(async (event: H3Event) => {
 		if (!param) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'No content',
+				statusMessage: 'no content',
 				message: 'No uid provided',
 			});
 		}
 
-		const doc = await db.collection('users').doc(param).get();
-		const role = doc.data()?.role;
+		const userDoc = await db.collection('users').doc(param).get();
 
-		const user = await db.collection(role).doc(param).get();
+		if (!userDoc.exists) {
+			throw createError({
+				statusCode: 404,
+				statusMessage: 'not found',
+				message: 'no user found',
+				data: userDoc,
+			});
+		}
 
-		return { ...user.data(), uid: user.id };
+		return {
+			statusCode: 200,
+			statusMessage: 'ok',
+			data: { ...userDoc.data(), uid: userDoc.id },
+		} as H3Response;
 	} catch (error: any) {
 		console.log('/user.uid.get', error);
 		return errorResponse(error);
