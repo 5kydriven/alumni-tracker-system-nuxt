@@ -34,7 +34,9 @@
 	const page = ref(1);
 	const limit = ref(10);
 	const selected = ref<Alumni[]>([]);
-	const selectedColumns = ref(defaultColumns);
+	const selectedColumns = ref(
+		defaultColumns.filter((column) => column.key !== 'password'),
+	);
 	const selectedCourses = ref<Course[]>([]);
 	const selectedStatuses = ref<AlumniStatus[]>([]);
 
@@ -184,7 +186,7 @@
 			},
 			wrapper: 'flex-1',
 		}">
-		<template #uid-data="{ row }">{{ row.uid }}</template>
+		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
 		<template #name-data="{ row }"
 			><span class="capitalize">{{ row.name }}</span></template
 		>
