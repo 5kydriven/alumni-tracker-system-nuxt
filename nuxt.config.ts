@@ -107,64 +107,64 @@ export default defineNuxtConfig({
 	build: {
 		transpile: ['@vuepic/vue-datepicker'],
 	},
-	pwa: {
-		registerType: 'autoUpdate',
+	// pwa: {
+	// 	registerType: 'autoUpdate',
 
-		manifest: {
-			name: 'CPSU - Alumni Tracker',
-			short_name: 'CPSU',
-			description: 'A alumni tracker for CPSU',
-			theme_color: '#04401f',
+	// 	manifest: {
+	// 		name: 'CPSU - Alumni Tracker',
+	// 		short_name: 'CPSU',
+	// 		description: 'A alumni tracker for CPSU',
+	// 		theme_color: '#04401f',
 
-			icons: [
-				{
-					src: '/pwa-icon-192x192.png',
-					sizes: '192x192',
-					type: 'image/png',
-				},
-				{
-					src: '/pwa-icon-512x512.png',
-					sizes: '512x512',
-					type: 'image/png',
-				},
-				{
-					src: '/pwa-icon-512x512.png',
-					sizes: '512x512',
-					type: 'image/png',
-					purpose: 'any',
-				},
-				{
-					src: '/pwa-icon-512x512.png',
-					sizes: '512x512',
-					type: 'image/png',
-					purpose: 'maskable',
-				},
-			],
-		},
-		client: {
-			installPrompt: true,
-		},
-		devOptions: {
-			enabled: true,
-			suppressWarnings: true,
-			navigateFallback: '/',
-			navigateFallbackAllowlist: [/^\/$/],
-			type: 'module',
-		},
-		// workbox: {
-		// 	runtimeCaching: [
-		// 		{
-		// 			urlPattern: 'https://example.com/.*',
-		// 			handler: 'NetworkFirst',
-		// 			options: {
-		// 				cacheName: 'api-cache',
-		// 				expiration: {
-		// 					maxEntries: 50,
-		// 					maxAgeSeconds: 86400,
-		// 				},
-		// 			},
-		// 		},
-		// 	],
-		// },
-	},
+	// 		icons: [
+	// 			{
+	// 				src: '/pwa-icon-192x192.png',
+	// 				sizes: '192x192',
+	// 				type: 'image/png',
+	// 			},
+	// 			{
+	// 				src: '/pwa-icon-512x512.png',
+	// 				sizes: '512x512',
+	// 				type: 'image/png',
+	// 			},
+	// 			{
+	// 				src: '/pwa-icon-512x512.png',
+	// 				sizes: '512x512',
+	// 				type: 'image/png',
+	// 				purpose: 'any',
+	// 			},
+	// 			{
+	// 				src: '/pwa-icon-512x512.png',
+	// 				sizes: '512x512',
+	// 				type: 'image/png',
+	// 				purpose: 'maskable',
+	// 			},
+	// 		],
+	// 	},
+	// 	client: {
+	// 		installPrompt: true,
+	// 	},
+	// 	devOptions: {
+	// 		enabled: true,
+	// 		suppressWarnings: true,
+	// 		navigateFallback: '/',
+	// 		navigateFallbackAllowlist: [/^\/$/],
+	// 		type: 'module',
+	// 	},
+	// 	// workbox: {
+	// 	// 	runtimeCaching: [
+	// 	// 		{
+	// 	// 			urlPattern: 'https://example.com/.*',
+	// 	// 			handler: 'NetworkFirst',
+	// 	// 			options: {
+	// 	// 				cacheName: 'api-cache',
+	// 	// 				expiration: {
+	// 	// 					maxEntries: 50,
+	// 	// 					maxAgeSeconds: 86400,
+	// 	// 				},
+	// 	// 			},
+	// 	// 		},
+	// 	// 	],
+	// 	// },
+	// },
 });
