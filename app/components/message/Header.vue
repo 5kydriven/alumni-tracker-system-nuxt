@@ -15,9 +15,12 @@
 			variant="ghost"
 			class="md:hidden"
 			@click="router.back()" />
-		<UAvatar :alt="props.participantName" />
+		<UAvatar
+			:alt="
+				!props.participantName ? 'Deleted Account' : props.participantName
+			" />
 		<label class="text-black text-lg font-bold">
-			{{ props.participantName }}
+			{{ !props.participantName ? 'Deleted Account' : props.participantName }}
 		</label>
 	</div>
 </template>

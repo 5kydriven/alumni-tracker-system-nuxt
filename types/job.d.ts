@@ -1,5 +1,3 @@
-import type { Timestamp } from 'firebase/firestore';
-
 export declare global {
 	interface Job {
 		id?: string;
@@ -19,4 +17,6 @@ export declare global {
 		companyName?: string;
 		applicants?: string[];
 	}
+
+	type JobType = 'full-time';
 }

@@ -11,10 +11,10 @@
 <template>
 	<div
 		class="p-4 dark:border-gray-800 border-b cursor-pointer flex gap-2 items-center">
-		<UAvatar :alt="props.name" />
+		<UAvatar :alt="!props.name ? 'Deleted Account' : props.name" />
 		<div class="flex flex-col w-full">
 			<label class="capitalize truncate line-clamp-1 w-64 text-black z-0">
-				{{ props.name }}
+				{{ !props.name ? 'Deleted Account' : props.name }}
 			</label>
 			<div
 				class="flex justify-between dark:text-gray-700 gap-2 text-gray-400 text-sm">

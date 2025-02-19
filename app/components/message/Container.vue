@@ -56,6 +56,8 @@
 		}
 	}
 
+	console.log(participant.value);
+
 	watch(messages, async () => {
 		await nextTick();
 		scrollToBottom();
