@@ -32,7 +32,7 @@
 
 	const q = ref();
 	const page = ref(1);
-	const limit = ref(10);
+	const limit = ref(15);
 	const selected = ref<Alumni[]>([]);
 	const selectedColumns = ref(
 		defaultColumns.filter((column) => column.key !== 'password'),

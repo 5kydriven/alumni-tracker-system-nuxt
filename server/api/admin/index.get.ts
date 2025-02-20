@@ -26,10 +26,10 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		return {
 			data: {
-				totalAlumni: totalAlumni.data().count,
-				totalEmployer: totalEmployer.data().count,
-				totalJob: totalJob.data().count,
-				totalRegistrar: totalRegistrar.data().count,
+				alumni: totalAlumni.data().count,
+				employer: totalEmployer.data().count,
+				job: totalJob.data().count,
+				registrar: totalRegistrar.data().count,
 			},
 		} as H3Response;
 	} catch (error: any) {

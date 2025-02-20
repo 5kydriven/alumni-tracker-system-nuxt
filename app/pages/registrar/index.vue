@@ -7,6 +7,17 @@
 	});
 
 	const slideOver = useSlideover();
+
+	const { data: total } = useFetch<
+		H3Response<{
+			alumni: number;
+			employed: number;
+			unemployed: number;
+			unknown: number;
+		}>
+	>('/api/registrar', {
+		method: 'GET',
+	});
 </script>
 
 <template>
@@ -30,28 +41,28 @@
 				<UIcon name="i-heroicons-user" />
 				<div class="flex flex-col gap-2">
 					<label class="text-sm text-gray-500">Total alumni</label>
-					<span class="text-lg font-bold">5000</span>
+					<span class="text-lg font-bold">{{ total?.data?.alumni }}</span>
 				</div>
 			</div>
 			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
 				<UIcon name="i-heroicons-user" />
 				<div class="flex flex-col gap-2">
 					<label class="text-sm text-gray-500">Total employed</label>
-					<span class="text-lg font-bold">5000</span>
+					<span class="text-lg font-bold">{{ total?.data?.employed }}</span>
 				</div>
 			</div>
 			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
 				<UIcon name="i-heroicons-user" />
 				<div class="flex flex-col gap-2">
 					<label class="text-sm text-gray-500">Total unemployed</label>
-					<span class="text-lg font-bold">5000</span>
+					<span class="text-lg font-bold">{{ total?.data?.unemployed }}</span>
 				</div>
 			</div>
 			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
 				<UIcon name="i-heroicons-user" />
 				<div class="flex flex-col gap-2">
 					<label class="text-sm text-gray-500">Total unknown</label>
-					<span class="text-lg font-bold">5000</span>
+					<span class="text-lg font-bold">{{ total?.data?.unknown }}</span>
 				</div>
 			</div>
 		</div>

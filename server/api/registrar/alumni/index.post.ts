@@ -7,6 +7,12 @@ import rearrangeName from '~~/server/utils/rearrangeName';
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const body = await readBody(event);
+	const sanitizeString = (str: string) =>
+		str
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.replace(/[^a-zA-Z]/g, '');
+
 	try {
 		if (!body) {
 			throw createError({
@@ -24,10 +30,10 @@ export default eventHandler(async (event: H3Event) => {
 				async (item: { name: string; batch: string; course: string }) => {
 					const arrange = rearrangeName(item.name);
 					const name = arrange.trim().split(' ');
-					const lastName = name[name.length - 1];
+					const lastName = sanitizeString(name[name.length - 1] || 'unknown');
 					const scrambledLastName = scrambleString(lastName as string);
-					const email = `${
-						scrambledLastName.toLowerCase() + item.batch
+					const email = `${scrambledLastName.toLowerCase()}${
+						item.batch
 					}cpsu@example.com`;
 
 					const userCreds = await getAuth().createUser({

@@ -24,24 +24,16 @@
 
 	const router = useRouter();
 	const user = useCurrentUser();
-	const toast = useToast();
 
 	watch(user, async (currentUser, prevUser) => {
 		if (prevUser && !currentUser) {
 			return router.replace('/auth');
 		}
 	});
-
-	const { $pwa } = useNuxtApp();
-
-	onMounted(() => {
-		if ($pwa?.isPWAInstalled) toast.add({ title: 'PWA is installed' });
-	});
 </script>
 
 <template>
 	<div>
-		<NuxtPwaManifest />
 		<NuxtLoadingIndicator />
 		<NuxtLayout>
 			<NuxtPage />
