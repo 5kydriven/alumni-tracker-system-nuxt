@@ -9,13 +9,11 @@
 	const { convertTimestamp } = useConverter();
 
 	const categories = ref([
-		{ name: 'Full Time', key: 'A' },
-		{ name: 'Part Time', key: 'M' },
-		{ name: 'Freelancing', key: 'P' },
-		{ name: 'Fixed Price', key: 'R' },
-		{ name: 'Remote', key: 'R' },
-		{ name: 'Hourly Basis', key: 'R' },
-		{ name: 'Hybrid', key: 'R' },
+		{ name: 'Full Time', key: 'full time' },
+		{ name: 'Part Time', key: 'part time' },
+		{ name: 'Freelance', key: 'freelance' },
+		{ name: 'Contract', key: 'contract' },
+		{ name: 'Internship', key: 'internship' },
 	]);
 
 	const { data: jobs, status } = useLazyFetch<Job[]>('/api/job');

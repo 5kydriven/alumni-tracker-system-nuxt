@@ -1,6 +1,7 @@
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 import errorResponse from '~~/server/utils/errorResponse';
+import generateSearchKeywords from '~~/server/utils/searchKeywords';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -13,9 +14,14 @@ export default defineEventHandler(async (event: H3Event) => {
 				message: 'Body has no content',
 			});
 		}
+
 		const res = await db
 			.collection('jobs')
-			.add({ ...body, createdAt: Timestamp.now() });
+			.add({
+				...body,
+				searchKeywords: generateSearchKeywords(body.title),
+				createdAt: Timestamp.now(),
+			});
 
 		return {
 			statusCode: 200,
