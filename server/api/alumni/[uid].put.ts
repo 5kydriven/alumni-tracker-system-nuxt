@@ -1,76 +1,89 @@
 import { H3Event } from 'h3';
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
+import successResponse from '~~/server/utils/okReponse';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const { form, survey } = await readBody<{
-		form: User<AlumniCredentials>;
-		survey: Survey;
-	}>(event);
+	const body = await readBody(event);
 	const param = getRouterParam(event, 'uid');
 
 	try {
 		if (!param) {
 			throw createError({
-				statusCode: 204,
-				statusMessage: 'no content',
-				message: 'No uid has found',
+				statusCode: 400,
+				statusMessage: 'Bad Request',
+				message: 'No UID found',
 			});
 		}
 
-		const { email, password, userCredentials } = form;
+		const { form, survey } = body as {
+			form: User<AlumniCredentials>;
+			survey: Survey;
+		};
 
-		const formatedPhoneNumber = `+63${userCredentials?.phoneNumber}`;
+		const { email, password, userCredentials } = form;
+		const formattedPhoneNumber = `+63${userCredentials?.phoneNumber}`;
+
 		const user = await getAuth().updateUser(param, {
 			email,
 			password,
-			phoneNumber: formatedPhoneNumber,
+			phoneNumber: formattedPhoneNumber,
 		});
 
-		const userRef = await db
-			.collection('users')
-			.doc(param)
-			.set(
-				{
-					password: '********',
-					email,
-					updatedAt: Timestamp.now(),
-					isUpdated: true,
-					userCredentials: {
-						status: survey.employmentStatus,
-						gender: userCredentials?.gender,
-						province: userCredentials?.province,
-						zipCode: userCredentials?.zipCode,
-						city: userCredentials?.city,
-						birthDate: userCredentials?.birthDate,
-						birthPlace: userCredentials?.birthPlace,
-						maritalStatus: userCredentials?.maritalStatus,
-						phoneNumber: formatedPhoneNumber,
-						description: null,
-						workExperience: null,
-						educationalBackground: null,
-					},
+		const batch = db.batch();
+		const userRef = db.collection('users').doc(param);
+		const surveyRef = db.collection('surveys').doc();
+
+		batch.set(
+			userRef,
+			{
+				password: '********',
+				email,
+				updatedAt: Timestamp.now(),
+				isUpdated: true,
+				userCredentials: {
+					status: survey.employmentStatus,
+					gender: userCredentials?.gender,
+					province: userCredentials?.province,
+					zipCode: userCredentials?.zipCode,
+					city: userCredentials?.city,
+					birthDate: userCredentials?.birthDate,
+					birthPlace: userCredentials?.birthPlace,
+					maritalStatus: userCredentials?.maritalStatus,
+					phoneNumber: formattedPhoneNumber,
+					description: null,
+					workExperience: null,
+					educationalBackground: null,
 				},
-				{ merge: true },
-			);
+			},
+			{ merge: true },
+		);
 
-		const surveyRef = await db
-			.collection('surveys')
-			.add({ ...survey, alumniUid: user.uid, createdAt: Timestamp.now() });
+		batch.set(surveyRef, {
+			...survey,
+			alumniUid: user.uid,
+			createdAt: Timestamp.now(),
+		});
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
-			message: 'Succesfully updated personal account!',
-			data: [userRef, surveyRef],
-		} as H3Response;
+		const analyticsRef = db.collection('analytics').doc('2025');
+		batch.update(analyticsRef, {
+			[survey.employmentStatus === 'employed' ? 'employed' : 'unemployed']:
+				FieldValue.increment(1),
+			unknown: FieldValue.increment(-1),
+		});
+
+		await batch.commit();
+
+		return successResponse({
+			message: 'Successfully updated personal account!',
+		});
 	} catch (error: any) {
-		console.log('/alumni.put', error);
+		console.error('/alumni.put', error);
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,
-				statusMessage: 'conflict',
+				statusMessage: 'Conflict',
 				message: 'Email already exists',
 			});
 		}

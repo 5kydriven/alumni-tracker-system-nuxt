@@ -7,10 +7,10 @@
 	} from '@unovis/vue';
 	import { Donut } from '@unovis/ts';
 
-	const props = defineProps<{ data: any }>();
+	const props = defineProps<{ data: any; status: string }>();
 	const triggers = {
 		[Donut.selectors.segment]: (d: any) =>
-			`${d.data.label}: ${d.data.value} employed`,
+			`${d.data.label}: ${d.data.value} ${props.status}`,
 	};
 
 	const legendItems = Object.entries(props.data).map(([_, data]: any) => ({

@@ -3,15 +3,11 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
 import rearrangeName from '~~/server/utils/rearrangeName';
+import sanitizeString from '~~/server/utils/snitizeString';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const body = await readBody(event);
-	const sanitizeString = (str: string) =>
-		str
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/[^a-zA-Z]/g, '');
 
 	try {
 		if (!body) {
@@ -27,7 +23,10 @@ export default eventHandler(async (event: H3Event) => {
 
 		const result = await Promise.all(
 			body.map(
-				async (item: { name: string; batch: string; course: string }) => {
+				async (
+					item: { name: string; batch: string; course: string },
+					index: number,
+				) => {
 					const arrange = rearrangeName(item.name);
 					const name = arrange.trim().split(' ');
 					const lastName = sanitizeString(name[name.length - 1] || 'unknown');
@@ -64,7 +63,21 @@ export default eventHandler(async (event: H3Event) => {
 						{ merge: true },
 					);
 
-					return { ...item, email, password, uid: userCreds.uid };
+					const analyticsRef = db.collection('analytics').doc(item.batch);
+					batch.set(analyticsRef, {
+						year: Number(item.batch),
+						employed: 0,
+						unemployed: 0,
+						unknown: index + 1,
+					});
+
+					return {
+						...item,
+						email,
+						password,
+						uid: userCreds.uid,
+						analyticsUId: analyticsRef.id,
+					};
 				},
 			),
 		);
