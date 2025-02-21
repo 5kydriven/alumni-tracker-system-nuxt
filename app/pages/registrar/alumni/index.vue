@@ -32,9 +32,11 @@
 
 	const q = ref();
 	const page = ref(1);
-	const limit = ref(10);
+	const limit = ref(15);
 	const selected = ref<Alumni[]>([]);
-	const selectedColumns = ref(defaultColumns);
+	const selectedColumns = ref(
+		defaultColumns.filter((column) => column.key !== 'password'),
+	);
 	const selectedCourses = ref<Course[]>([]);
 	const selectedStatuses = ref<AlumniStatus[]>([]);
 
@@ -128,7 +130,7 @@
 		</div>
 	</Navbar>
 	<SubNavbar>
-		<div class="flex items-center gap-2 md:gap-4 w-full">
+		<div class="flex items-center py-4 gap-2 md:gap-4 w-full">
 			<USelectMenu
 				multiple
 				v-model="selectedStatuses"
@@ -184,7 +186,7 @@
 			},
 			wrapper: 'flex-1',
 		}">
-		<template #uid-data="{ row }">{{ row.uid }}</template>
+		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
 		<template #name-data="{ row }"
 			><span class="capitalize">{{ row.name }}</span></template
 		>

@@ -26,6 +26,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 			birthDate: '',
 		},
 	});
+	
 	const survey = ref<Survey>({
 		employmentStatus: undefined,
 		employmentType: undefined,
