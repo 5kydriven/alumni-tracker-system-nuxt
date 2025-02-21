@@ -13,7 +13,7 @@ export default eventHandler(async (event: H3Event) => {
 
 		let countQueryRef: Query = db
 			.collection('users')
-			.where('role', '==', 'alumni'); // Start with base filter
+			.where('role', '==', 'alumni');
 
 		if (q) {
 			const queryLowerCase = q.toString().toLowerCase();
