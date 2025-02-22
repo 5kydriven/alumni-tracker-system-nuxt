@@ -7,16 +7,27 @@
 	});
 
 	const { convertTimestamp } = useConverter();
-
+	const selectedCategory = ref<string | null>(null);
 	const categories = ref([
-		{ name: 'Full Time', key: 'full time' },
-		{ name: 'Part Time', key: 'part time' },
-		{ name: 'Freelance', key: 'freelance' },
-		{ name: 'Contract', key: 'contract' },
-		{ name: 'Internship', key: 'internship' },
+		{ name: 'Full Time', key: 'full time', isSelected: false },
+		{ name: 'Part Time', key: 'part time', isSelected: false },
+		{ name: 'Freelance', key: 'freelance', isSelected: false },
+		{ name: 'Contract', key: 'contract', isSelected: false },
+		{ name: 'Internship', key: 'internship', isSelected: false },
 	]);
 
-	const { data: jobs, status } = useLazyFetch<Job[]>('/api/job');
+	const { data: jobs, status } = useLazyFetch<H3Response<Job[]>>('/api/job');
+
+	const selectCategory = (selectedKey: string) => {
+		selectedCategory.value = selectedKey;
+		categories.value.forEach((cat) => {
+			cat.isSelected = cat.key === selectedKey;
+		});
+	};
+
+	watch(selectedCategory, (newValue) => {
+		console.log('Selected Category:', newValue);
+	});
 </script>
 
 <template>
@@ -32,7 +43,11 @@
 				<div class="flex flex-col gap-1.5">
 					<label class="text-lg font-bold">Job Types</label>
 					<div class="flex flex-col gap-1">
-						<UCheckbox v-for="category of categories">
+						<UCheckbox
+							v-for="category in categories"
+							:key="category.key"
+							v-model="category.isSelected"
+							@update:model-value="selectCategory(category.key)">
 							<template #label>
 								<span class="dark:text-gray-500">{{ category.name }}</span>
 							</template>
@@ -45,7 +60,7 @@
 		<template v-if="status === 'success'">
 			<div class="flex-1 flex flex-col gap-4">
 				<div
-					v-for="(job, index) in jobs"
+					v-for="(job, index) in jobs?.data"
 					:key="index"
 					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg">
 					<div class="flex justify-between">
