@@ -76,6 +76,7 @@
 				</div>
 			</div>
 		</Navbar>
+
 		<UCarousel
 			ref="carouselRef"
 			v-slot="{ item }"
@@ -87,82 +88,186 @@
 				class="w-full"
 				draggable="false" />
 		</UCarousel>
-		<Container class="flex flex-col gap-4 py-4 text-center">
-			<label class="text-3xl font-bold">Lates News</label>
+
+		<UContainer class="flex flex-col gap-8 py-12 text-center">
+			<label class="text-3xl font-bold">Latest News</label>
 			<div class="flex justify-between">
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
 			</div>
-		</Container>
-		<Container class="flex flex-col gap-4 py-4 text-center">
+		</UContainer>
+
+		<UContainer class="flex flex-col gap-8 py-12 text-center">
 			<label class="text-3xl font-bold">Upcoming Events</label>
 			<div class="flex justify-between">
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
-				<UCard>
-					<template #header>
-						<div class="h-8"></div>
-					</template>
-
-					<div class="h-32 w-64"></div>
+				<UCard
+					:ui="{
+						base: 'w-72 flex flex-col gap-8',
+						divide: 'divide-none',
+						ring: 'ring-0',
+						shadow: 'shadow-none',
+						body: {
+							padding: 'sm:p-0',
+						},
+						footer: {
+							padding: 'sm:p-0',
+						},
+					}">
+					<div class="rounded-lg overflow-hidden relative">
+						<NuxtImg
+							src="/sample-1.jpg"
+							width="288px" />
+					</div>
 
 					<template #footer>
-						<div class="h-8"></div>
+						<div class="flex flex-col justify-center">
+							<label class="text-lg font-bold">TITLE</label>
+							<p class="text-wrap">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							</p>
+						</div>
 					</template>
 				</UCard>
 			</div>
-		</Container>
+		</UContainer>
 		<footer class="py-4 text-center border-t">5KYDRIVEN</footer>
 	</main>
 </template>
