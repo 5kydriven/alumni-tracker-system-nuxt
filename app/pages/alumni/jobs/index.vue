@@ -7,8 +7,9 @@
 	});
 
 	const { convertTimestamp } = useConverter();
-	const selectedCategory = ref<string | null>(null);
-	const categories = ref([
+
+	const q = ref<string>();
+	const categories = ref<{ name: string; key: string; isSelected: boolean }[]>([
 		{ name: 'Full Time', key: 'full time', isSelected: false },
 		{ name: 'Part Time', key: 'part time', isSelected: false },
 		{ name: 'Freelance', key: 'freelance', isSelected: false },
@@ -16,17 +17,22 @@
 		{ name: 'Internship', key: 'internship', isSelected: false },
 	]);
 
-	const { data: jobs, status } = useLazyFetch<H3Response<Job[]>>('/api/job');
+	const selectedCategory = computed(() =>
+		categories.value.filter((cat) => cat.isSelected).map((cat) => cat.key),
+	);
 
-	const selectCategory = (selectedKey: string) => {
-		selectedCategory.value = selectedKey;
-		categories.value.forEach((cat) => {
-			cat.isSelected = cat.key === selectedKey;
-		});
-	};
+	const query = computed(() => ({
+		q: q.value,
+		type: selectedCategory.value,
+	}));
 
-	watch(selectedCategory, (newValue) => {
-		console.log('Selected Category:', newValue);
+	const { data: jobs, status } = useLazyFetch<H3Response<Job[]>>('/api/job', {
+		method: 'GET',
+		query,
+	});
+
+	watch(selectedCategory, () => {
+		console.log('Selected Categories:', selectedCategory.value);
 	});
 </script>
 
@@ -37,6 +43,7 @@
 			<div
 				class="flex flex-col gap-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg sticky top-4 bg-white shadow">
 				<UInput
+					v-model="q"
 					placeholder="Search..."
 					type="text"
 					icon="i-heroicons-magnifying-glass" />
@@ -46,12 +53,8 @@
 						<UCheckbox
 							v-for="category in categories"
 							:key="category.key"
-							v-model="category.isSelected"
-							@update:model-value="selectCategory(category.key)">
-							<template #label>
-								<span class="dark:text-gray-500">{{ category.name }}</span>
-							</template>
-						</UCheckbox>
+							:label="category.name"
+							v-model="category.isSelected" />
 					</div>
 				</div>
 			</div>
@@ -60,6 +63,7 @@
 		<template v-if="status === 'success'">
 			<div class="flex-1 flex flex-col gap-4">
 				<div
+					v-if="(jobs?.data?.length ?? 0) >= 1"
 					v-for="(job, index) in jobs?.data"
 					:key="index"
 					class="w-full border dark:border-gray-800 p-4 border-gray-200 rounded-lg break-words flex flex-col gap-4 bg-white shadow-lg">
@@ -100,6 +104,18 @@
 							:to="`/alumni/jobs/${job.uid}`"
 							class="self-end" />
 					</div>
+				</div>
+
+				<div
+					v-else
+					class="w-full h-full flex flex-col gap-4 justify-center items-center">
+					<UIcon
+						name="i-heroicons-magnifying-glass"
+						class="w-10 h-10" />
+					<label>
+						No current listings match your search, but new opportunities are
+						added regularly!</label
+					>
 				</div>
 			</div>
 		</template>
