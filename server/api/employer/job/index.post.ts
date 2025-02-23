@@ -1,6 +1,7 @@
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 import errorResponse from '~~/server/utils/errorResponse';
+import successResponse from '~~/server/utils/okReponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -15,20 +16,16 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		const res = await db
-			.collection('jobs')
-			.add({
-				...body,
-				searchKeywords: generateSearchKeywords(body.title),
-				createdAt: Timestamp.now(),
-			});
+		const res = await db.collection('jobs').add({
+			...body,
+			searchKeywords: generateSearchKeywords(body.title.toLowerCase()),
+			createdAt: Timestamp.now(),
+		});
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
-			message: 'Succesfully created job',
-			data: { uid: res.id },
-		} as H3Response;
+		return successResponse({
+			message: 'Successfully posted job',
+			data: res.id,
+		});
 	} catch (error: any) {
 		console.log('/employer/job.post', error);
 		return errorResponse(error);

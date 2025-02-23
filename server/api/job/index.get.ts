@@ -7,17 +7,21 @@ export default defineEventHandler(async (event: H3Event) => {
 	const { q, type } = getQuery(event);
 
 	try {
-		let query = db.collection('jobs').orderBy('createdAt', 'desc');
+		let queryRef = db.collection('jobs').orderBy('createdAt', 'desc');
 
 		if (q) {
-			query = query.where('searchKeywords', 'array-contains', q);
+			const queryLowerCase = q.toString().toLowerCase();
+			queryRef = queryRef
+				.where('searchKeywords', 'array-contains', queryLowerCase)
+				.limit(5);
 		}
 
-		if (type && Array.isArray(type)) {
-			query = query.where('type', 'in', type);
+		if (type) {
+			const courseArray = Array.isArray(type) ? type : [type];
+			queryRef = queryRef.where('type', 'in', courseArray);
 		}
 
-		const snapShot = await query.get();
+		const snapShot = await queryRef.get();
 
 		const jobs = snapShot.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
 

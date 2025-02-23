@@ -53,7 +53,7 @@
 						" />
 				</div>
 				<p
-					class="text-gray-400 text-sm"
+					class="text-gray-900 text-sm"
 					v-if="props.userCredentials?.description">
 					{{ props.userCredentials?.description }}
 				</p>
