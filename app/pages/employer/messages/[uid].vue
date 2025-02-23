@@ -74,7 +74,6 @@
 
 <template>
 	<div class="w-full flex flex-col">
-		{{ participant }}
 		<MessageHeader :participantName="participant" />
 
 		<div

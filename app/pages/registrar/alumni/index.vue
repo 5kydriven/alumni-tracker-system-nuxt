@@ -3,6 +3,7 @@
 		RegistrarAlumniAdd,
 		RegistrarAlumniDelete,
 		RegistrarAlumniDeleteMultiple,
+		RegistrarAlumniEdit,
 		RegistrarSlideOver,
 		UButton,
 	} from '#components';
@@ -68,32 +69,36 @@
 		};
 	});
 
-	const { status, data: alumni } = useLazyFetch<PaginatedResponse<Alumni[]>>(
-		'/api/registrar/alumni',
-		{
-			key: 'alumni',
-			method: 'GET',
-			query,
-			default: () => ({
-				data: [],
-				total: 0,
-			}),
-			getCachedData: (key) => {
-				const cachedData =
-					nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-				if (cachedData) {
-					return cachedData;
-				}
-				return null;
-			},
-			watch: [q, page],
+	const {
+		status,
+		data: alumni,
+		refresh,
+	} = useLazyFetch<PaginatedResponse<Alumni[]>>('/api/registrar/alumni', {
+		key: 'alumni',
+		method: 'GET',
+		query,
+		default: () => ({
+			data: [],
+			total: 0,
+		}),
+		getCachedData: (key) => {
+			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+			if (cachedData) {
+				return cachedData;
+			}
+			return null;
 		},
-	);
+		watch: [q, page, selectedCourses, selectedStatuses],
+	});
 
 	function onClosed() {
 		modal.close();
 		selected.value = [];
 	}
+
+	onBeforeMount(() => {
+		refresh();
+	});
 </script>
 
 <template>
@@ -212,6 +217,17 @@
 							icon: 'i-heroicons-eye-solid',
 							click: () => {
 								router.push(`/registrar/alumni/${row.uid}`);
+							},
+						},
+						{
+							label: 'Edit',
+							icon: 'i-heroicons-pencil-square-solid',
+							click: () => {
+								modal.open(RegistrarAlumniEdit, {
+									uid: row.uid,
+									name: row.name,
+									onClose: modal.close,
+								});
 							},
 						},
 						{

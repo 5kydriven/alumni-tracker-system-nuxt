@@ -14,8 +14,6 @@
 		},
 	];
 
-	const batch = ['2025', '2026'];
-
 	const conversation = reactive({
 		isGroup: false,
 		message: '',
@@ -46,6 +44,8 @@
 			watch: [q],
 		},
 	);
+
+	const { data: batch } = useFetch<H3Response>('/api/registrar/batch');
 
 	function onChanged(index: any) {
 		const item = items[index];
@@ -113,7 +113,9 @@
 						label="Select Batch"
 						required>
 						<USelectMenu
-							:options="batch"
+							:options="batch?.data"
+							value-attribute="uid"
+							option-attribute="uid"
 							v-model="conversation.batch" />
 					</UFormGroup>
 				</div>

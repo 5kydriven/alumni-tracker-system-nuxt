@@ -17,7 +17,9 @@
 			@click="router.back()" />
 		<UAvatar
 			:alt="
-				!props.participantName ? 'Deleted Account' : props.participantName
+				!props.participantName
+					? 'Deleted Account'
+					: props.participantName.toUpperCase()
 			" />
 		<label class="text-black text-lg font-bold">
 			{{ !props.participantName ? 'Deleted Account' : props.participantName }}

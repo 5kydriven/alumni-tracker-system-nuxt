@@ -1,13 +1,13 @@
 <script setup lang="ts">
 	definePageMeta({
-		middleware: ['employer'],
-		layout: 'user',
+		middleware: ['personel'],
+		layout: 'registrar',
 	});
 
 	const router = useRouter();
 
 	function handleClick(uid: string) {
-		router.push(`/employer/messages/${uid}`);
+		router.push(`/registrar/messages/${uid}`);
 	}
 </script>
 

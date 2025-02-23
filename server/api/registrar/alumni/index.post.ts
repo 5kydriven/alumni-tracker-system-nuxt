@@ -83,6 +83,8 @@ export default eventHandler(async (event: H3Event) => {
 		);
 
 		await batch.commit();
+		const cache = useStorage('cache');
+		await cache.clear();
 
 		return {
 			statusCode: 200,
