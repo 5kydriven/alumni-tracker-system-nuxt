@@ -95,7 +95,7 @@
 			</div>
 		</div>
 		<div class="flex gap-4">
-			<div class="border rounded shadow p-2 flex flex-col w-2/3">
+			<div class="border rounded-lg shadow p-2 flex flex-col w-2/3">
 				<ChartGroupedBar
 					:data="[
 						{ year: 2022, employed: 10, unemployed: 1, unknown: 1 },
