@@ -25,7 +25,7 @@
 
 <template>
 	<Navbar class="gap-2">
-		<div class="flex gap-2">
+		<div class="flex gap-2 items-center">
 			<UButton
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
@@ -35,11 +35,11 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg">Home</label>
+			<label class="font-bold text-xl">Home</label>
 		</div>
 	</Navbar>
 	<div class="p-4 flex flex-col gap-4">
-		<label class="font-bold text-3xl">Overview</label>
+		<label class="font-bold text-lg">Overview</label>
 		<div class="w-full flex gap-4">
 			<div
 				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">

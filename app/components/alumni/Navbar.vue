@@ -46,14 +46,6 @@
 					>
 				</div>
 				<div class="flex items-center gap-2">
-					<!-- <UButton
-						:icon="
-							isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
-						"
-						color="gray"
-						variant="ghost"
-						@click="isDark = !isDark"
-					/> -->
 					<UHorizontalNavigation
 						:links="navLinks"
 						:ui="{ wrapper: 'hidden md:flex' }">

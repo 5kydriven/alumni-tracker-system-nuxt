@@ -51,24 +51,26 @@
 </script>
 
 <template>
-	<label>Alumni employability</label>
-	<VisBulletLegend
-		:items="items"
-		class="mb-4" />
-	<VisXYContainer :data="props.data">
-		<VisGroupedBar
-			:color="colors"
-			:barMinHeight="1"
-			:x="x"
-			:y="y" />
-		<VisAxis
-			type="x"
-			label="Year"
-			:gridLine="false"
-			:numTicks="props.data.length" />
-		<VisAxis
-			type="y"
-			label="Total" />
-		<VisTooltip :triggers="triggers" />
-	</VisXYContainer>
+	<div class="border rounded shadow p-2 flex flex-col w-2/3">
+		<label>Alumni employability</label>
+		<VisBulletLegend
+			:items="items"
+			class="mb-4" />
+		<VisXYContainer :data="props.data">
+			<VisGroupedBar
+				:color="colors"
+				:barMinHeight="1"
+				:x="x"
+				:y="y" />
+			<VisAxis
+				type="x"
+				label="Year"
+				:gridLine="false"
+				:numTicks="props.data.length" />
+			<VisAxis
+				type="y"
+				label="Total" />
+			<VisTooltip :triggers="triggers" />
+		</VisXYContainer>
+	</div>
 </template>
