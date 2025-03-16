@@ -94,16 +94,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex gap-4">
-			<div class="border rounded-lg shadow p-2 flex flex-col w-2/3">
-				<ChartGroupedBar
-					:data="[
-						{ year: 2022, employed: 10, unemployed: 1, unknown: 1 },
-						{ year: 2023, employed: 20, unemployed: 5, unknown: 2 },
-						{ year: 2024, employed: 1, unemployed: 2, unknown: 3 },
-						{ year: 2025, employed: 4, unemployed: 3, unknown: 1 },
-					]" />
-			</div>
+		<div class="flex gap-4 h-full">
+			<ChartGroupedBar
+				:data="[
+					{ year: 2022, employed: 10, unemployed: 1, unknown: 1 },
+					{ year: 2023, employed: 20, unemployed: 5, unknown: 2 },
+					{ year: 2024, employed: 1, unemployed: 2, unknown: 3 },
+					{ year: 2025, employed: 4, unemployed: 3, unknown: 1 },
+				]" />
 
 			<ChartDonut
 				class="w-1/3"

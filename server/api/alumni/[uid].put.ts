@@ -67,9 +67,14 @@ export default defineEventHandler(async (event: H3Event) => {
 		});
 
 		const analyticsRef = db.collection('analytics').doc('2025');
+		const employmentField =
+			survey?.employmentStatus === 'employed' ||
+			survey?.employmentStatus === 'self-employed'
+				? 'employed'
+				: 'unemployed';
+
 		batch.update(analyticsRef, {
-			[survey.employmentStatus === 'employed' ? 'employed' : 'unemployed']:
-				FieldValue.increment(1),
+			[employmentField]: FieldValue.increment(1),
 			unknown: FieldValue.increment(-1),
 		});
 
