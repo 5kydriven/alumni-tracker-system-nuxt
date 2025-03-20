@@ -51,7 +51,7 @@
 </script>
 
 <template>
-	<div class="border rounded shadow p-2 flex flex-col w-2/3">
+	<div class="border rounded-lg shadow p-2 flex flex-col w-2/3">
 		<label>Alumni employability</label>
 		<VisBulletLegend
 			:items="items"

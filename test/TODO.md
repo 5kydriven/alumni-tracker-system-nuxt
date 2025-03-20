@@ -2,9 +2,9 @@
 
 - [ ] admin: enhance view more information of approval queue table
 - [ ] admin: add edit modal in user's table
-- [ ] registrar: add actual data in bar graph
-- [ ] registrar: add actual data in pie graph
-- [ ] registrar: make filter in pie graph work
+- [x] registrar: add actual data in bar graph
+- [x] registrar: add actual data in pie graph
+- [x] registrar: make filter in pie graph work
 - [ ] registrar: finish edit modal in alumni table
 - [ ] employer: upload documents in registering
 - [ ] employer: finish edit modal in jobs
