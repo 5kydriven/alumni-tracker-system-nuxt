@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { AdminUserDelete } from '#components';
+	import { AdminUserDelete, AdminUserEdit } from '#components';
 
 	const { q } = useSearch();
 	const store = useUserStore();
@@ -74,6 +74,12 @@
 						{
 							label: 'Edit',
 							icon: 'i-heroicons-pencil-square-20-solid',
+							click: () => {
+								modal.open(AdminUserEdit, {
+									userData: row,
+									onClose: modal.close,
+								});
+							},
 						},
 						{
 							label: 'Delete',
