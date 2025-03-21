@@ -1,7 +1,7 @@
 ### TODO's
 
 - [ ] admin: enhance view more information of approval queue table
-- [ ] admin: add edit modal in user's table
+- [x] admin: add edit modal in user's table
 - [x] registrar: add actual data in bar graph
 - [x] registrar: add actual data in pie graph
 - [x] registrar: make filter in pie graph work
