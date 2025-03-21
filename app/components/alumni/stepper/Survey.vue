@@ -4,7 +4,6 @@
 	const employmentStatus = [
 		{ name: 'Employed', value: 'employed' },
 		{ name: 'Self-Employed', value: 'self-employed' },
-		// { name: 'Freelancer', value: 'freelancer' },
 		{ name: 'Unemployed', value: 'unemployed' },
 	];
 

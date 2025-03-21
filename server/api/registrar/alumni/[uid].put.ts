@@ -1,4 +1,4 @@
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
 import successResponse from '~~/server/utils/okReponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
@@ -67,6 +67,20 @@ export default eventHandler(async (event: H3Event) => {
 				.collection('surveys')
 				.doc(surveyDoc?.id as string)
 				.update(surveyUpdate);
+
+			const employmentField =
+				survey?.employmentStatus === 'employed' ||
+				survey?.employmentStatus === 'self-employed'
+					? 'employed'
+					: 'unemployed';
+
+			await db
+				.collection('analytics')
+				.doc(alumni.userCredentials?.batch ?? '')
+				.update({
+					[employmentField]: FieldValue.increment(1),
+					unknown: FieldValue.increment(-1),
+				});
 		}
 
 		console.log(alumni, survey);
