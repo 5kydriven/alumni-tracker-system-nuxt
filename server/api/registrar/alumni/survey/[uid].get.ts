@@ -1,5 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import successResponse from '~~/server/utils/okReponse';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -27,11 +28,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			uid: doc.id,
 		};
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
-			data: survey,
-		} as H3Response;
+		return successResponse({ data: survey });
 	} catch (error: any) {
 		return errorResponse(error);
 	}

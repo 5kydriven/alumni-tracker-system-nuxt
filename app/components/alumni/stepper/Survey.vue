@@ -152,8 +152,8 @@
 					required
 					valueAttribute="value"
 					:options="[
-						{ name: 'yes', value: true },
-						{ name: 'No', value: false },
+						{ name: 'Yes', value: 'yes' },
+						{ name: 'No', value: 'no' },
 					]"
 					v-model="store.survey.isRegistered" />
 			</UFormGroup>

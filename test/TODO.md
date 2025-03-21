@@ -5,7 +5,7 @@
 - [x] registrar: add actual data in bar graph
 - [x] registrar: add actual data in pie graph
 - [x] registrar: make filter in pie graph work
-- [ ] registrar: finish edit modal in alumni table
+- [x] registrar: finish edit modal in alumni table
 - [ ] employer: upload documents in registering
 - [ ] employer: finish edit modal in jobs
 - [ ] employer: add view information for jobs

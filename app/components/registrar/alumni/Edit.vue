@@ -1,29 +1,40 @@
 <script setup lang="ts">
+	import VueDatePicker from '@vuepic/vue-datepicker';
 	const isEmployement = ref(false);
 	const isLoading = ref(false);
-	const name = ref('');
+	const { toastResponse } = useToastComposables();
 
 	const props = defineProps<{
 		alumni: User<AlumniCredentials>;
 	}>();
 
+	const userCredentials = ref(props.alumni.userCredentials || {});
+	const name = ref(props.alumni.name || '');
 	const survey = ref<Survey>({
-		employmentStatus: props.alumni.userCredentials?.status,
-		employmentType: undefined,
-		jobTitle: undefined,
-		companyName: undefined,
-		companyAddress: undefined,
-		yearsInJob: undefined,
-		workNature: undefined,
-		urlLink: undefined,
-		bussinessName: undefined,
-		isRegistered: undefined,
+		employmentStatus: 'unknown',
 	});
+
+	if (userCredentials.value.status != 'unknown') {
+		const { data: response } = useFetch<H3Response>(
+			`/api/registrar/alumni/survey/${props.alumni.uid}`,
+			{
+				method: 'GET',
+				immediate: true,
+			},
+		);
+		console.log('open');
+		watch(
+			response,
+			(newResponse) => {
+				survey.value = newResponse?.data ?? {};
+			},
+			{ immediate: true },
+		);
+	}
 
 	const employmentStatus = [
 		{ name: 'Employed', value: 'employed' },
 		{ name: 'Self-Employed', value: 'self-employed' },
-		{ name: 'Freelancer', value: 'freelancer' },
 		{ name: 'Unemployed', value: 'unemployed' },
 		{ name: 'Unknown', value: 'unknown' },
 	];
@@ -64,11 +75,32 @@
 		}
 	}
 
+	async function onSubmit() {
+		isLoading.value = true;
+		const res = await $fetch<H3Response>(
+			`/api/registrar/alumni/${props.alumni.uid}`,
+			{
+				method: 'PUT',
+				body: JSON.stringify({
+					alumni: {
+						name: name.value,
+						userCredentials: userCredentials.value,
+					},
+					survey: { ...survey.value, alumniUid: props.alumni.uid },
+				}),
+			},
+		);
+		await refreshNuxtData('alumni');
+		isLoading.value = false;
+		toastResponse(res);
+		emits('close');
+	}
+
 	const emits = defineEmits<{
 		close: [];
 	}>();
 
-	console.log(props.alumni);
+	watchEffect(() => console.log(survey.value));
 </script>
 
 <template>
@@ -106,37 +138,42 @@
 							base: 'capitalize',
 						}"
 						type="text"
-						v-model="props.alumni.name" />
+						v-model="name" />
 				</UFormGroup>
 				<UFormGroup label="Phonenumber">
 					<UInput
 						:maxlength="11"
-						v-model="name" />
+						v-model="userCredentials.phoneNumber" />
 				</UFormGroup>
 				<UFormGroup
 					label="City"
 					class="col-span-1">
 					<UInput
 						type="text"
-						v-model="props.alumni.name" />
+						v-model="userCredentials.city" />
 				</UFormGroup>
 				<UFormGroup
 					label="Province"
 					class="col-span-1">
 					<UInput
 						type="text"
-						v-model="props.alumni.name" />
+						v-model="userCredentials.province" />
 				</UFormGroup>
 				<UFormGroup label="Marital Status">
 					<UInput
 						type="text"
-						v-model="props.alumni.name" />
+						v-model="userCredentials.maritalStatus" />
 				</UFormGroup>
 				<UFormGroup label="Birthdate">
-					<UInput type="text" />
+					<VueDatePicker
+						:enable-time-picker="false"
+						auto-apply
+						v-model="userCredentials.birthDate" />
 				</UFormGroup>
 				<UFormGroup label="Birth place">
-					<UInput type="text" />
+					<UInput
+						type="text"
+						v-model="userCredentials.birthPlace" />
 				</UFormGroup>
 			</div>
 
@@ -144,7 +181,7 @@
 				class="flex flex-col gap-2"
 				v-else>
 				<UFormGroup
-					label="What is your current employment status"
+					label="Employment status"
 					required
 					class="col-span-6">
 					<USelectMenu
@@ -204,39 +241,6 @@
 
 				<div
 					class="grid grid-cols-12 gap-2"
-					v-if="survey.employmentStatus == 'freelancer'">
-					<UFormGroup
-						label="Job Title/Profession"
-						class="col-span-6"
-						required>
-						<UInput
-							type="text"
-							required
-							placeholder="e.g., Freelance Graphic Designer"
-							v-model="survey.jobTitle" />
-					</UFormGroup>
-					<UFormGroup
-						label="Nature of Work / Services Offered"
-						class="col-span-6"
-						required>
-						<UInput
-							type="text"
-							required
-							placeholder="e.g., Logo Design, Web Development"
-							v-model="survey.workNature" />
-					</UFormGroup>
-					<UFormGroup
-						label="Portfolio / Website "
-						class="col-span-6">
-						<UInput
-							type="text"
-							placeholder="Enter website url or social media"
-							v-model="survey.urlLink" />
-					</UFormGroup>
-				</div>
-
-				<div
-					class="grid grid-cols-12 gap-2"
 					v-if="survey.employmentStatus == 'self-employed'">
 					<UFormGroup
 						label="Bussiness Name"
@@ -263,13 +267,13 @@
 						class="col-span-6"
 						required>
 						<USelectMenu
-							placeholder="Select the following options"
 							optionAttribute="name"
+							placeholder="Select the following options"
 							required
 							valueAttribute="value"
 							:options="[
-								{ name: 'yes', value: true },
-								{ name: 'No', value: false },
+								{ name: 'Yes', value: 'yes' },
+								{ name: 'No', value: 'no' },
 							]"
 							v-model="survey.isRegistered" />
 					</UFormGroup>
@@ -304,7 +308,7 @@
 					<UButton
 						variant="solid"
 						label="Save"
-						type="submit"
+						@click="onSubmit"
 						:loading="isLoading" />
 				</div>
 			</template>
