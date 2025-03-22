@@ -1,5 +1,5 @@
 export default function generateSearchKeywords(name: string) {
-	const keywords = new Set();
+	const keywords = new Set<string>(); // Explicitly type the Set
 	const words = name.toLowerCase().split(' ');
 
 	// Add the whole name
@@ -14,8 +14,8 @@ export default function generateSearchKeywords(name: string) {
 		}
 	});
 
-	// Add combinations of "test" with prefixes of "account"
-	if (words.length > 1) {
+	// Add combinations of "test" with prefixes of "account" if second word exists
+	if (words.length > 1 && words[1]) {
 		let secondWordPrefix = '';
 		for (const char of words[1]) {
 			secondWordPrefix += char;
@@ -23,8 +23,8 @@ export default function generateSearchKeywords(name: string) {
 		}
 	}
 
-	// Add combinations of "test account" with prefixes of "registrar"
-	if (words.length > 2) {
+	// Add combinations of "test account" with prefixes of "registrar" if third word exists
+	if (words.length > 2 && words[2]) {
 		let thirdWordPrefix = '';
 		for (const char of words[2]) {
 			thirdWordPrefix += char;
