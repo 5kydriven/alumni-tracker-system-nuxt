@@ -21,7 +21,7 @@
 					? 'Deleted Account'
 					: props.participantName.toUpperCase()
 			" />
-		<label class="text-black text-lg font-bold">
+		<label class="text-black text-lg font-bold capitalize">
 			{{ !props.participantName ? 'Deleted Account' : props.participantName }}
 		</label>
 	</div>

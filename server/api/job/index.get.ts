@@ -4,7 +4,7 @@ import successResponse from '~~/server/utils/okReponse';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const { q, type } = getQuery(event);
+	const { q, type, limit, offset } = getQuery(event);
 
 	try {
 		let queryRef = db.collection('jobs').orderBy('createdAt', 'desc');
@@ -13,7 +13,9 @@ export default defineEventHandler(async (event: H3Event) => {
 			const queryLowerCase = q.toString().toLowerCase();
 			queryRef = queryRef
 				.where('searchKeywords', 'array-contains', queryLowerCase)
-				.limit(5);
+				.limit(3);
+		} else {
+			queryRef = queryRef.limit(Number(limit));
 		}
 
 		if (type) {
@@ -21,11 +23,16 @@ export default defineEventHandler(async (event: H3Event) => {
 			queryRef = queryRef.where('type', 'in', courseArray);
 		}
 
+		if (offset) {
+			queryRef = queryRef.offset(Number(offset));
+		}
+
 		const snapShot = await queryRef.get();
 
 		const jobs = snapShot.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+		const totalJobs = await queryRef.count().get();
 
-		return successResponse({ data: jobs });
+		return successResponse({ data: jobs, total: totalJobs.data().count });
 	} catch (error: any) {
 		console.error('/job.get', error);
 		throw createError({

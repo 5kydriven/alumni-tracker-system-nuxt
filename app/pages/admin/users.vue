@@ -39,7 +39,7 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg text-black">User's</label>
+			<label class="font-bold text-xl text-black">User's</label>
 		</div>
 		<div class="flex items-center gap-4">
 			<UInput
@@ -50,6 +50,7 @@
 				placeholder="Search..."
 				v-model="q" />
 			<UButton
+				v-show="isUser"
 				icon="i-heroicons-pencil-square"
 				size="sm"
 				color="gray"

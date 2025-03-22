@@ -10,8 +10,11 @@
 	const employmentOptions = ['employed', 'unemployed', 'unknown'];
 
 	const selected = ref(employmentOptions[2]);
+	const query = computed(() => ({
+		status: selected.value,
+	}));
 
-	const { data: total } = useFetch<
+	const { data: total } = useLazyFetch<
 		H3Response<{
 			alumni: number;
 			employed: number;
@@ -21,11 +24,22 @@
 	>('/api/registrar', {
 		method: 'GET',
 	});
+
+	const { data: pie, status: pieLoading } = useLazyFetch<H3Response>(
+		'/api/admin/total-course',
+		{
+			query,
+		},
+	);
+
+	const { data: bar, status: barLoading } = useLazyFetch<H3Response>(
+		'/api/admin/employability-analytics',
+	);
 </script>
 
 <template>
 	<Navbar class="gap-2">
-		<div class="flex gap-2">
+		<div class="flex gap-2 items-center">
 			<UButton
 				@click="
 					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
@@ -35,11 +49,11 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg">Home</label>
+			<label class="font-bold text-xl">Home</label>
 		</div>
 	</Navbar>
 	<div class="p-4 flex flex-col gap-4">
-		<label class="font-bold text-3xl">Overview</label>
+		<label class="font-bold text-lg">Overview</label>
 		<div class="w-full flex gap-4">
 			<div
 				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
@@ -94,25 +108,19 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex gap-4">
-			<div class="border rounded-lg shadow p-2 flex flex-col w-2/3">
-				<ChartGroupedBar
-					:data="[
-						{ year: 2022, employed: 10, unemployed: 1, unknown: 1 },
-						{ year: 2023, employed: 20, unemployed: 5, unknown: 2 },
-						{ year: 2024, employed: 1, unemployed: 2, unknown: 3 },
-						{ year: 2025, employed: 4, unemployed: 3, unknown: 1 },
-					]" />
-			</div>
+		<div class="flex gap-4 h-full">
+			<ChartGroupedBar
+				v-if="barLoading == 'success' && bar?.data"
+				:data="bar?.data ?? []" />
+			<USkeleton
+				v-else
+				class="h-[382px] w-2/3" />
 
 			<ChartDonut
 				class="w-1/3"
-				:data="[
-					{ label: 'BSIT', value: 2 },
-					{ label: 'CRIM', value: 5 },
-					{ label: 'EDUC', value: 7 },
-				]"
-				status="employed">
+				v-if="pieLoading == 'success'"
+				:data="pie?.data ?? []"
+				:status="selected as string">
 				<div class="flex justify-between">
 					<label>Course</label>
 					<USelectMenu
@@ -120,6 +128,9 @@
 						v-model="selected" />
 				</div>
 			</ChartDonut>
+			<USkeleton
+				v-else
+				class="h-[382px] w-1/3" />
 		</div>
 	</div>
 </template>

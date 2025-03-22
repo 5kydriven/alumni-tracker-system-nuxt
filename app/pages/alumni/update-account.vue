@@ -77,10 +77,7 @@
 							icon="i-heroicons-user"
 							size="sm"
 							color="black"
-							:disabled="
-								!stepper.get('alumni-credential')?.isValid() ||
-								stepper.isLast.value
-							"
+							disabled
 							variant="link"
 							:padded="false"
 							class="!text-black"
@@ -94,10 +91,7 @@
 							size="sm"
 							color="black"
 							variant="link"
-							:disabled="
-								!stepper.get('alumni-credential')?.isValid() ||
-								stepper.isLast.value
-							"
+							disabled
 							:padded="false"
 							@click="
 								() => {

@@ -12,6 +12,6 @@ export declare global {
 		workNature?: string;
 		urlLink?: string;
 		bussinessName?: string;
-		isRegistered?: boolean;
+		isRegistered?: string;
 	}
 }

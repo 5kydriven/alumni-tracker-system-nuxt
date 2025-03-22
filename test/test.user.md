@@ -9,5 +9,5 @@ Password: 123456
 Username: admin.cpsu@example.com
 Password: admin123
 
-Username: idyl.vencing@example.com
+Username: nenwell.era@example.com
 Password: 123456

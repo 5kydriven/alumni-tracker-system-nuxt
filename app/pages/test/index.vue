@@ -24,6 +24,7 @@
 	];
 
 	const carouselRef = ref();
+	const router = useRouter();
 
 	onMounted(() => {
 		setInterval(() => {
@@ -69,6 +70,7 @@
 					</UHorizontalNavigation>
 					<UButton
 						label="Login"
+						@click="router.push('/auth')"
 						variant="solid"
 						color="yellow"
 						class="text-black"

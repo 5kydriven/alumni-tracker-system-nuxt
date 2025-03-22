@@ -4,7 +4,6 @@
 	const employmentStatus = [
 		{ name: 'Employed', value: 'employed' },
 		{ name: 'Self-Employed', value: 'self-employed' },
-		{ name: 'Freelancer', value: 'freelancer' },
 		{ name: 'Unemployed', value: 'unemployed' },
 	];
 
@@ -152,8 +151,8 @@
 					required
 					valueAttribute="value"
 					:options="[
-						{ name: 'yes', value: true },
-						{ name: 'No', value: false },
+						{ name: 'Yes', value: 'yes' },
+						{ name: 'No', value: 'no' },
 					]"
 					v-model="store.survey.isRegistered" />
 			</UFormGroup>

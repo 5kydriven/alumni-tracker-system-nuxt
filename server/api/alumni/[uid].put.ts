@@ -34,6 +34,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		const batch = db.batch();
 		const userRef = db.collection('users').doc(param);
 		const surveyRef = db.collection('surveys').doc();
+		const userDoc = await userRef.get();
 
 		batch.set(
 			userRef,
@@ -66,10 +67,17 @@ export default defineEventHandler(async (event: H3Event) => {
 			createdAt: Timestamp.now(),
 		});
 
-		const analyticsRef = db.collection('analytics').doc('2025');
+		const analyticsRef = db
+			.collection('analytics')
+			.doc(userDoc.data()?.userCredentials.batch);
+		const employmentField =
+			survey?.employmentStatus === 'employed' ||
+			survey?.employmentStatus === 'self-employed'
+				? 'employed'
+				: 'unemployed';
+
 		batch.update(analyticsRef, {
-			[survey.employmentStatus === 'employed' ? 'employed' : 'unemployed']:
-				FieldValue.increment(1),
+			[employmentField]: FieldValue.increment(1),
 			unknown: FieldValue.increment(-1),
 		});
 

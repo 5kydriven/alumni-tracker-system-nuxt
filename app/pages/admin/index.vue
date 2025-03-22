@@ -46,11 +46,11 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="text-lg font-bold">Home</label>
+			<label class="text-xl font-bold">Home</label>
 		</div>
 	</Navbar>
 	<div class="p-4 flex flex-col gap-4">
-		<label class="font-bold text-3xl">Overview</label>
+		<label class="font-bold text-lg">Overview</label>
 		<AdminOverview
 			v-if="totalStatus == 'success'"
 			:total="total?.data" />
@@ -62,15 +62,13 @@
 			<USkeleton class="h-[90px] rounded-lg" />
 			<USkeleton class="h-[90px] rounded-lg" />
 		</div>
-		<div class="flex gap-4">
-			<div
-				class="border rounded shadow p-2 flex flex-col w-2/3"
-				v-if="barLoading == 'success'">
-				<ChartGroupedBar :data="bar?.data ?? []" />
-			</div>
+		<div class="flex gap-4 h-full">
+			<ChartGroupedBar
+				v-if="barLoading == 'success' && bar?.data"
+				:data="bar?.data ?? []" />
 			<USkeleton
 				v-else
-				class="h-[382px] w-full" />
+				class="h-[382px] w-2/3" />
 
 			<ChartDonut
 				class="w-1/3"

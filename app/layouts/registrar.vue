@@ -6,16 +6,19 @@
 		{
 			label: 'Dashboard',
 			labelClass: 'hover:text-black',
+			icon: 'i-heroicons-chart-bar-solid',
 			to: '/registrar',
 		},
 		{
 			label: 'Alumni',
 			labelClass: 'hover:text-black',
+			icon: 'i-heroicons-users-solid',
 			to: '/registrar/alumni',
 		},
 		{
 			label: 'Messages',
 			labelClass: 'hover:text-black',
+			icon: 'i-heroicons-inbox-solid',
 			to: '/registrar/messages/',
 		},
 	]);
@@ -30,13 +33,14 @@
 	<div class="h-screen flex">
 		<aside
 			class="w-[225px] flex-col hidden lg:flex bg-zuccini-500 h-full px-4 xl:w-[250px] shrink-0">
-			<div class="h-16 flex items-center gap-2">
+			<div class="h-16 flex items-center gap-2 py-4">
 				<NuxtImg
 					src="/cpsu-logo.png"
 					width="36"
 					height="36" />
-				<label class="font-bold text-white">CPSU</label>
+				<label class="font-bold text-white text-xl">CPSU</label>
 			</div>
+			<UDivider />
 			<UVerticalNavigation
 				:links="links"
 				class="grow py-2">

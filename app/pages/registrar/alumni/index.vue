@@ -33,7 +33,7 @@
 
 	const q = ref();
 	const page = ref(1);
-	const limit = ref(15);
+	const limit = ref(10);
 	const selected = ref<Alumni[]>([]);
 	const selectedColumns = ref(
 		defaultColumns.filter((column) => column.key !== 'password'),
@@ -113,7 +113,7 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="font-bold text-lg hidden md:block">Alumni's</label>
+			<label class="font-bold text-xl hidden md:block">Alumni's</label>
 		</div>
 		<div class="flex items-center w-full justify-end gap-2 md:gap-4">
 			<UInput
@@ -135,7 +135,7 @@
 		</div>
 	</Navbar>
 	<SubNavbar>
-		<div class="flex items-center py-4 gap-2 md:gap-4 w-full">
+		<div class="flex items-center py-2 gap-2 md:gap-4 w-full">
 			<USelectMenu
 				multiple
 				v-model="selectedStatuses"
@@ -186,9 +186,6 @@
 			th: {
 				base: 'sticky z-10 top-0 bg-gray-100',
 			},
-			td: {
-				padding: 'p-2',
-			},
 			wrapper: 'flex-1',
 		}">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
@@ -224,8 +221,7 @@
 							icon: 'i-heroicons-pencil-square-solid',
 							click: () => {
 								modal.open(RegistrarAlumniEdit, {
-									uid: row.uid,
-									name: row.name,
+									alumni: row,
 									onClose: modal.close,
 								});
 							},

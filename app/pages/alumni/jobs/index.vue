@@ -16,6 +16,10 @@
 		{ name: 'Contract', key: 'contract', isSelected: false },
 		{ name: 'Internship', key: 'internship', isSelected: false },
 	]);
+	const page = ref(1);
+	const limit = ref(10);
+
+	const offset = computed(() => (page.value - 1) * limit.value);
 
 	const selectedCategory = computed(() =>
 		categories.value.filter((cat) => cat.isSelected).map((cat) => cat.key),
@@ -24,6 +28,8 @@
 	const query = computed(() => ({
 		q: q.value,
 		type: selectedCategory.value,
+		limit: limit.value,
+		offset: offset.value,
 	}));
 
 	const { data: jobs, status } = useLazyFetch<H3Response<Job[]>>('/api/job', {
@@ -116,6 +122,45 @@
 						No current listings match your search, but new opportunities are
 						added regularly!</label
 					>
+				</div>
+				<div
+					class="w-full flex justify-between px-2"
+					v-show="(jobs?.total ?? 0) >= 10">
+					<div>
+						<span class="text-sm leading-5">
+							Showing
+							<span class="font-medium">
+								{{ (page - 1) * limit + 1 }}
+							</span>
+							to
+							<span class="font-medium">
+								{{ Math.min(page * limit, jobs?.total as number) }}
+							</span>
+							of
+							<span class="font-medium">
+								{{ jobs?.total }}
+							</span>
+							results
+						</span>
+					</div>
+					<UPagination
+						:prev-button="{
+							icon: 'i-heroicons-arrow-small-left-20-solid',
+							label: 'Prev',
+							color: 'gray',
+						}"
+						:next-button="{
+							icon: 'i-heroicons-arrow-small-right-20-solid',
+							trailing: true,
+							label: 'Next',
+							color: 'gray',
+						}"
+						v-model="page"
+						:page-count="limit"
+						:total="jobs?.total as number"
+						:to="(page: number) => ({
+							query: { page },
+						})" />
 				</div>
 			</div>
 		</template>

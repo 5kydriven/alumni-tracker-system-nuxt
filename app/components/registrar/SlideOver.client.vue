@@ -6,17 +6,20 @@
 	const links = ref([
 		{
 			label: 'Dashboard',
+			icon: 'i-heroicons-chart-bar-solid',
 			to: '/registrar',
 			click: () => emits('close'),
 		},
 		{
 			label: 'Alumni',
 			to: '/registrar/alumni',
+			icon: 'i-heroicons-users-solid',
 			click: () => emits('close'),
 		},
 		{
 			label: 'Message',
 			to: '/registrar/messages',
+			icon: 'i-heroicons-inbox-solid',
 			click: () => emits('close'),
 		},
 	]);
@@ -40,7 +43,7 @@
 					src="/cpsu-logo.png"
 					width="36"
 					height="36" />
-				<div class="text-lg font-bold text-white">CPSU</div>
+				<div class="text-xl font-bold text-white">CPSU</div>
 			</div>
 			<UButton
 				:ui="{
