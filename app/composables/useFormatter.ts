@@ -15,7 +15,14 @@ export default function useFormatter() {
 			: formattedDate;
 	}
 
+	function capitalCase(key: any) {
+		return key
+			.replace(/([A-Z])/g, ' $1')
+			.replace(/^./, (str: string) => str.toUpperCase());
+	}
+
 	return {
 		formatMonthYear,
+		capitalCase,
 	};
 }

@@ -1,6 +1,6 @@
 ### TODO's
 
-- [ ] admin: enhance view more information of approval queue table
+- [x] admin: enhance view more information of approval queue table
 - [x] admin: add edit modal in user's table
 - [x] registrar: add actual data in bar graph
 - [x] registrar: add actual data in pie graph
@@ -11,5 +11,5 @@
 - [ ] employer: add view information for jobs
 - [ ] employer: add view information of alumni in chats
 - [ ] employer: add employer profile
-- [ ] alumni: fix search in jobs
-- [ ] alumni: add pagination in jobs
+- [x] alumni: fix search in jobs
+- [x] alumni: add pagination in jobs

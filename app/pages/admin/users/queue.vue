@@ -2,6 +2,7 @@
 	import RejectModal from '~/components/admin/RejectModal.vue';
 
 	const { convertToDate } = useConverter();
+	const { capitalCase } = useFormatter();
 	const { q } = useSearch();
 	const { toastResponse } = useToastComposables();
 	const modal = useModal();
@@ -110,8 +111,15 @@
 			</div>
 		</template>
 		<template #expand="{ row }">
-			<div class="p-4">
-				<pre>{{ row.userCredentials }}</pre>
+			<div class="p-4 flex flex-col gap-2">
+				<div
+					v-for="(value, key) in row.userCredentials"
+					:key="key"
+					class="flex gap-2">
+					<label class="font-bold">{{ capitalCase(key) }}:</label>
+					<span>{{ value }}</span>
+				</div>
+				<!-- <pre>{{ row.userCredentials }}</pre> -->
 			</div>
 		</template>
 	</UTable>

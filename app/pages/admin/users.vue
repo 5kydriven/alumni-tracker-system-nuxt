@@ -50,6 +50,7 @@
 				placeholder="Search..."
 				v-model="q" />
 			<UButton
+				v-show="isUser"
 				icon="i-heroicons-pencil-square"
 				size="sm"
 				color="gray"
