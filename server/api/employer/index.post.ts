@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import successResponse from '~~/server/utils/okReponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -16,10 +17,25 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
+		console.log(body);
+		let phoneNumber: string | undefined;
+		const contactNumber = body.userCredentials?.contactNumber;
+		if (contactNumber) {
+			if (!/^\d{10}$/.test(contactNumber) || !contactNumber.startsWith('9')) {
+				throw createError({
+					statusCode: 400,
+					statusMessage: 'bad request',
+					message:
+						'Invalid contact number. Must be a 10-digit Philippine mobile number starting with 9.',
+				});
+			}
+			phoneNumber = `+63${contactNumber}`;
+		}
+
 		const user = await auth.createUser({
 			displayName: body.name,
 			email: body.email,
-			phoneNumber: `+63${body.userCredentials?.contactNumber}`,
+			phoneNumber,
 			password: body.password,
 			disabled: true,
 		});
@@ -38,28 +54,27 @@ export default defineEventHandler(async (event: H3Event) => {
 						body.name?.toLowerCase() as string,
 					),
 					userCredentials: {
-						companyName: body.userCredentials?.companyName,
-						companyAddress: body.userCredentials?.companyAddress,
-						website: body.userCredentials?.website,
-						telephoneNumber: body.userCredentials?.telephoneNumber,
-						numberBranches: body.userCredentials?.numberBranches,
-						numberEmployees: body.userCredentials?.numberEmployees,
-						field: body.userCredentials?.field,
+						companyName: body.userCredentials?.companyName ?? '',
+						companyAddress: body.userCredentials?.companyAddress ?? '',
+						website: body.userCredentials?.website ?? '',
+						telephoneNumber: body.userCredentials?.telephoneNumber ?? '',
+						numberBranches: body.userCredentials?.numberBranches ?? '',
+						numberEmployees: body.userCredentials?.numberEmployees ?? '',
+						field: body.userCredentials?.field ?? '',
 						// logo: body.logo,
 						// bussinessPermit: body.bussinessPermit,
-						description: body.userCredentials?.description,
-						position: body.userCredentials?.position,
-						contactNumber: body.userCredentials?.contactNumber,
+						description: body.userCredentials?.description ?? '',
+						position: body.userCredentials?.position ?? '',
+						contactNumber: body.userCredentials?.contactNumber ?? '',
 					},
 				},
 				{ merge: true },
 			);
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
-			data: [user, usersRef],
-		} as H3Response;
+		return successResponse({
+			message: 'Successfully created account',
+			data: usersRef,
+		});
 	} catch (error: any) {
 		console.log('/employer.post', error);
 		return errorResponse(error);
