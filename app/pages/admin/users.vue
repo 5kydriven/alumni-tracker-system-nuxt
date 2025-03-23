@@ -43,6 +43,7 @@
 		</div>
 		<div class="flex items-center gap-4">
 			<UInput
+				v-show="isUser"
 				icon="i-heroicons-magnifying-glass-20-solid"
 				size="sm"
 				color="white"

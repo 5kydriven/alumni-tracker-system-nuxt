@@ -1,9 +1,9 @@
-import { H3Event } from 'h3';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import successResponse from '~~/server/utils/okReponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
-import rearrangeName from '~~/server/utils/rearrangeName';
 import sanitizeString from '~~/server/utils/snitizeString';
+import { H3Event } from 'h3';
+import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -23,10 +23,7 @@ export default eventHandler(async (event: H3Event) => {
 
 		const result = await Promise.all(
 			body.map(
-				async (
-					item: { name: string; batch: string; course: string },
-					index: number,
-				) => {
+				async (item: { name: string; batch: string; course: string }) => {
 					const arrange = rearrangeName(item.name);
 					const name = arrange.trim().split(' ');
 					const lastName = sanitizeString(name[name.length - 1] || 'unknown');
@@ -63,35 +60,38 @@ export default eventHandler(async (event: H3Event) => {
 						{ merge: true },
 					);
 
-					const analyticsRef = db.collection('analytics').doc(item.batch);
-					batch.set(analyticsRef, {
-						year: Number(item.batch),
-						employed: 0,
-						unemployed: 0,
-						unknown: index + 1,
-					});
-
 					return {
 						...item,
 						email,
 						password,
 						uid: userCreds.uid,
-						analyticsUId: analyticsRef.id,
 					};
 				},
 			),
+		);
+
+		// Update analytics for the single batch (outside the loop)
+		const batchValue = body[0].batch; // All items have the same batch
+		const analyticsRef = db.collection('analytics').doc(batchValue);
+		batch.set(
+			analyticsRef,
+			{
+				year: Number(batchValue),
+				employed: FieldValue.increment(0),
+				unemployed: FieldValue.increment(0),
+				unknown: FieldValue.increment(body.length), // Increment by 38 once
+			},
+			{ merge: true },
 		);
 
 		await batch.commit();
 		const cache = useStorage('cache');
 		await cache.clear();
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
+		return successResponse({
 			message: 'Successfully created alumni',
 			data: result,
-		} as H3Response;
+		});
 	} catch (error: any) {
 		console.error('/registrar/alumni.post', error);
 		if (error.code === 'auth/email-already-exists') {
