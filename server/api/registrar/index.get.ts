@@ -14,7 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		const totalemployed = await db
 			.collection('users')
 			.where('role', '==', 'alumni')
-			.where('userCredentials.status', '==', 'employed')
+			.where('userCredentials.status', 'in', ['employed', 'self-employed'])
 			.count()
 			.get();
 
