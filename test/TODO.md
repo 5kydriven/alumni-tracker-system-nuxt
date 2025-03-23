@@ -12,5 +12,6 @@
 - [ ] employer: add view information of alumni in chats
 - [ ] employer: add employer profile
 - [ ] registrar: can't update unknown to employed
+- [ ] alumni: analytics update
 - [x] alumni: fix search in jobs
 - [x] alumni: add pagination in jobs
