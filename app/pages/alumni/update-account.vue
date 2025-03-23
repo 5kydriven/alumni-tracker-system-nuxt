@@ -37,7 +37,7 @@
 
 	async function onSubmit() {
 		if (stepper.isCurrent('alumni-done')) {
-			router.replace('/auth');
+			router.push('/alumni');
 			return;
 		}
 

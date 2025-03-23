@@ -27,7 +27,10 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		batch.delete(db.collection('users').doc(uid));
 
-		if (alumni.userCredentials?.status == 'employed') {
+		if (
+			alumni.userCredentials?.status == 'employed' ||
+			alumni.userCredentials?.status == 'self-employed'
+		) {
 			batch.set(
 				analyticsRef,
 				{
