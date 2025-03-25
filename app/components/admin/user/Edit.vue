@@ -1,30 +1,92 @@
 <script setup lang="ts">
-	import useComposableToast from '~/composables/useToastComposables';
+	import VueDatePicker from '@vuepic/vue-datepicker';
 
-	const { toastResponse } = useComposableToast();
-	const isLoading = ref(false);
+	const { toastResponse } = useToastComposables();
 
 	const props = defineProps<{
 		userData: User<any>;
 	}>();
 
+	const employmentStatus = [
+		{ name: 'Employed', value: 'employed' },
+		{ name: 'Self-Employed', value: 'self-employed' },
+		{ name: 'Unemployed', value: 'unemployed' },
+		{ name: 'Unknown', value: 'unknown' },
+	];
+
+	const employmentType = [
+		{ name: 'Full-Time', value: 'full-time' },
+		{ name: 'Part-Time', value: 'part-time' },
+		{ name: 'Contractual', value: 'contractual' },
+		{ name: 'Probationary', value: 'probationary' },
+	];
+
+	const yearsInJob = [
+		'less than 6 months',
+		'6 months - 1 year',
+		'1 year - 2 years',
+		'2 years - 3 years',
+		'3 years - 5 years',
+		'more than 5 years',
+	];
+
+	const items = [
+		{
+			label: 'Personal',
+			icon: 'i-heroicons-user',
+		},
+		{
+			label: 'Employment',
+			icon: 'i-heroicons-briefcase',
+		},
+	];
+
 	const user = ref(props.userData);
 	const userCredentials = ref(props.userData.userCredentials || {});
+	const survey = ref<Survey>({});
+	const isLoading = ref(false);
+	const isEmployement = ref(false);
 
-	const handleSubmit = async (user: User) => {
+	if (user.value.userCredentials.status != 'unknown') {
+		const { data: response } = useFetch<H3Response>(
+			`/api/registrar/alumni/survey/${props.userData.uid}`,
+			{
+				method: 'GET',
+				immediate: true,
+			},
+		);
+		watch(
+			response,
+			(newResponse) => {
+				survey.value = newResponse?.data ?? {};
+			},
+			{ immediate: true },
+		);
+	}
+
+	async function handleSubmit(user: User) {
 		isLoading.value = true;
 		const res = await $fetch<H3Response>(
 			`/api/admin/user/${props.userData.uid}`,
 			{
 				method: 'PUT',
-				body: JSON.stringify(user),
+				body: JSON.stringify({ user: { ...user }, survey: { ...survey } }),
 			},
 		);
-		// await refreshNuxtData('users');
+		await refreshNuxtData('users');
 		toastResponse(res);
 		isLoading.value = false;
 		emits('close');
-	};
+	}
+
+	function onChanged(index: any) {
+		const item = items[index];
+		if (item?.label == 'Employment') {
+			isEmployement.value = true;
+		} else {
+			isEmployement.value = false;
+		}
+	}
 
 	const emits = defineEmits<{
 		close: [];
@@ -170,6 +232,181 @@
 							type="text"
 							size="sm" />
 					</UFormGroup>
+				</div>
+
+				<div v-if="props.userData.role == 'alumni'">
+					<UTabs
+						:items="items"
+						@change="onChanged" />
+
+					<div
+						v-if="!isEmployement"
+						class="grid grid-cols-1 md:grid-cols-2 gap-2">
+						<UFormGroup label="Name">
+							<UInput
+								:ui="{
+									base: 'capitalize',
+								}"
+								type="text"
+								v-model="user.name" />
+						</UFormGroup>
+						<UFormGroup label="Phonenumber">
+							<UInput
+								:maxlength="11"
+								v-model="userCredentials.phoneNumber" />
+						</UFormGroup>
+						<UFormGroup
+							label="City"
+							class="col-span-1">
+							<UInput
+								type="text"
+								v-model="userCredentials.city" />
+						</UFormGroup>
+						<UFormGroup
+							label="Province"
+							class="col-span-1">
+							<UInput
+								type="text"
+								v-model="userCredentials.province" />
+						</UFormGroup>
+						<UFormGroup label="Marital Status">
+							<UInput
+								type="text"
+								v-model="userCredentials.maritalStatus" />
+						</UFormGroup>
+						<UFormGroup label="Birthdate">
+							<VueDatePicker
+								:enable-time-picker="false"
+								auto-apply
+								v-model="userCredentials.birthDate" />
+						</UFormGroup>
+						<UFormGroup label="Birth place">
+							<UInput
+								type="text"
+								v-model="userCredentials.birthPlace" />
+						</UFormGroup>
+					</div>
+
+					<div
+						class="flex flex-col gap-2"
+						v-else>
+						<UFormGroup
+							label="Employment status"
+							required
+							class="col-span-6">
+							<USelectMenu
+								value-attribute="value"
+								option-attribute="name"
+								v-model="userCredentials.status"
+								:options="employmentStatus"
+								placeholder="Select status" />
+						</UFormGroup>
+
+						<div
+							class="grid grid-cols-12 gap-2"
+							v-if="userCredentials.status == 'employed'">
+							<UFormGroup
+								label="Company Name"
+								class="col-span-6"
+								required>
+								<UInput
+									type="text"
+									required
+									placeholder="Enter company name"
+									v-model="survey.companyName" />
+							</UFormGroup>
+							<UFormGroup
+								label="Company Address"
+								class="col-span-6"
+								required>
+								<UInput
+									type="text"
+									required
+									placeholder="Enter company address"
+									v-model="survey.companyAddress" />
+							</UFormGroup>
+							<UFormGroup
+								label="Employment Type"
+								class="col-span-6"
+								required>
+								<USelectMenu
+									placeholder="Select type of employemet"
+									required
+									:options="employmentType"
+									valueAttribute="value"
+									optionAttribute="name"
+									v-model="survey.employmentType" />
+							</UFormGroup>
+							<UFormGroup
+								label="Years in current job"
+								class="col-span-6"
+								required>
+								<USelectMenu
+									placeholder="Select years"
+									required
+									:options="yearsInJob"
+									v-model="survey.yearsInJob" />
+							</UFormGroup>
+						</div>
+
+						<div
+							class="grid grid-cols-12 gap-2"
+							v-if="userCredentials.status == 'self-employed'">
+							<UFormGroup
+								label="Bussiness Name"
+								class="col-span-6"
+								required>
+								<UInput
+									type="text"
+									required
+									placeholder="Enter business name"
+									v-model="survey.bussinessName" />
+							</UFormGroup>
+							<UFormGroup
+								label="Nature of Bussiness"
+								class="col-span-6"
+								required>
+								<UInput
+									type="text"
+									required
+									placeholder="Enter nature of bussiness"
+									v-model="survey.workNature" />
+							</UFormGroup>
+							<UFormGroup
+								label="Is your Business registered?"
+								class="col-span-6"
+								required>
+								<USelectMenu
+									optionAttribute="name"
+									placeholder="Select the following options"
+									required
+									valueAttribute="value"
+									:options="[
+										{ name: 'Yes', value: 'yes' },
+										{ name: 'No', value: 'no' },
+									]"
+									v-model="survey.isRegistered" />
+							</UFormGroup>
+							<UFormGroup
+								label="Years in business"
+								class="col-span-6"
+								required>
+								<USelectMenu
+									placeholder="Select years"
+									required
+									:options="yearsInJob"
+									v-model="survey.yearsInJob" />
+							</UFormGroup>
+							<UFormGroup
+								label="Business Website / Social Media"
+								class="col-span-6">
+								<UInput
+									type="text"
+									placeholder="Enter url of your website or social media"
+									v-model="survey.urlLink" />
+							</UFormGroup>
+						</div>
+					</div>
 				</div>
 
 				<template #footer>

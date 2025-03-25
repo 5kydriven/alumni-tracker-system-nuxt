@@ -31,6 +31,11 @@ declare global {
 		createdAt?: Timestamp;
 	}
 
+	interface ExperienceDate {
+		month?: any;
+		year?: any;
+	}
+
 	interface EducationalBackground {
 		uid?: string;
 		schoolName?: string;
@@ -51,4 +56,9 @@ declare global {
 	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 }
 
-export { AlumniCredentials, EducationalBackground, WorkExperience };
+export {
+	AlumniCredentials,
+	EducationalBackground,
+	WorkExperience,
+	ExperienceDate,
+};

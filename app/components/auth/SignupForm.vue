@@ -53,6 +53,13 @@
 		if (res.statusCode != 200) return;
 		emit('success');
 	}
+
+	const onInput = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const input = target.value;
+		target.value = input.replace(/\D/g, '');
+	};
+
 	const emit = defineEmits(['success']);
 </script>
 
@@ -107,6 +114,8 @@
 					name="telephoneNumber"
 					required>
 					<UInput
+						:maxlength="10"
+						@input="onInput"
 						type="text"
 						v-model="employer.telephoneNumber"
 						placeholder="+63 (XX) YYY ZZZZ"></UInput>
@@ -195,6 +204,8 @@
 					required>
 					<UInput
 						type="text"
+						maxlength="10"
+						@input="onInput"
 						v-model="employer.contactNumber"
 						placeholder="(XXX) YYY ZZZZ">
 						<template #leading>
