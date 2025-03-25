@@ -1,5 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import successResponse from '~~/server/utils/okReponse';
 
 export default defineEventHandler(async (event: H3Event) => {
 	const uid = getRouterParam(event, 'uid');
@@ -25,11 +26,9 @@ export default defineEventHandler(async (event: H3Event) => {
 			...doc.data(),
 		}));
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
+		return successResponse({
 			data: experience as WorkExperience[],
-		} as H3Response;
+		});
 	} catch (error: any) {
 		return errorResponse(error);
 	}
