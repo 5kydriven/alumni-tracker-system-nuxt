@@ -9,7 +9,6 @@
 		email: z.string().email('Invalid email'),
 		companyName: z.string(),
 		companyAddress: z.string(),
-		telephoneNumber: z.string().min(9, 'Must be at least 9 characters'),
 		numberBranches: z.number().optional(),
 		numberEmployees: z.number().optional(),
 		field: z.string(),
@@ -22,6 +21,8 @@
 			.max(11, 'maximum is 9 characters'),
 		website: z.string().optional(),
 		password: z.string().min(6, 'Must be at least 6 characters'),
+		logo: z.any(),
+		businessPermit: z.any(),
 	});
 
 	type Schema = z.output<typeof schema>;
@@ -40,13 +41,30 @@
 		name: '',
 		email: '',
 		password: '',
+		logo: null,
+		businessPermit: null,
 	});
+
+	const logo = ref();
+	const businessPermit = ref();
 
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
 		isLoading.value = true;
+		const formData = new FormData();
+		const data: Schema = event.data;
+
+		Object.keys(data).forEach((key) => {
+			const typedKey = key as keyof Schema;
+			if (data[typedKey] !== undefined) {
+				formData.append(typedKey, String(data[typedKey]));
+			}
+		});
+
+		formData.append('logo', logo.value);
+		formData.append('businessPermit', businessPermit.value);
 		const res = await $fetch<H3Response>('/api/employer', {
 			method: 'POST',
-			body: JSON.stringify(event.data),
+			body: formData,
 		});
 		toastResponse(res);
 		isLoading.value = false;
@@ -59,6 +77,20 @@
 		const input = target.value;
 		target.value = input.replace(/\D/g, '');
 	};
+
+	function onLogoSelected(event: Event) {
+		const target = event.target as HTMLInputElement | null;
+		if (target && target.files && target.files.length > 0) {
+			logo.value = target.files[0];
+		}
+	}
+
+	function onPermitSelected(event: Event) {
+		const target = event.target as HTMLInputElement | null;
+		if (target && target.files && target.files.length > 0) {
+			businessPermit.value = target.files[0];
+		}
+	}
 
 	const emit = defineEmits(['success']);
 </script>
@@ -111,8 +143,7 @@
 				</UFormGroup>
 				<UFormGroup
 					label="Telephone Number"
-					name="telephoneNumber"
-					required>
+					name="telephoneNumber">
 					<UInput
 						:maxlength="10"
 						@input="onInput"
@@ -152,15 +183,17 @@
 						v-model="employer.field"
 						placeholder="Education"></UInput>
 				</UFormGroup>
-				<UFormGroup
-					label="logo"
-					name="logo">
-					<UInput type="file"></UInput>
+				<UFormGroup label="logo">
+					<UInput
+						@change="onLogoSelected"
+						type="file"
+						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
-				<UFormGroup
-					label="Bussiness permit"
-					name="bussinessPermit">
-					<UInput type="file"></UInput>
+				<UFormGroup label="Business permit">
+					<UInput
+						@change="onPermitSelected"
+						type="file"
+						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
 				<UFormGroup
 					class="md:col-span-2"
