@@ -57,12 +57,10 @@ export default eventHandler(async (event: H3Event) => {
 
 		await batch.commit();
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
+		return okReponse({
 			message: 'Successfully created alumni',
 			data: result,
-		} as H3Response;
+		});
 	} catch (error: any) {
 		console.error('/alumni.post', error);
 		if (error.code === 'auth/email-already-exists') {

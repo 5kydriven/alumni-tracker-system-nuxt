@@ -1,5 +1,9 @@
 <script setup lang="ts">
-	import { EmployerModalAdd, EmployerModalDelete } from '#components';
+	import {
+		EmployerModalAdd,
+		EmployerModalDelete,
+		EmployerModalEdit,
+	} from '#components';
 	const modal = useModal();
 
 	const props = defineProps<{
@@ -59,7 +63,13 @@
 						label="Edit"
 						:padded="false"
 						variant="link"
-						color="gray" />
+						color="gray"
+						@click="
+							modal.open(EmployerModalEdit, {
+								onClose: modal.close,
+								job,
+							})
+						" />
 					<UDivider
 						orientation="vertical"
 						:ui="{

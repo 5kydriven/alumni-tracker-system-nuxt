@@ -18,20 +18,11 @@
 
 	type Schema = z.output<typeof schema>;
 
-	const user = useCurrentUser();
 	const { toastResponse } = useToastComposables();
-
 	const isLoading = ref(false);
-	const form = reactive<Job>({
-		companyName: '',
-		title: '',
-		type: '',
-		email: '',
-		contactPerson: '',
-		salary: '',
-		desiredWeeklyHours: '',
-		description: '',
-	});
+
+	const props = defineProps<{ job: Job }>();
+	const form = ref<Job>(props.job);
 
 	const employmentTypes = [
 		{ name: 'Full-Time', value: 'full time' },
@@ -41,21 +32,21 @@
 		{ name: 'Freelance', value: 'freelance' },
 	];
 
-	const emits = defineEmits<{
-		close: [];
-	}>();
-
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
 		isLoading.value = true;
-		const res = await $fetch<H3Response>('/api/employer/job', {
-			method: 'POST',
-			body: JSON.stringify({ ...event.data, employerUid: user.value?.uid }),
+		const res = await $fetch<H3Response>(`/api/employer/job/${props.job.uid}`, {
+			method: 'PUT',
+			body: JSON.stringify(form.value),
 		});
 		await refreshNuxtData('employer-jobs');
 		toastResponse(res);
 		emits('close');
 		isLoading.value = false;
 	}
+
+	const emits = defineEmits<{
+		close: [];
+	}>();
 </script>
 
 <template>
@@ -77,7 +68,7 @@
 					<div class="flex items-center justify-between">
 						<h3
 							class="text-lg font-bold leading-6 text-gray-900 dark:text-white">
-							Post a job
+							Update job
 						</h3>
 						<UButton
 							color="gray"
@@ -194,7 +185,7 @@ How to Apply:
 						<UButton
 							variant="solid"
 							type="submit"
-							label="Create job"
+							label="Update job"
 							:loading="isLoading" />
 					</div>
 				</template>

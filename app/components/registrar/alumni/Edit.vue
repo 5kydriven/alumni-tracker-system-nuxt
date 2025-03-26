@@ -10,9 +10,7 @@
 
 	const userCredentials = ref(props.alumni.userCredentials || {});
 	const name = ref(props.alumni.name || '');
-	const survey = ref<Survey>({
-		employmentStatus: 'unknown',
-	});
+	const survey = ref<Survey>({});
 
 	if (userCredentials.value.status != 'unknown') {
 		const { data: response } = useFetch<H3Response>(
@@ -22,7 +20,6 @@
 				immediate: true,
 			},
 		);
-		console.log('open');
 		watch(
 			response,
 			(newResponse) => {
@@ -106,11 +103,12 @@
 <template>
 	<UModal>
 		<UCard
+			as="form"
+			@submit.prevent="onSubmit()"
 			:ui="{
 				ring: '',
 				divide: 'divide-y divide-gray-300 dark:divide-gray-800',
-			}"
-			as="form">
+			}">
 			<template #header>
 				<div class="flex items-center justify-between">
 					<h3
@@ -187,14 +185,14 @@
 					<USelectMenu
 						value-attribute="value"
 						option-attribute="name"
-						v-model="survey.employmentStatus"
+						v-model="userCredentials.status"
 						:options="employmentStatus"
 						placeholder="Select status" />
 				</UFormGroup>
 
 				<div
 					class="grid grid-cols-12 gap-2"
-					v-if="survey.employmentStatus == 'employed'">
+					v-if="userCredentials.status == 'employed'">
 					<UFormGroup
 						label="Company Name"
 						class="col-span-6"
@@ -241,7 +239,7 @@
 
 				<div
 					class="grid grid-cols-12 gap-2"
-					v-if="survey.employmentStatus == 'self-employed'">
+					v-if="userCredentials.status == 'self-employed'">
 					<UFormGroup
 						label="Bussiness Name"
 						class="col-span-6"
@@ -308,7 +306,7 @@
 					<UButton
 						variant="solid"
 						label="Save"
-						@click="onSubmit"
+						type="submit"
 						:loading="isLoading" />
 				</div>
 			</template>

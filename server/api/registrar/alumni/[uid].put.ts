@@ -6,12 +6,12 @@ import generateSearchKeywords from '~~/server/utils/searchKeywords';
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
 	const uid = getRouterParam(event, 'uid');
+	const body = await readBody<{
+		alumni: User<AlumniCredentials>;
+		survey: Survey;
+	}>(event);
 
 	try {
-		const body = await readBody<{
-			alumni: User<AlumniCredentials>;
-			survey: Survey;
-		}>(event);
 		const { alumni, survey } = body;
 
 		if (!uid) {
@@ -50,27 +50,31 @@ export default eventHandler(async (event: H3Event) => {
 				.get();
 
 			if (surveyQuery.empty) {
-				throw createError({
-					statusCode: 404,
-					statusMessage: 'Not Found',
-					message: 'No survey found for this alumni',
-				});
+				await db
+					.collection('surveys')
+					.doc()
+					.set({
+						...survey,
+						employmentStatus: alumni.userCredentials?.status,
+						createdAt: Timestamp.now(),
+					});
+			} else {
+				const surveyDoc = surveyQuery.docs[0];
+				const surveyUpdate = {
+					...survey,
+					employmentStatus: alumni.userCredentials?.status,
+					updatedAt: Timestamp.now(),
+				};
+
+				await db
+					.collection('surveys')
+					.doc(surveyDoc?.id as string)
+					.update(surveyUpdate);
 			}
 
-			const surveyDoc = surveyQuery.docs[0];
-			const surveyUpdate = {
-				...survey,
-				updatedAt: Timestamp.now(),
-			};
-
-			await db
-				.collection('surveys')
-				.doc(surveyDoc?.id as string)
-				.update(surveyUpdate);
-
 			const employmentField =
-				survey?.employmentStatus === 'employed' ||
-				survey?.employmentStatus === 'self-employed'
+				alumni.userCredentials?.status === 'employed' ||
+				alumni.userCredentials?.status === 'self-employed'
 					? 'employed'
 					: 'unemployed';
 
@@ -82,8 +86,6 @@ export default eventHandler(async (event: H3Event) => {
 					unknown: FieldValue.increment(-1),
 				});
 		}
-
-		console.log(alumni, survey);
 
 		return successResponse({
 			message: 'Successfully updated alumni data',

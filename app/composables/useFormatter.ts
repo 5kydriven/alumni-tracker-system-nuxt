@@ -1,6 +1,6 @@
 export default function useFormatter() {
-	function formatMonthYear({ month, year }: { month: number; year: number }) {
-		const date = new Date(year, month);
+	function formatMonthYear({ month, year }: ExperienceDate) {
+		const date = new Date(Number(year), Number(month));
 		const formattedDate = date.toLocaleString('en-US', {
 			month: 'short',
 			year: 'numeric',

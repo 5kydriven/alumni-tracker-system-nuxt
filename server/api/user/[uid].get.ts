@@ -1,5 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
+import successResponse from '~~/server/utils/okReponse';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
@@ -12,7 +13,7 @@ export default eventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-
+		console.log('uid', param);
 		const userDoc = await db.collection('users').doc(param).get();
 
 		if (!userDoc.exists) {
@@ -24,11 +25,7 @@ export default eventHandler(async (event: H3Event) => {
 			});
 		}
 
-		return {
-			statusCode: 200,
-			statusMessage: 'ok',
-			data: { ...userDoc.data(), uid: userDoc.id },
-		} as H3Response;
+		return successResponse({ data: { ...userDoc.data(), uid: userDoc.id } });
 	} catch (error: any) {
 		console.log('/user.uid.get', error);
 		return errorResponse(error);

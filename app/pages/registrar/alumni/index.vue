@@ -29,7 +29,7 @@
 		{ key: 'actions', label: '' },
 	];
 	const courses = ['BSIT', 'BSCRIM', 'BSED', 'BSAB', 'BSHM', 'BEED'];
-	const statuses = ['unknown', 'unemployed', 'employed'];
+	const statuses = ['unknown', 'unemployed', 'employed', 'self-employed'];
 
 	const q = ref();
 	const page = ref(1);
