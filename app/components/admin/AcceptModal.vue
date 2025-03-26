@@ -9,6 +9,7 @@
 		});
 		await refreshNuxtData('employer-queue');
 		toastResponse(res);
+		emits('close');
 		isLoading.value = false;
 	}
 
