@@ -54,61 +54,65 @@
 	</Navbar>
 	<div class="p-4 flex flex-col gap-4">
 		<label class="font-bold text-lg">Overview</label>
-		<div class="w-full flex gap-4">
-			<div
-				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+		<div class="w-full flex gap-4 flex-col md:flex-row">
+			<div class="flex gap-4 flex-col sm:flex-row w-full">
 				<div
-					class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
-					<UIcon
-						name="i-heroicons-user"
-						class="w-6 h-6 text-zuccini" />
+					class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+					<div
+						class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
+						<UIcon
+							name="i-heroicons-user"
+							class="w-6 h-6 text-zuccini" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label class="text-sm text-gray-500">Total alumni</label>
+						<span class="text-lg font-bold">{{ total?.data?.alumni }}</span>
+					</div>
 				</div>
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total alumni</label>
-					<span class="text-lg font-bold">{{ total?.data?.alumni }}</span>
+				<div
+					class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+					<div
+						class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
+						<UIcon
+							name="i-heroicons-user"
+							class="w-6 h-6 text-zuccini" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label class="text-sm text-gray-500">Total employed</label>
+						<span class="text-lg font-bold">{{ total?.data?.employed }}</span>
+					</div>
 				</div>
 			</div>
-			<div
-				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+			<div class="flex gap-4 flex-col sm:flex-row w-full">
 				<div
-					class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
-					<UIcon
-						name="i-heroicons-user"
-						class="w-6 h-6 text-zuccini" />
+					class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+					<div
+						class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
+						<UIcon
+							name="i-heroicons-user"
+							class="w-6 h-6 text-zuccini" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label class="text-sm text-gray-500">Total unemployed</label>
+						<span class="text-lg font-bold">{{ total?.data?.unemployed }}</span>
+					</div>
 				</div>
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total employed</label>
-					<span class="text-lg font-bold">{{ total?.data?.employed }}</span>
-				</div>
-			</div>
-			<div
-				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
 				<div
-					class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
-					<UIcon
-						name="i-heroicons-user"
-						class="w-6 h-6 text-zuccini" />
-				</div>
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total unemployed</label>
-					<span class="text-lg font-bold">{{ total?.data?.unemployed }}</span>
-				</div>
-			</div>
-			<div
-				class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
-				<div
-					class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
-					<UIcon
-						name="i-heroicons-user"
-						class="w-6 h-6 text-zuccini" />
-				</div>
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total unknown</label>
-					<span class="text-lg font-bold">{{ total?.data?.unknown }}</span>
+					class="border p-4 rounded-lg flex items-center justify-start gap-4 w-full shadow">
+					<div
+						class="p-2 rounded bg-zuccini-200/50 flex flex-col justify-center items-center">
+						<UIcon
+							name="i-heroicons-user"
+							class="w-6 h-6 text-zuccini" />
+					</div>
+					<div class="flex flex-col gap-2">
+						<label class="text-sm text-gray-500">Total unknown</label>
+						<span class="text-lg font-bold">{{ total?.data?.unknown }}</span>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="flex gap-4 h-full">
+		<div class="flex gap-4 h-full flex-col md:flex-row">
 			<ChartGroupedBar
 				v-if="barLoading == 'success' && bar?.data"
 				:data="bar?.data ?? []" />
