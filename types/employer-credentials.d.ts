@@ -8,8 +8,8 @@ export declare global {
 		numberEmployees?: number;
 		field?: string;
 		description?: string;
-		logo?: File;
-		bussinessPermit?: File;
+		logo?: any;
+		businessPermit?: any;
 		position?: string;
 		contactNumber?: string;
 	}

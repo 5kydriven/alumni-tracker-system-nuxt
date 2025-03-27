@@ -8,13 +8,22 @@
 	} from '@unovis/vue';
 	import { GroupedBar } from '@unovis/ts';
 
-	const props = defineProps<{ data: any }>();
-	const x = (d: any) => d.year;
+	interface BarData {
+		year: number;
+		employed: number;
+		unemployed: number;
+		unknown: number;
+	}
+
+	const props = defineProps<{ data: BarData[] }>();
+	const x = (d: BarData) => d.year;
 	const y = [
-		(d: any) => d.employed,
-		(d: any) => d.unemployed,
-		(d: any) => d.unknown,
+		(d: BarData) => d.employed,
+		(d: BarData) => d.unemployed,
+		(d: BarData) => d.unknown,
 	];
+
+	console.log(props.data);
 
 	const groups = [
 		{ key: 'employed', name: 'Employed' },
@@ -31,7 +40,7 @@
 	}));
 
 	const triggers = {
-		[GroupedBar.selectors.barGroup]: (d: any) => `
+		[GroupedBar.selectors.barGroup]: (d: BarData) => `
       <div class="w-40 flex flex-col gap-2">
 				<div class="flex justify-between border-l-4 border-[#22c55e] px-2">
 					<labe>Employed:</labe>
@@ -66,7 +75,7 @@
 				type="x"
 				label="Year"
 				:gridLine="false"
-				:numTicks="props.data.length" />
+				:numTicks="props.data.length - 1" />
 			<VisAxis
 				type="y"
 				label="Total" />

@@ -1,3 +1,4 @@
+// server/api/upload.ts
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
@@ -5,63 +6,56 @@ import { H3Event, readMultipartFormData } from 'h3';
 import successResponse from '~~/server/utils/okReponse';
 import errorResponse from '~~/server/utils/errorResponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
+import { getApp } from 'firebase-admin/app';
 
 export default defineEventHandler(async (event: H3Event) => {
+	const app = getApp();
 	const auth = getAuth();
 	const db = getFirestore();
-	const storage = getStorage().bucket();
-	const formData = await readMultipartFormData(event);
+	const bucket = getStorage(app).bucket();
 
 	try {
-		if (!formData) {
+		const formData = await readMultipartFormData(event);
+
+		if (!formData || formData.length === 0) {
 			throw createError({
 				statusCode: 204,
-				statusMessage: 'no content',
+				statusMessage: 'No content',
 				message: 'No content found',
 			});
 		}
-		console.log(formData);
 
 		const fields: Record<string, string> = {};
-		const images: { file: Buffer; fileName: string }[] = [];
-		let logoFile: Buffer | null = null;
-		let businessPermitFile: Buffer | null = null;
-		let logoFileName: string | null = null;
-		let businessPermitFileName: string | null = null;
+		let logoUrl = '';
+		let businessPermitUrl = '';
 
-		for (const field of formData) {
-			if (field.name === 'logo' && field.data) {
-				logoFile = field.data;
-				logoFileName = `images/${Date.now()}_${field.filename}`;
-			} else if (field.name === 'businessPermit' && field.data) {
-				businessPermitFile = field.data;
-				businessPermitFileName = `images/${Date.now()}_${field.filename}`;
-			} else if (field.name === 'images' && field.data) {
-				images.push({
-					file: field.data,
-					fileName: `images/${Date.now()}_${field.filename}`,
-				});
+		for (const item of formData) {
+			if (item.type && item.data) {
+				// File field
+				const filename = `${Date.now()}-${item.filename || 'unnamed'}`;
+				const destination = `images/${filename}`;
+				const buffer = Buffer.from(item.data);
+
+				// Upload to Firebase Storage
+				const storageFile = bucket.file(destination);
+				await storageFile.save(buffer, { contentType: item.type });
+				await storageFile.makePublic();
+				const permanentUrl = storageFile.publicUrl();
+
+				if (item.name === 'logo') logoUrl = permanentUrl;
+				if (item.name === 'businessPermit') businessPermitUrl = permanentUrl;
 			} else {
-				fields[field.name as string] = field.data.toString('utf-8');
-			}
-		}
-		// Validate required fields
-		const requiredFields = ['name', 'email', 'password', 'contactNumber'];
-		for (const field of requiredFields) {
-			if (!fields[field]) {
-				throw createError({
-					statusCode: 400,
-					statusMessage: 'bad request',
-					message: `${field} is required`,
-				});
+				// Text field
+				fields[item.name as string] = item.data.toString('utf8');
 			}
 		}
 
 		// Validate contact number
 		let phoneNumber: string | undefined;
 		if (
-			!/^\d{10}$/.test(fields.contactNumber as string) ||
-			!fields.contactNumber?.startsWith('9')
+			!fields.contactNumber ||
+			!/^\d{10}$/.test(fields.contactNumber) ||
+			!fields.contactNumber.startsWith('9')
 		) {
 			throw createError({
 				statusCode: 400,
@@ -81,27 +75,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			disabled: true,
 		});
 
-		// Upload files to Firebase Storage
-		let logoUrl: string | null = null;
-		let businessPermitUrl: string | null = null;
-
-		if (logoFile && logoFileName) {
-			const logoFileRef = storage.file(logoFileName);
-			await logoFileRef.save(logoFile, { contentType: 'image/png' });
-			logoUrl = `https://storage.googleapis.com/${logoFileName}`;
-		}
-
-		if (businessPermitFile && businessPermitFileName) {
-			const permitFileRef = storage.file(businessPermitFileName);
-			await permitFileRef.save(businessPermitFile, {
-				contentType: 'image/png',
-			});
-			businessPermitUrl = `https://storage.googleapis.com/${businessPermitFileName}`;
-		}
-
-		console.log('storage url', logoUrl, businessPermitUrl);
-
-		// Save user data to Firestore
+		// Save user data to Firestore with image URLs
 		const userRef = db.collection('queues').doc(user.uid);
 		await userRef.set(
 			{
@@ -121,8 +95,8 @@ export default defineEventHandler(async (event: H3Event) => {
 					numberBranches: fields.numberBranches ?? '',
 					numberEmployees: fields.numberEmployees ?? '',
 					field: fields.field ?? '',
-					logo: logoUrl, // Store uploaded logo URL
-					businessPermit: businessPermitUrl, // Store uploaded permit URL
+					logo: logoUrl || '',
+					businessPermit: businessPermitUrl || '',
 					description: fields.description ?? '',
 					position: fields.position ?? '',
 					contactNumber: fields.contactNumber ?? '',

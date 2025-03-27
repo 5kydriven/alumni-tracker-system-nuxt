@@ -7,14 +7,14 @@
 
 	const schema = z.object({
 		email: z.string().email('Invalid email'),
-		companyName: z.string(),
-		companyAddress: z.string(),
+		companyName: z.string().min(1, 'Company name is required'),
+		companyAddress: z.string().min(1, 'Company address is required'),
 		numberBranches: z.number().optional(),
 		numberEmployees: z.number().optional(),
 		field: z.string(),
 		description: z.string(),
-		name: z.string(),
-		position: z.string(),
+		name: z.string().min(3, 'Name is required'),
+		position: z.string().min(2, 'Position is required'),
 		contactNumber: z
 			.string()
 			.min(10, 'Must be at least 10 characters')
@@ -41,27 +41,32 @@
 		name: '',
 		email: '',
 		password: '',
-		logo: null,
-		businessPermit: null,
+		logo: null as File | null,
+		businessPermit: null as File | null,
 	});
-
-	const logo = ref();
-	const businessPermit = ref();
 
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
 		isLoading.value = true;
 		const formData = new FormData();
 		const data: Schema = event.data;
 
-		Object.keys(data).forEach((key) => {
-			const typedKey = key as keyof Schema;
-			if (data[typedKey] !== undefined) {
-				formData.append(typedKey, String(data[typedKey]));
+		Object.entries(employer).forEach(([key, value]) => {
+			if (
+				key !== 'logo' &&
+				key !== 'businessPermit' &&
+				value !== null &&
+				value !== undefined
+			) {
+				formData.append(key, String(value));
 			}
 		});
 
-		formData.append('logo', logo.value);
-		formData.append('businessPermit', businessPermit.value);
+		if (employer.logo) {
+			formData.append('logo', employer.logo);
+		}
+		if (employer.businessPermit) {
+			formData.append('businessPermit', employer.businessPermit);
+		}
 		const res = await $fetch<H3Response>('/api/employer', {
 			method: 'POST',
 			body: formData,
@@ -78,21 +83,20 @@
 		target.value = input.replace(/\D/g, '');
 	};
 
-	function onLogoSelected(event: Event) {
-		const target = event.target as HTMLInputElement | null;
-		if (target && target.files && target.files.length > 0) {
-			logo.value = target.files[0];
+	function onLogoSelected(event: FileList) {
+		if (event && event.length > 0) {
+			employer.logo = event.item(0);
 		}
 	}
 
-	function onPermitSelected(event: Event) {
-		const target = event.target as HTMLInputElement | null;
-		if (target && target.files && target.files.length > 0) {
-			businessPermit.value = target.files[0];
+	function onPermitSelected(event: FileList) {
+		if (event && event.length > 0) {
+			employer.businessPermit = event.item(0);
 		}
 	}
 
 	const emit = defineEmits(['success']);
+	watch(employer, () => console.log(employer));
 </script>
 
 <template>
