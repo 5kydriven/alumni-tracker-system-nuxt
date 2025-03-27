@@ -19,7 +19,8 @@
 </script>
 
 <template>
-	<div class="flex flex-col border rounded-lg shadow p-2 w-full max-w-[400px]">
+	<div
+		class="flex flex-col border rounded-lg shadow p-2 w-full md:max-w-[400px]">
 		<slot />
 		<VisBulletLegend :items="legendItems" />
 		<VisSingleContainer

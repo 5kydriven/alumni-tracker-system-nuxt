@@ -62,7 +62,7 @@
 			<USkeleton class="h-[90px] rounded-lg" />
 			<USkeleton class="h-[90px] rounded-lg" />
 		</div>
-		<div class="flex gap-4 h-full">
+		<div class="flex gap-4 h-full w-full flex-col md:flex-row">
 			<ChartGroupedBar
 				v-if="barLoading == 'success' && bar?.data"
 				:data="bar?.data ?? []" />
@@ -71,7 +71,7 @@
 				class="h-[382px] w-2/3" />
 
 			<ChartDonut
-				class="w-1/3"
+				class="md:w-1/3 w-full"
 				v-if="pieLoading == 'success'"
 				:data="pie?.data ?? []"
 				:status="selected as string">
