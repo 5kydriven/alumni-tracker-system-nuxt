@@ -1,4 +1,4 @@
-import { getApp } from 'firebase-admin/app';
+import { App, getApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
@@ -13,7 +13,6 @@ export default defineEventHandler(async (event: H3Event) => {
 	const auth = getAuth();
 	const body = await readBody(event);
 	const { sendMail } = useNodeMailer();
-	const storage = getStorage(app).bucket();
 
 	if (!uid || !body) {
 		throw createError({
@@ -24,7 +23,6 @@ export default defineEventHandler(async (event: H3Event) => {
 	}
 
 	try {
-		// Send Email Notification
 		const res = await sendMail({
 			subject: 'Your Account Application Status',
 			html: `<p>Hello ${body.displayName},</p>
@@ -41,10 +39,8 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		// Delete Auth User
 		await auth.deleteUser(uid);
 
-		// Get the employer's data
 		const queuesRef = db.collection('queues').doc(uid);
 		const queuesDoc = await queuesRef.get();
 
@@ -56,42 +52,12 @@ export default defineEventHandler(async (event: H3Event) => {
 			});
 		}
 
-		const queues = queuesDoc.data() as User<EmployerCredentials>;
+		const queues = queuesDoc.data() as { userCredentials: EmployerCredentials };
 
-		// Extract logo and business permit URLs
 		const { logo, businessPermit } = queues.userCredentials || {};
 
-		// Function to extract file path from URL
-		const extractFilePath = (url: string) => {
-			try {
-				const decodedUrl = decodeURIComponent(new URL(url).pathname);
-				const match = decodedUrl.match(/\/o\/(.*?)\?alt=media/);
-				return match && match[1] ? match[1].replace(/%2F/g, '/') : null;
-			} catch (error) {
-				console.error('Error extracting file path:', error);
-				return null;
-			}
-		};
-
-		// Convert URLs to storage paths
-		const logoPath = logo ? extractFilePath(logo) : null;
-		const businessPermitPath = businessPermit
-			? extractFilePath(businessPermit)
-			: null;
-
-		// Delete files from Firebase Storage
-		const deleteFile = async (path: string | null) => {
-			if (path) {
-				await storage
-					.file(path)
-					.delete()
-					.catch((err) => {
-						console.error(`Error deleting file ${path}:`, err);
-					});
-			}
-		};
-
-		await Promise.all([deleteFile(logoPath), deleteFile(businessPermitPath)]);
+		if (logo) await deleteFileFromStorage(app, logo);
+		if (businessPermit) await deleteFileFromStorage(app, businessPermit);
 
 		// Delete the Firestore document
 		await queuesRef.delete();
@@ -103,3 +69,17 @@ export default defineEventHandler(async (event: H3Event) => {
 		return errorResponse(error);
 	}
 });
+
+async function deleteFileFromStorage(app: App, fileUrl: string) {
+	const bucket = getStorage(app).bucket();
+	try {
+		const url = new URL(fileUrl);
+		const filePath = decodeURIComponent(url.pathname.split('/o/')[1]); // Extract path after '/o/'
+
+		await bucket.file(filePath).delete();
+
+		console.log(`File at ${filePath} deleted successfully`);
+	} catch (error) {
+		console.error('Error deleting file:', error);
+	}
+}
