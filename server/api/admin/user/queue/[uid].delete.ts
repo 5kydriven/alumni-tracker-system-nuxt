@@ -1,4 +1,5 @@
-import { App, getApp } from 'firebase-admin/app';
+import { getApp } from 'firebase-admin/app';
+import type { App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
@@ -71,15 +72,21 @@ export default defineEventHandler(async (event: H3Event) => {
 });
 
 async function deleteFileFromStorage(app: App, fileUrl: string) {
+	if (!fileUrl) return;
+
 	const bucket = getStorage(app).bucket();
 	try {
 		const url = new URL(fileUrl);
-		const filePath = decodeURIComponent(url.pathname.split('/o/')[1]); // Extract path after '/o/'
+		const pathParts = url.pathname.split('/o/');
+		if (pathParts.length < 2) {
+			throw new Error('Invalid storage URL format');
+		}
+		const filePath = decodeURIComponent(pathParts[1] as string);
 
 		await bucket.file(filePath).delete();
-
 		console.log(`File at ${filePath} deleted successfully`);
 	} catch (error) {
 		console.error('Error deleting file:', error);
+		throw error;
 	}
 }
