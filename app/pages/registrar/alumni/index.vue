@@ -28,7 +28,16 @@
 		{ key: 'status', label: 'Status' },
 		{ key: 'actions', label: '' },
 	];
-	const courses = ['BSIT', 'BSCRIM', 'BSED', 'BSAB', 'BSHM', 'BEED'];
+	const courses = [
+		'BSAB',
+		'BSCRIM',
+		'BSHM',
+		'BSIT',
+		'BSED',
+		'BSED-MATH',
+		'BSED-SCI',
+		'BEED',
+	];
 	const statuses = ['unknown', 'unemployed', 'employed', 'self-employed'];
 
 	const q = ref();
@@ -40,21 +49,26 @@
 	);
 	const selectedCourses = ref<Course[]>([]);
 	const selectedStatuses = ref<AlumniStatus[]>([]);
+	const selectedBatch = ref<string[]>([]);
 
 	const offset = computed(() => (page.value - 1) * limit.value);
 	const filteredColumns = computed(() =>
 		defaultColumns.filter((column) => column.key !== 'actions'),
 	);
+
 	const columns = computed(() =>
 		defaultColumns.filter((column) => selectedColumns.value.includes(column)),
 	);
+
 	const query = computed(() => ({
 		q: q.value,
 		courses: selectedCourses.value,
 		statuses: selectedStatuses.value,
 		limit: limit.value,
 		offset: offset.value,
+		batch: selectedBatch.value,
 	}));
+
 	const statusColors = computed(() => {
 		return (status: AlumniStatus): any => {
 			switch (status) {
@@ -89,6 +103,12 @@
 			return null;
 		},
 		watch: [q, page, selectedCourses, selectedStatuses],
+	});
+
+	const { data: batchs } = useLazyFetch<H3Response>('/api/registrar/batch');
+
+	const batchsOptions = computed(() => {
+		return batchs.value?.data.map((batch: any) => batch.uid);
 	});
 
 	function onClosed() {
@@ -146,6 +166,11 @@
 				v-model="selectedCourses"
 				multiple
 				placeholder="Select Course" />
+			<USelectMenu
+				:options="batchsOptions"
+				v-model="selectedBatch"
+				multiple
+				placeholder="Select Batch" />
 		</div>
 		<div class="flex gap-2 items-center">
 			<UButton

@@ -11,6 +11,10 @@
 - [ ] admin: when rejecting employer delete also the files
 - [ ] employer: add view information for jobs
 - [ ] employer: add employer profile
+- [ ] registrar: add export alumni data
+- [ ] alumni: add update employment status for alumni
+- [x] registrar: add alumni filter batch
+- [x] registrar: remove view resume in messages
 - [x] employer: add view information of alumni in chats
 - [x] registrar: can't update unknown to employed
 - [x] alumni: analytics update
