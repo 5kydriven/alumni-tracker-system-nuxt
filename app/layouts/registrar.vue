@@ -19,7 +19,7 @@
 			label: 'Messages',
 			labelClass: 'hover:text-black',
 			icon: 'i-heroicons-inbox-solid',
-			to: '/registrar/messages/',
+			to: '/registrar/messages',
 		},
 	]);
 

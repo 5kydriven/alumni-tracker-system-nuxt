@@ -3,12 +3,13 @@ import { getFirestore, Query } from 'firebase-admin/firestore';
 
 export default eventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const { q, courses, statuses, limit, offset } = getQuery(event);
+	const { q, courses, statuses, limit, offset, batch } = getQuery(event);
 
 	try {
 		let queryRef: Query = db
 			.collection('users')
 			.where('role', '==', 'alumni')
+			.orderBy('userCredentials.course', 'asc')
 			.orderBy('name', 'asc');
 
 		let countQueryRef: Query = db
@@ -41,6 +42,16 @@ export default eventHandler(async (event: H3Event) => {
 				'userCredentials.status',
 				'in',
 				statusArray,
+			);
+		}
+
+		if (batch) {
+			const batchArray = Array.isArray(batch) ? batch : [batch];
+			queryRef = queryRef.where('userCredentials.batch', 'in', batchArray);
+			countQueryRef = countQueryRef.where(
+				'userCredentials.batch',
+				'in',
+				batchArray,
 			);
 		}
 

@@ -107,10 +107,29 @@
 			<div class="p-4 flex flex-col gap-2">
 				<div
 					v-for="(value, key) in row.userCredentials"
-					:key="key"
-					class="flex gap-2">
-					<label class="font-bold">{{ capitalCase(key) }}:</label>
-					<span>{{ value }}</span>
+					:key="key">
+					<div
+						v-if="String(key) != 'logo' && String(key) != 'businessPermit'"
+						class="flex gap-2">
+						<label class="font-bold">{{ capitalCase(key) }}:</label>
+						<span>{{ value }}</span>
+					</div>
+				</div>
+				<div class="flex gap-4">
+					<UButton
+						variant="link"
+						:to="row.userCredentials.logo"
+						target="_blank"
+						rel="noopener noreferrer"
+						>View Logo</UButton
+					>
+					<UButton
+						variant="link"
+						:to="row.userCredentials.businessPermit"
+						target="_blank"
+						rel="noopener noreferrer"
+						>View Business Permit</UButton
+					>
 				</div>
 				<!-- <pre>{{ row.userCredentials }}</pre> -->
 			</div>

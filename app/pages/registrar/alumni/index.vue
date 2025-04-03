@@ -28,7 +28,16 @@
 		{ key: 'status', label: 'Status' },
 		{ key: 'actions', label: '' },
 	];
-	const courses = ['BSIT', 'BSCRIM', 'BSED', 'BSAB', 'BSHM', 'BEED'];
+	const courses = [
+		'BSAB',
+		'BSCRIM',
+		'BSHM',
+		'BSIT',
+		'BSED',
+		'BSED-MATH',
+		'BSED-SCI',
+		'BEED',
+	];
 	const statuses = ['unknown', 'unemployed', 'employed', 'self-employed'];
 
 	const q = ref();
@@ -40,6 +49,7 @@
 	);
 	const selectedCourses = ref<Course[]>([]);
 	const selectedStatuses = ref<AlumniStatus[]>([]);
+	const selectedBatch = ref<string[]>([]);
 
 	const offset = computed(() => (page.value - 1) * limit.value);
 	const filteredColumns = computed(() =>
@@ -48,13 +58,16 @@
 	const columns = computed(() =>
 		defaultColumns.filter((column) => selectedColumns.value.includes(column)),
 	);
+
 	const query = computed(() => ({
 		q: q.value,
 		courses: selectedCourses.value,
 		statuses: selectedStatuses.value,
 		limit: limit.value,
 		offset: offset.value,
+		batch: selectedBatch.value,
 	}));
+
 	const statusColors = computed(() => {
 		return (status: AlumniStatus): any => {
 			switch (status) {
@@ -83,13 +96,77 @@
 		}),
 		getCachedData: (key) => {
 			const cachedData = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-			if (cachedData) {
-				return cachedData;
-			}
+			if (cachedData) return cachedData;
 			return null;
 		},
 		watch: [q, page, selectedCourses, selectedStatuses],
 	});
+
+	const { data: batchs } = useLazyFetch<H3Response>('/api/registrar/batch');
+
+	const batchsOptions = computed(() => {
+		return batchs.value?.data.map((batch: any) => batch.uid);
+	});
+
+	// CSV Export Function
+	async function exportToCSV() {
+		const filters = {
+			courses: selectedCourses.value,
+			statuses: selectedStatuses.value,
+			batch: selectedBatch.value,
+		};
+
+		// Construct dynamic filename with null/undefined checks
+		const filenameParts: string[] = [];
+		if (selectedCourses.value?.length)
+			filenameParts.push(selectedCourses.value[0]?.toLowerCase() as string);
+		if (selectedStatuses.value?.length)
+			filenameParts.push(selectedStatuses.value[0]?.toLowerCase() as string);
+		if (selectedBatch.value?.length)
+			filenameParts.push(selectedBatch.value[0]?.toLowerCase() as string);
+		const filename =
+			filenameParts.length > 0
+				? `${filenameParts.join('-')}.csv`
+				: 'alumni_export.csv';
+
+		const queryParams = new URLSearchParams(
+			Object.entries(filters).reduce(
+				(acc, [key, value]) => {
+					if (Array.isArray(value) && value.length > 0) {
+						acc[key] = value.join(',');
+					}
+					return acc;
+				},
+				{ filename } as Record<string, string>,
+			),
+		).toString();
+
+		try {
+			const response = await fetch(
+				`/api/registrar/alumni/export?${queryParams}`,
+				{
+					method: 'GET',
+				},
+			);
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`Export failed: ${response.status} - ${errorText}`);
+			}
+
+			const blob = await response.blob();
+			const url = window.URL.createObjectURL(blob);
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = filename;
+			link.click();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('CSV Export Error:', error);
+			// Optionally, show a notification
+			// e.g., useToast().error('Failed to export CSV. Please try again.');
+		}
+	}
 
 	function onClosed() {
 		modal.close();
@@ -102,7 +179,7 @@
 </script>
 
 <template>
-	<Navbar>
+	<Navbar class="gap-2">
 		<div class="flex gap-2 items-center">
 			<UButton
 				@click="
@@ -114,6 +191,11 @@
 				color="white"
 				size="sm" />
 			<label class="font-bold text-xl hidden md:block">Alumni's</label>
+			<UBadge
+				color="primary"
+				variant="soft"
+				>{{ alumni.total }}</UBadge
+			>
 		</div>
 		<div class="flex items-center w-full justify-end gap-2 md:gap-4">
 			<UInput
@@ -123,6 +205,15 @@
 				:trailing="false"
 				placeholder="Search..."
 				v-model="q" />
+			<UButton
+				icon="i-heroicons-arrow-down-tray"
+				size="sm"
+				color="gray"
+				variant="solid"
+				trailing
+				@click="exportToCSV">
+				<span class="hidden md:block">Export CSV</span>
+			</UButton>
 			<UButton
 				icon="i-heroicons-pencil-square"
 				size="sm"
@@ -146,6 +237,11 @@
 				v-model="selectedCourses"
 				multiple
 				placeholder="Select Course" />
+			<USelectMenu
+				:options="batchsOptions"
+				v-model="selectedBatch"
+				multiple
+				placeholder="Select Batch" />
 		</div>
 		<div class="flex gap-2 items-center">
 			<UButton
@@ -182,28 +278,19 @@
 		:rows="alumni.data || []"
 		:columns="columns"
 		v-model="selected"
-		:ui="{
-			th: {
-				base: 'sticky z-10 top-0 bg-gray-100',
-			},
-			wrapper: 'flex-1',
-		}">
+		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
 		<template #name-data="{ row }"
 			><span class="capitalize">{{ row.name }}</span></template
 		>
-		<template #course-data="{ row }">
-			{{ row.userCredentials.course }}
-		</template>
-		<template #batch-data="{ row }">
-			{{ row.userCredentials.batch }}
-		</template>
+		<template #course-data="{ row }">{{ row.userCredentials.course }}</template>
+		<template #batch-data="{ row }">{{ row.userCredentials.batch }}</template>
 		<template #status-data="{ row }">
 			<UBadge
 				variant="subtle"
-				:color="statusColors(row.userCredentials.status)"
-				>{{ row.userCredentials.status }}</UBadge
-			>
+				:color="statusColors(row.userCredentials.status)">
+				{{ row.userCredentials.status }}
+			</UBadge>
 		</template>
 		<template #actions-data="{ row }">
 			<UDropdown
@@ -212,29 +299,25 @@
 						{
 							label: 'View',
 							icon: 'i-heroicons-eye-solid',
-							click: () => {
-								router.push(`/registrar/alumni/${row.uid}`);
-							},
+							click: () => router.push(`/registrar/alumni/${row.uid}`),
 						},
 						{
 							label: 'Edit',
 							icon: 'i-heroicons-pencil-square-solid',
-							click: () => {
+							click: () =>
 								modal.open(RegistrarAlumniEdit, {
 									alumni: row,
 									onClose: modal.close,
-								});
-							},
+								}),
 						},
 						{
 							label: 'Delete',
 							icon: 'i-heroicons-trash-solid',
-							click: () => {
+							click: () =>
 								modal.open(RegistrarAlumniDelete, {
 									uid: row.uid,
 									onClose: modal.close,
-								});
-							},
+								}),
 						},
 					],
 				]">
@@ -245,8 +328,9 @@
 			</UDropdown>
 		</template>
 	</UTable>
-	<div class="flex py-2 px-4 items-center border-t justify-between">
-		<div>
+	<div
+		class="flex py-2 px-4 items-center border-t justify-end sm:justify-between">
+		<div class="hidden sm:block">
 			<span class="text-sm leading-5">
 				Showing
 				<span class="font-medium">{{ (page - 1) * limit + 1 }}</span>
@@ -263,8 +347,6 @@
 			v-model="page"
 			:page-count="10"
 			:total="alumni.total as number"
-			:to="(page: number) => ({
-      query: { page },
-    })" />
+			:to="(page: number) => ({ query: { page } })" />
 	</div>
 </template>
