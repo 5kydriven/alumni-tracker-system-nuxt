@@ -49,7 +49,7 @@ export default eventHandler(async (event: H3Event) => {
 			const batchArray = Array.isArray(batch) ? batch : [batch];
 			queryRef = queryRef.where('userCredentials.batch', 'in', batchArray);
 			countQueryRef = countQueryRef.where(
-				'userCredentials.status',
+				'userCredentials.batch',
 				'in',
 				batchArray,
 			);
