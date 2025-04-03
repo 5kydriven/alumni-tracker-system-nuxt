@@ -42,8 +42,8 @@
 						class="w-6 h-6 text-zuccini" />
 				</div>
 				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total personel</label>
-					<span class="text-lg font-bold">{{ props.total.registrar }}</span>
+					<label class="text-sm text-gray-500">Total personnel</label>
+					<span class="text-lg font-bold">{{ props.total.personnel }}</span>
 				</div>
 			</div>
 			<div

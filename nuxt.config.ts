@@ -12,9 +12,6 @@ export default defineNuxtConfig({
 		'nuxt-nodemailer',
 		// '@vite-pwa/nuxt',
 	],
-	colorMode: {
-		preference: 'light',
-	},
 	future: {
 		compatibilityVersion: 4,
 	},

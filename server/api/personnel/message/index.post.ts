@@ -80,7 +80,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			};
 		}
 	} catch (error) {
-		console.error('Error in /registrar/message.post:', error);
+		console.error('Error in /personnel/message.post:', error);
 		return errorResponse(error);
 	}
 });

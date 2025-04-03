@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { RegistrarSlideOver } from '#components';
+	import { PersonnelSlideOver } from '#components';
 	definePageMeta({
-		middleware: ['personel'],
-		layout: 'registrar',
+		middleware: ['personnel'],
+		layout: 'personnel',
 	});
 
 	const router = useRouter();
@@ -10,7 +10,7 @@
 	const route = useRoute();
 
 	function handleClick(uid: string) {
-		router.push(`/registrar/messages/${uid}`);
+		router.push(`/personnel/messages/${uid}`);
 	}
 </script>
 
@@ -18,12 +18,12 @@
 	<div
 		class="flex h-full xl:border xl:border-b-none xl:rounded-t dark:border-gray-800">
 		<div
-			:class="route.path !== '/registrar/messages' ? 'md:flex hidden' : 'flex'"
+			:class="route.path !== '/personnel/messages' ? 'md:flex hidden' : 'flex'"
 			class="border-r-none w-full border-gray-300 md:border-r bg-white dark:border-gray-800 shadow-lg lg:max-w-md flex-col">
 			<ConversationHeader
 				class="py-4"
 				@click="
-					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
+					slideOver.open(PersonnelSlideOver, { onClose: slideOver.close })
 				"
 				isShowButton />
 

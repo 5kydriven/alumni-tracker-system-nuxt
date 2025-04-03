@@ -1,4 +1,4 @@
-// /server/api/registrar/alumni/export.ts
+// /server/api/personnel/alumni/export.ts
 import { H3Event } from 'h3';
 import { getFirestore, Query } from 'firebase-admin/firestore';
 import { stringify } from 'csv-stringify';

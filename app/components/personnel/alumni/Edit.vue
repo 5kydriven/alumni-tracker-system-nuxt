@@ -14,7 +14,7 @@
 
 	if (userCredentials.value.status != 'unknown') {
 		const { data: response } = useFetch<H3Response>(
-			`/api/registrar/alumni/survey/${props.alumni.uid}`,
+			`/api/personnel/alumni/survey/${props.alumni.uid}`,
 			{
 				method: 'GET',
 				immediate: true,
@@ -75,7 +75,7 @@
 	async function onSubmit() {
 		isLoading.value = true;
 		const res = await $fetch<H3Response>(
-			`/api/registrar/alumni/${props.alumni.uid}`,
+			`/api/personnel/alumni/${props.alumni.uid}`,
 			{
 				method: 'PUT',
 				body: JSON.stringify({
