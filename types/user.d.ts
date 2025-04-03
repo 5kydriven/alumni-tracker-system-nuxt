@@ -11,5 +11,8 @@ export declare global {
 		createdAt?: any;
 		updatedAt?: any;
 		isUpdated?: boolean;
+		permission?: Permissions;
 	}
+
+	type Permissions = 'viewer' | 'editor';
 }

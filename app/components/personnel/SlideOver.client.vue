@@ -7,18 +7,18 @@
 		{
 			label: 'Dashboard',
 			icon: 'i-heroicons-chart-bar-solid',
-			to: '/registrar',
+			to: '/personnel',
 			click: () => emits('close'),
 		},
 		{
 			label: 'Alumni',
-			to: '/registrar/alumni',
+			to: '/personnel/alumni',
 			icon: 'i-heroicons-users-solid',
 			click: () => emits('close'),
 		},
 		{
 			label: 'Message',
-			to: '/registrar/messages',
+			to: '/personnel/messages',
 			icon: 'i-heroicons-inbox-solid',
 			click: () => emits('close'),
 		},

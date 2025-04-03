@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { RegistrarMessageAdd } from '#components';
+	import { PersonnelMessageAdd } from '#components';
 
 	const modal = useModal();
 
@@ -33,7 +33,7 @@
 				icon="i-heroicons-pencil-square-solid"
 				:class="!props.isShowButton ? 'hidden' : 'text-black'"
 				label="New chat"
-				@click="modal.open(RegistrarMessageAdd, { onClose: modal.close })" />
+				@click="modal.open(PersonnelMessageAdd, { onClose: modal.close })" />
 		</div>
 	</div>
 </template>

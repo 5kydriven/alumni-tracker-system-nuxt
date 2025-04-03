@@ -7,19 +7,19 @@
 			label: 'Dashboard',
 			labelClass: 'hover:text-black',
 			icon: 'i-heroicons-chart-bar-solid',
-			to: '/registrar',
+			to: '/personnel',
 		},
 		{
 			label: 'Alumni',
 			labelClass: 'hover:text-black',
 			icon: 'i-heroicons-users-solid',
-			to: '/registrar/alumni',
+			to: '/personnel/alumni',
 		},
 		{
 			label: 'Messages',
 			labelClass: 'hover:text-black',
 			icon: 'i-heroicons-inbox-solid',
-			to: '/registrar/messages',
+			to: '/personnel/messages',
 		},
 	]);
 

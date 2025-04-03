@@ -92,7 +92,7 @@ export default eventHandler(async (event: H3Event) => {
 			data: alumniPromise,
 		});
 	} catch (error: any) {
-		console.error('/api/registrar/alumni/[uid].put ', error);
+		console.error('/api/personnel/alumni/[uid].put ', error);
 		return errorResponse(error);
 	}
 });

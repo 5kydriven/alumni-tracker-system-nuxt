@@ -23,7 +23,7 @@ export default function generateSearchKeywords(name: string) {
 		}
 	}
 
-	// Add combinations of "test account" with prefixes of "registrar" if third word exists
+	// Add combinations of "test account" with prefixes of "personnel" if third word exists
 	if (words.length > 2 && words[2]) {
 		let thirdWordPrefix = '';
 		for (const char of words[2]) {

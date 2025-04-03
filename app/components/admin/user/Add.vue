@@ -3,6 +3,7 @@
 
 	const { toastResponse } = useComposableToast();
 	const isLoading = ref(false);
+
 	const user = reactive<User>({
 		name: '',
 		email: '',
@@ -51,33 +52,52 @@
 				</template>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-					<UFormGroup label="Name">
+					<UFormGroup
+						required
+						label="Name">
 						<UInput
 							required
 							v-model="user.name"
 							type="text"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Email">
+					<UFormGroup
+						required
+						label="Email">
 						<UInput
 							required
 							v-model="user.email"
 							type="email"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Password">
+					<UFormGroup
+						required
+						label="Password">
 						<UInput
 							required
 							v-model="user.password"
 							type="password"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Role">
+					<UFormGroup
+						required
+						label="Role">
 						<USelectMenu
 							required
 							v-model="user.role"
-							:options="['registrar', 'employer']"
+							:options="['personnel', 'employer']"
 							placeholder="Select role" />
+					</UFormGroup>
+
+					<UFormGroup
+						required
+						label="Permission"
+						v-show="user.role == 'personnel'">
+						<USelectMenu
+							required
+							v-model="user.permission"
+							:options="['editor', 'viewer']"
+							placeholder="Select permission" />
 					</UFormGroup>
 				</div>
 

@@ -18,7 +18,7 @@
 	const { data: total, status: totalStatus } = useLazyFetch<
 		H3Response<{
 			alumni: number;
-			registrar: number;
+			personnel: number;
 			job: number;
 			employer: number;
 		}>

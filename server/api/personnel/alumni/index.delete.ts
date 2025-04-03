@@ -71,7 +71,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			data: [users, result],
 		});
 	} catch (error: any) {
-		console.log('/registrar/alumni.delete', error);
+		console.log('/personnel/alumni.delete', error);
 		return errorResponse(error);
 	}
 });

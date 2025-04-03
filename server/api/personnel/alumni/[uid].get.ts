@@ -29,7 +29,7 @@ export default eventHandler(async (event: H3Event) => {
 			data: alumniDoc.data(),
 		} as H3Response;
 	} catch (error: any) {
-		console.log('/api/registrar/alumni/uid.get ', error);
+		console.log('/api/personnel/alumni/uid.get ', error);
 		return errorResponse(error);
 	}
 });

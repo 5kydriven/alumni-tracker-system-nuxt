@@ -4,7 +4,7 @@
 
 	async function onDelete(selected: any) {
 		isLoading.value = true;
-		const res = await $fetch<H3Response<any>>('/api/registrar/alumni', {
+		const res = await $fetch<H3Response<any>>('/api/personnel/alumni', {
 			method: 'DELETE',
 			body: JSON.stringify(selected),
 		});

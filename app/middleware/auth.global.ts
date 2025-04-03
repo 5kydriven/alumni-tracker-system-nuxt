@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	const user = await getCurrentUser();
 
-	const restrictedPaths = ['/alumni', '/admin', '/registrar', '/employer'];
+	const restrictedPaths = ['/alumni', '/admin', '/personnel', '/employer'];
 	const isRestricted = restrictedPaths.some((path) => to.path.startsWith(path));
 
 	if (!user && isRestricted) {

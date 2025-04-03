@@ -4,7 +4,7 @@
 
 	async function onDelete(uid: string) {
 		isLoading.value = true;
-		const res = await $fetch<H3Response<any>>(`/api/registrar/alumni/${uid}`, {
+		const res = await $fetch<H3Response<any>>(`/api/personnel/alumni/${uid}`, {
 			method: 'DELETE',
 		});
 		await refreshNuxtData('alumni');
