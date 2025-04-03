@@ -29,7 +29,7 @@
 	const query = computed(() => ({ q: q.value, limit: limit.value }));
 
 	const { data: alumni, status } = useFetch<PaginatedResponse<Alumni[]>>(
-		'/api/registrar/alumni',
+		'/api/personnel/alumni',
 		{
 			method: 'GET',
 			query,
@@ -45,7 +45,7 @@
 		},
 	);
 
-	const { data: batch } = useFetch<H3Response>('/api/registrar/batch');
+	const { data: batch } = useFetch<H3Response>('/api/personnel/batch');
 
 	function onChanged(index: any) {
 		const item = items[index];
@@ -58,7 +58,7 @@
 
 	async function onSubmitted() {
 		isLoading.value = true;
-		const res = await $fetch<H3Response>('/api/registrar/message', {
+		const res = await $fetch<H3Response>('/api/personnel/message', {
 			method: 'POST',
 			body: JSON.stringify(conversation),
 		});

@@ -93,7 +93,7 @@ export default eventHandler(async (event: H3Event) => {
 			data: result,
 		});
 	} catch (error: any) {
-		console.error('/registrar/alumni.post', error);
+		console.error('/personnel/alumni.post', error);
 		if (error.code === 'auth/email-already-exists') {
 			throw createError({
 				statusCode: 409,

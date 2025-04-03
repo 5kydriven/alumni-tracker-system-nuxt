@@ -81,7 +81,7 @@
 		<USelectMenu
 			v-if="isUser"
 			v-model="store.selectedRole"
-			:options="['registrar', 'employer']"
+			:options="['employer', 'personnel']"
 			multiple
 			placeholder="Select Role" />
 	</SubNavbar>

@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	const userData = cachedUserData.value;
 
-	if (userData.role != 'registrar' && to.path == '/registrar') {
+	if (userData.role != 'personnel' && to.path == '/personnel') {
 		return showError({
 			statusCode: 404,
 			statusMessage: 'Page Not Found',

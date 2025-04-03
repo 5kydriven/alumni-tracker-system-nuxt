@@ -1,22 +1,23 @@
 <script setup lang="ts">
 	import {
-		RegistrarAlumniAdd,
-		RegistrarAlumniDelete,
-		RegistrarAlumniDeleteMultiple,
-		RegistrarAlumniEdit,
-		RegistrarSlideOver,
+		PersonnelAlumniAdd,
+		PersonnelAlumniDelete,
+		PersonnelAlumniDeleteMultiple,
+		PersonnelAlumniEdit,
+		PersonnelSlideOver,
 		UButton,
 	} from '#components';
 
 	definePageMeta({
-		middleware: ['personel'],
-		layout: 'registrar',
+		middleware: ['personnel'],
+		layout: 'personnel',
 	});
 
 	const router = useRouter();
 	const slideOver = useSlideover();
 	const modal = useModal();
 	const nuxtApp = useNuxtApp();
+	const user = useCurrentUser();
 
 	const defaultColumns = [
 		{ key: 'uid', label: 'ID' },
@@ -82,11 +83,15 @@
 		};
 	});
 
+	const { data: personnel } = useLazyFetch<H3Response<User>>(
+		`/api/personnel/${user.value?.uid}`,
+	);
+
 	const {
 		status,
 		data: alumni,
 		refresh,
-	} = useLazyFetch<PaginatedResponse<Alumni[]>>('/api/registrar/alumni', {
+	} = useLazyFetch<PaginatedResponse<Alumni[]>>('/api/personnel/alumni', {
 		key: 'alumni',
 		method: 'GET',
 		query,
@@ -102,7 +107,7 @@
 		watch: [q, page, selectedCourses, selectedStatuses],
 	});
 
-	const { data: batchs } = useLazyFetch<H3Response>('/api/registrar/batch');
+	const { data: batchs } = useLazyFetch<H3Response>('/api/personnel/batch');
 
 	const batchsOptions = computed(() => {
 		return batchs.value?.data.map((batch: any) => batch.uid);
@@ -143,7 +148,7 @@
 
 		try {
 			const response = await fetch(
-				`/api/registrar/alumni/export?${queryParams}`,
+				`/api/personnel/alumni/export?${queryParams}`,
 				{
 					method: 'GET',
 				},
@@ -183,7 +188,7 @@
 		<div class="flex gap-2 items-center">
 			<UButton
 				@click="
-					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
+					slideOver.open(PersonnelSlideOver, { onClose: slideOver.close })
 				"
 				class="lg:hidden"
 				icon="i-heroicons-bars-3"
@@ -215,12 +220,13 @@
 				<span class="hidden md:block">Export CSV</span>
 			</UButton>
 			<UButton
+				v-if="personnel?.data?.permission == 'editor'"
 				icon="i-heroicons-pencil-square"
 				size="sm"
 				color="gray"
 				variant="solid"
 				trailing
-				@click="modal.open(RegistrarAlumniAdd, { onClose: modal.close })">
+				@click="modal.open(PersonnelAlumniAdd, { onClose: modal.close })">
 				<span class="hidden md:block">Import Alumni</span>
 			</UButton>
 		</div>
@@ -249,7 +255,7 @@
 				label="Delete"
 				color="red"
 				@click="
-					modal.open(RegistrarAlumniDeleteMultiple, {
+					modal.open(PersonnelAlumniDeleteMultiple, {
 						onClose: onClosed,
 						selected: selected,
 					})
@@ -277,7 +283,9 @@
 		}"
 		:rows="alumni.data || []"
 		:columns="columns"
-		v-model="selected"
+		v-bind="
+			personnel?.data?.permission == 'editor' ? { 'v-model': selected } : {}
+		"
 		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
 		<template #name-data="{ row }"
@@ -294,18 +302,19 @@
 		</template>
 		<template #actions-data="{ row }">
 			<UDropdown
+				v-if="personnel?.data?.permission == 'editor'"
 				:items="[
 					[
 						{
 							label: 'View',
 							icon: 'i-heroicons-eye-solid',
-							click: () => router.push(`/registrar/alumni/${row.uid}`),
+							click: () => router.push(`/personnel/alumni/${row.uid}`),
 						},
 						{
 							label: 'Edit',
 							icon: 'i-heroicons-pencil-square-solid',
 							click: () =>
-								modal.open(RegistrarAlumniEdit, {
+								modal.open(PersonnelAlumniEdit, {
 									alumni: row,
 									onClose: modal.close,
 								}),
@@ -314,7 +323,7 @@
 							label: 'Delete',
 							icon: 'i-heroicons-trash-solid',
 							click: () =>
-								modal.open(RegistrarAlumniDelete, {
+								modal.open(PersonnelAlumniDelete, {
 									uid: row.uid,
 									onClose: modal.close,
 								}),
@@ -326,6 +335,12 @@
 					variant="ghost"
 					icon="i-heroicons-ellipsis-horizontal-20-solid" />
 			</UDropdown>
+			<UButton
+				color="gray"
+				label="View"
+				variant="solid"
+				v-else
+				@click="router.push(`/personnel/alumni/${row.uid}`)" />
 		</template>
 	</UTable>
 	<div

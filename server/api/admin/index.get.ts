@@ -16,9 +16,9 @@ export default defineEventHandler(async (event: H3Event) => {
 			.count()
 			.get();
 
-		const totalRegistrar = await db
+		const totalPersonnel = await db
 			.collection('users')
-			.where('role', '==', 'registrar')
+			.where('role', '==', 'personnel')
 			.count()
 			.get();
 
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event: H3Event) => {
 				alumni: totalAlumni.data().count,
 				employer: totalEmployer.data().count,
 				job: totalJob.data().count,
-				registrar: totalRegistrar.data().count,
+				personnel: totalPersonnel.data().count,
 			},
 		} as H3Response;
 	} catch (error: any) {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-	import { RegistrarSlideOver } from '#components';
+	import { PersonnelSlideOver } from '#components';
 
 	definePageMeta({
-		middleware: ['personel'],
-		layout: 'registrar',
+		middleware: ['personnel'],
+		layout: 'personnel',
 	});
 
 	const slideOver = useSlideover();
@@ -21,7 +21,7 @@
 			unemployed: number;
 			unknown: number;
 		}>
-	>('/api/registrar', {
+	>('/api/personnel', {
 		method: 'GET',
 	});
 
@@ -42,7 +42,7 @@
 		<div class="flex gap-2 items-center">
 			<UButton
 				@click="
-					slideOver.open(RegistrarSlideOver, { onClose: slideOver.close })
+					slideOver.open(PersonnelSlideOver, { onClose: slideOver.close })
 				"
 				class="lg:hidden"
 				icon="i-heroicons-bars-3"

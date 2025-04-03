@@ -2,8 +2,8 @@
 	import { format } from 'date-fns';
 
 	definePageMeta({
-		middleware: ['personel'],
-		layout: 'registrar',
+		middleware: ['personnel'],
+		layout: 'personnel',
 	});
 
 	const nuxtApp = useNuxtApp();
@@ -12,7 +12,7 @@
 
 	const { data: response, status } = useFetch<
 		H3Response<User<AlumniCredentials>>
-	>(`/api/registrar/alumni/${uid}`, {
+	>(`/api/personnel/alumni/${uid}`, {
 		key: `alumni-${uid}`,
 		method: 'GET',
 		getCachedData: (key) =>
@@ -20,7 +20,7 @@
 	});
 
 	const { data: survey } = useFetch<H3Response<Survey>>(
-		`/api/registrar/alumni/survey/${uid}`,
+		`/api/personnel/alumni/survey/${uid}`,
 	);
 
 	// Extracting user data with default values
