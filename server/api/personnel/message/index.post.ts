@@ -30,7 +30,8 @@ export default defineEventHandler(async (event: H3Event) => {
 	try {
 		if (isGroup) {
 			const snapShot = await db
-				.collection('alumni')
+				.collection('users')
+				.where('role', '==', 'alumni')
 				.where('batch', '==', batch)
 				.get();
 			const participants = snapShot.docs
