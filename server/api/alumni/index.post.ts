@@ -32,7 +32,7 @@ export default eventHandler(async (event: H3Event) => {
 					displayName: item.name,
 				});
 
-				const docRef = db.collection('alumni').doc(userCreds.uid);
+				const docRef = db.collection('users').doc(userCreds.uid);
 				batch.update(docRef, {
 					...item,
 					email,
