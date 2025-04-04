@@ -15,7 +15,7 @@ export default defineEventHandler(async (event: H3Event) => {
 	}
 
 	try {
-		const personnelDoc = await db.collection('user').doc(uid).get();
+		const personnelDoc = await db.collection('users').doc(uid).get();
 
 		return successResponse({ data: personnelDoc.data() });
 	} catch (error: any) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import VueDatePicker from '@vuepic/vue-datepicker';
+	// import VueDatePicker from '@vuepic/vue-datepicker';
 
 	const { toastResponse } = useToastComposables();
 
@@ -103,6 +103,7 @@
 					class="grid grid-cols-1 md:grid-cols-2 gap-2"
 					v-if="props.userData.role == 'personnel'">
 					<UFormGroup
+						required
 						label="Name"
 						class="col-span-2">
 						<UInput
@@ -111,19 +112,33 @@
 							type="text"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Email">
+					<UFormGroup
+						required
+						label="Email">
 						<UInput
 							required
 							v-model="user.email"
 							type="email"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Role">
+					<UFormGroup
+						required
+						label="Role">
 						<USelectMenu
 							required
 							v-model="user.role"
 							:options="['personnel', 'employer']"
 							placeholder="Select role" />
+					</UFormGroup>
+					<UFormGroup
+						required
+						label="Permission"
+						v-if="user.role == 'personnel'">
+						<USelectMenu
+							required
+							v-model="user.permission"
+							:options="['editor', 'viewer']"
+							placeholder="Select permission" />
 					</UFormGroup>
 				</div>
 

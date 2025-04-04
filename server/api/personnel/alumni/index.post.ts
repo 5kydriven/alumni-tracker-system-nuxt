@@ -1,14 +1,21 @@
 import successResponse from '~~/server/utils/okReponse';
 import generateSearchKeywords from '~~/server/utils/searchKeywords';
-import sanitizeString from '~~/server/utils/snitizeString';
 import { H3Event } from 'h3';
 import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
+import sanitizeString from '~~/server/utils/snitizeString';
 
-export default eventHandler(async (event: H3Event) => {
+interface AlumniData {
+	firstname?: string;
+	lastname?: string;
+	middlename?: string;
+	course?: string;
+	batch?: string;
+}
+
+export default defineEventHandler(async (event: H3Event) => {
 	const db = getFirestore();
-	const body = await readBody(event);
-
+	const body = await readBody<AlumniData[]>(event);
 	try {
 		if (!body) {
 			throw createError({
@@ -17,69 +24,70 @@ export default eventHandler(async (event: H3Event) => {
 				message: 'Body has no content',
 			});
 		}
-
 		const batch = db.batch();
 		const password = '123456';
 
 		const result = await Promise.all(
-			body.map(
-				async (item: { name: string; batch: string; course: string }) => {
-					const arrange = rearrangeName(item.name);
-					const name = arrange.trim().split(' ');
-					const lastName = sanitizeString(name[name.length - 1] || 'unknown');
-					const scrambledLastName = scrambleString(lastName as string);
-					const email = `${scrambledLastName.toLowerCase()}${
-						item.batch
-					}cpsu@example.com`;
+			body.map(async (item) => {
+				const fullname =
+					item.firstname + ' ' + item.middlename + ' ' + item.lastname;
+				const name = fullname.replace('�', 'ñ').trim().split(' ');
+				const lastName = sanitizeString(name[name.length - 1] || 'unknown');
+				const scrambledLastName = scrambleString(lastName as string);
 
-					const userCreds = await getAuth().createUser({
+				const email = `${scrambledLastName.toLowerCase()}${
+					item.batch ?? ''
+				}cpsu@example.com`;
+
+				const userCreds = await getAuth().createUser({
+					email,
+					password,
+					displayName: fullname,
+				});
+
+				const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
+				batch.set(
+					accountRolesDocRef,
+					{
+						role: 'alumni',
 						email,
 						password,
-						displayName: arrange,
-					});
-
-					const accountRolesDocRef = db.collection('users').doc(userCreds.uid);
-					batch.set(
-						accountRolesDocRef,
-						{
-							role: 'alumni',
-							email,
-							password,
-							name: arrange.toLowerCase(),
-							searchKeywords: generateSearchKeywords(arrange),
-							createdAt: Timestamp.now(),
-							updatedAt: Timestamp.now(),
-							isUpdated: false,
-							userCredentials: {
-								status: 'unknown',
-								course: item.course.toUpperCase(),
-								batch: item.batch,
-								description: null,
-							},
+						name: fullname.toLowerCase(),
+						firstname: item.firstname?.toLowerCase(),
+						lastname: item.lastname?.toLowerCase(),
+						middlename: item.middlename?.toLowerCase(),
+						searchKeywords: generateSearchKeywords(fullname.toLowerCase()),
+						createdAt: Timestamp.now(),
+						updatedAt: Timestamp.now(),
+						isUpdated: false,
+						userCredentials: {
+							status: 'unknown',
+							course: item.course?.toUpperCase(),
+							batch: item.batch,
+							description: null,
 						},
-						{ merge: true },
-					);
+					},
+					{ merge: true },
+				);
 
-					return {
-						...item,
-						email,
-						password,
-						uid: userCreds.uid,
-					};
-				},
-			),
+				return {
+					...item,
+					email,
+					password,
+					uid: userCreds.uid,
+				};
+			}),
 		);
 
-		// Update analytics for the single batch (outside the loop)
-		const batchValue = body[0].batch; // All items have the same batch
-		const analyticsRef = db.collection('analytics').doc(batchValue);
+		const batchValue = body[0]?.batch;
+		const analyticsRef = db.collection('analytics').doc(batchValue as string);
 		batch.set(
 			analyticsRef,
 			{
 				year: Number(batchValue),
 				employed: FieldValue.increment(0),
 				unemployed: FieldValue.increment(0),
-				unknown: FieldValue.increment(body.length), // Increment by 38 once
+				unknown: FieldValue.increment(body.length),
 			},
 			{ merge: true },
 		);
