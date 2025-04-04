@@ -3,6 +3,9 @@ export declare global {
 		id?: number;
 		uid?: string;
 		name?: string;
+		firstname?: string;
+		lastname?: string;
+		middlename?: string;
 		email?: string;
 		role?: Roles;
 		password?: string;
@@ -11,8 +14,8 @@ export declare global {
 		createdAt?: any;
 		updatedAt?: any;
 		isUpdated?: boolean;
-		permission?: Permissions;
+		permission?: Permission;
 	}
 
-	type Permissions = 'viewer' | 'editor';
+	type Permission = 'viewer' | 'editor' | undefined;
 }

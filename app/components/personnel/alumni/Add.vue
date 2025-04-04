@@ -11,6 +11,7 @@
 		const file = files.item(0);
 		Papa.parse(file as File, {
 			header: true,
+			encoding: 'UTF-8',
 			complete: (result: any) => {
 				const filteredData = result.data.filter((row: any) =>
 					Object.values(row).some((value) => value !== '' && value !== null),

@@ -271,7 +271,9 @@
 			</USelectMenu>
 		</div>
 	</SubNavbar>
+
 	<UTable
+		v-if="personnel?.data?.permission == 'editor'"
 		:loading="status != 'success' ? true : false"
 		:loading-state="{
 			icon: 'i-heroicons-arrow-path-20-solid',
@@ -283,9 +285,7 @@
 		}"
 		:rows="alumni.data || []"
 		:columns="columns"
-		v-bind="
-			personnel?.data?.permission == 'editor' ? { 'v-model': selected } : {}
-		"
+		v-model="selected"
 		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
 		<template #name-data="{ row }"
@@ -302,7 +302,6 @@
 		</template>
 		<template #actions-data="{ row }">
 			<UDropdown
-				v-if="personnel?.data?.permission == 'editor'"
 				:items="[
 					[
 						{
@@ -335,14 +334,45 @@
 					variant="ghost"
 					icon="i-heroicons-ellipsis-horizontal-20-solid" />
 			</UDropdown>
+		</template>
+	</UTable>
+
+	<UTable
+		v-else
+		:loading="status != 'success' ? true : false"
+		:loading-state="{
+			icon: 'i-heroicons-arrow-path-20-solid',
+			label: 'Loading...',
+		}"
+		:empty-state="{
+			icon: 'i-heroicons-circle-stack-20-solid',
+			label: 'No items.',
+		}"
+		:rows="alumni.data || []"
+		:columns="columns"
+		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
+		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
+		<template #name-data="{ row }"
+			><span class="capitalize">{{ row.name }}</span></template
+		>
+		<template #course-data="{ row }">{{ row.userCredentials.course }}</template>
+		<template #batch-data="{ row }">{{ row.userCredentials.batch }}</template>
+		<template #status-data="{ row }">
+			<UBadge
+				variant="subtle"
+				:color="statusColors(row.userCredentials.status)">
+				{{ row.userCredentials.status }}
+			</UBadge>
+		</template>
+		<template #actions-data="{ row }">
 			<UButton
 				color="gray"
 				label="View"
 				variant="solid"
-				v-else
 				@click="router.push(`/personnel/alumni/${row.uid}`)" />
 		</template>
 	</UTable>
+
 	<div
 		class="flex py-2 px-4 items-center border-t justify-end sm:justify-between">
 		<div class="hidden sm:block">
