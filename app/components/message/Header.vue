@@ -4,6 +4,7 @@
 	const router = useRouter();
 	const name = ref();
 	const modal = useModal();
+	const route = useRoute();
 
 	const props = defineProps<{
 		participantName?: string;
@@ -44,6 +45,7 @@
 				{{ !props.participantName ? 'Deleted Account' : props.participantName }}
 			</label>
 			<UButton
+				v-show="route.path.includes('employer') && props.participantName"
 				@click="
 					modal.open(EmployerAlumniResume, {
 						uid: props.uid,

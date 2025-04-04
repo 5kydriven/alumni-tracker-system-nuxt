@@ -152,7 +152,7 @@
 
 					<UButton
 						:loading="isLoading"
-						:label="stepper.isLast.value ? 'Go to sign In' : 'Next'"
+						:label="stepper.isLast.value ? 'Go to sign In' : 'Next Step'"
 						type="submit"
 						size="lg"
 						:disabled="!stepper.current.value.isValid()"
@@ -160,9 +160,9 @@
 						class="mt-4" />
 				</form>
 			</div>
-			<UButton
+			<!-- <UButton
 				@click="signOut(auth as Auth)"
-				label="sign out(debugging)" />
+				label="sign out(debugging)" /> -->
 		</div>
 	</main>
 </template>

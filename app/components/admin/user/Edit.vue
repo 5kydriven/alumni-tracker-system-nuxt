@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import VueDatePicker from '@vuepic/vue-datepicker';
+	// import VueDatePicker from '@vuepic/vue-datepicker';
 
 	const { toastResponse } = useToastComposables();
 
@@ -7,62 +7,45 @@
 		userData: User<any>;
 	}>();
 
-	const employmentStatus = [
-		{ name: 'Employed', value: 'employed' },
-		{ name: 'Self-Employed', value: 'self-employed' },
-		{ name: 'Unemployed', value: 'unemployed' },
-		{ name: 'Unknown', value: 'unknown' },
-	];
+	// const employmentStatus = [
+	// 	{ name: 'Employed', value: 'employed' },
+	// 	{ name: 'Self-Employed', value: 'self-employed' },
+	// 	{ name: 'Unemployed', value: 'unemployed' },
+	// 	{ name: 'Unknown', value: 'unknown' },
+	// ];
 
-	const employmentType = [
-		{ name: 'Full-Time', value: 'full-time' },
-		{ name: 'Part-Time', value: 'part-time' },
-		{ name: 'Contractual', value: 'contractual' },
-		{ name: 'Probationary', value: 'probationary' },
-	];
+	// const employmentType = [
+	// 	{ name: 'Full-Time', value: 'full-time' },
+	// 	{ name: 'Part-Time', value: 'part-time' },
+	// 	{ name: 'Contractual', value: 'contractual' },
+	// 	{ name: 'Probationary', value: 'probationary' },
+	// ];
 
-	const yearsInJob = [
-		'less than 6 months',
-		'6 months - 1 year',
-		'1 year - 2 years',
-		'2 years - 3 years',
-		'3 years - 5 years',
-		'more than 5 years',
-	];
+	// const yearsInJob = [
+	// 	'less than 6 months',
+	// 	'6 months - 1 year',
+	// 	'1 year - 2 years',
+	// 	'2 years - 3 years',
+	// 	'3 years - 5 years',
+	// 	'more than 5 years',
+	// ];
 
-	const items = [
-		{
-			label: 'Personal',
-			icon: 'i-heroicons-user',
-		},
-		{
-			label: 'Employment',
-			icon: 'i-heroicons-briefcase',
-		},
-	];
+	// const items = [
+	// 	{
+	// 		label: 'Personal',
+	// 		icon: 'i-heroicons-user',
+	// 	},
+	// 	{
+	// 		label: 'Employment',
+	// 		icon: 'i-heroicons-briefcase',
+	// 	},
+	// ];
 
 	const user = ref(props.userData);
 	const userCredentials = ref(props.userData.userCredentials || {});
-	const survey = ref<Survey>({});
+	// const survey = ref<Survey>({});
 	const isLoading = ref(false);
-	const isEmployement = ref(false);
-
-	if (user.value.userCredentials.status != 'unknown') {
-		const { data: response } = useFetch<H3Response>(
-			`/api/registrar/alumni/survey/${props.userData.uid}`,
-			{
-				method: 'GET',
-				immediate: true,
-			},
-		);
-		watch(
-			response,
-			(newResponse) => {
-				survey.value = newResponse?.data ?? {};
-			},
-			{ immediate: true },
-		);
-	}
+	// const isEmployement = ref(false);
 
 	async function handleSubmit(user: User) {
 		isLoading.value = true;
@@ -70,7 +53,7 @@
 			`/api/admin/user/${props.userData.uid}`,
 			{
 				method: 'PUT',
-				body: JSON.stringify({ user: { ...user }, survey: { ...survey } }),
+				body: JSON.stringify({ ...user }),
 			},
 		);
 		await refreshNuxtData('users');
@@ -79,20 +62,18 @@
 		emits('close');
 	}
 
-	function onChanged(index: any) {
-		const item = items[index];
-		if (item?.label == 'Employment') {
-			isEmployement.value = true;
-		} else {
-			isEmployement.value = false;
-		}
-	}
+	// function onChanged(index: any) {
+	// 	const item = items[index];
+	// 	if (item?.label == 'Employment') {
+	// 		isEmployement.value = true;
+	// 	} else {
+	// 		isEmployement.value = false;
+	// 	}
+	// }
 
 	const emits = defineEmits<{
 		close: [];
 	}>();
-
-	watchEffect(() => console.log(props.userData));
 </script>
 
 <template>
@@ -120,8 +101,9 @@
 
 				<div
 					class="grid grid-cols-1 md:grid-cols-2 gap-2"
-					v-if="props.userData.role == 'registrar'">
+					v-if="props.userData.role == 'personnel'">
 					<UFormGroup
+						required
 						label="Name"
 						class="col-span-2">
 						<UInput
@@ -130,19 +112,33 @@
 							type="text"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Email">
+					<UFormGroup
+						required
+						label="Email">
 						<UInput
 							required
 							v-model="user.email"
 							type="email"
 							size="sm" />
 					</UFormGroup>
-					<UFormGroup label="Role">
+					<UFormGroup
+						required
+						label="Role">
 						<USelectMenu
 							required
 							v-model="user.role"
-							:options="['registrar', 'employer']"
+							:options="['personnel', 'employer']"
 							placeholder="Select role" />
+					</UFormGroup>
+					<UFormGroup
+						required
+						label="Permission"
+						v-if="user.role == 'personnel'">
+						<USelectMenu
+							required
+							v-model="user.permission"
+							:options="['editor', 'viewer']"
+							placeholder="Select permission" />
 					</UFormGroup>
 				</div>
 
@@ -167,7 +163,7 @@
 						<USelectMenu
 							required
 							v-model="user.role"
-							:options="['registrar', 'employer']"
+							:options="['personnel', 'employer']"
 							placeholder="Select role" />
 					</UFormGroup>
 					<UFormGroup label="Company Name">
@@ -234,7 +230,7 @@
 					</UFormGroup>
 				</div>
 
-				<div v-if="props.userData.role == 'alumni'">
+				<!-- <div v-if="props.userData.role == 'alumni'">
 					<UTabs
 						:items="items"
 						@change="onChanged" />
@@ -407,7 +403,7 @@
 							</UFormGroup>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<template #footer>
 					<div class="flex justify-end gap-2">

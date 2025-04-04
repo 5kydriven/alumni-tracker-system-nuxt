@@ -1,3 +1,3 @@
 export declare global {
-	type Roles = 'employer' | 'admin' | 'registrar' | 'alumni';
+	type Roles = 'employer' | 'admin' | 'personnel' | 'alumni';
 }

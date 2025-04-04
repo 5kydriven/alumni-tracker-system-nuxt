@@ -2,15 +2,16 @@
 	const { toastResponse } = useToastComposables();
 	const isLoading = ref(false);
 
-	async function onApproved(uid: string) {
+	async function onDelete(selected: any) {
 		isLoading.value = true;
-		const res = await $fetch(`/api/admin/user/queue/${uid}`, {
-			method: 'PUT',
+		const res = await $fetch<H3Response<any>>('/api/personnel/alumni', {
+			method: 'DELETE',
+			body: JSON.stringify(selected),
 		});
-		await refreshNuxtData('employer-queue');
+		await refreshNuxtData('alumni');
+		isLoading.value = false;
 		toastResponse(res);
 		emits('close');
-		isLoading.value = false;
 	}
 
 	const emits = defineEmits<{
@@ -18,7 +19,7 @@
 	}>();
 
 	const props = defineProps<{
-		uid?: string;
+		selected?: any;
 	}>();
 </script>
 
@@ -47,9 +48,9 @@
 			</template>
 
 			<UIcon
-				name="i-heroicons-exclamation-circle"
+				name="i-heroicons-trash"
 				class="w-14 h-14 text-gray-500" />
-			<p>Are you sure you want to approved this employer?</p>
+			<p>Are you sure you want to delete this alumni?</p>
 
 			<template #footer>
 				<UButton
@@ -59,7 +60,8 @@
 					@click="emits('close')" />
 				<UButton
 					label="Yes, I'm sure"
-					@click="onApproved(props.uid as string)"
+					color="red"
+					@click="onDelete(props.selected)"
 					:loading="isLoading" />
 			</template>
 		</UCard>

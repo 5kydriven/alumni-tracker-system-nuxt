@@ -4,6 +4,9 @@ export default defineAppConfig({
 	// Secondary: #F1F806
 	// neutral: #1f2d3d
 	ui: {
+		theme: {
+			default: 'light',
+		},
 		primary: 'zuccini',
 		yellow: 'goldenfizz',
 		modal: {
