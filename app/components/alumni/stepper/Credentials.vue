@@ -49,8 +49,8 @@
 					placeholder="9385254044"
 					type="text"
 					trim
-					minLength="10"
-					maxLength="10"
+					minLength="11"
+					maxLength="11"
 					v-model="(store.form.userCredentials as AlumniCredentials).phoneNumber"
 					@input="onInput">
 					<template #leading>

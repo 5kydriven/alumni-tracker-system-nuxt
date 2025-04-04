@@ -34,7 +34,6 @@
 		'BSCRIM',
 		'BSHM',
 		'BSIT',
-		'BSED',
 		'BSED-MATH',
 		'BSED-SCI',
 		'BEED',

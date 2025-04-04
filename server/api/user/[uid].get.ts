@@ -13,7 +13,6 @@ export default eventHandler(async (event: H3Event) => {
 				message: 'No uid provided',
 			});
 		}
-		console.log('uid', param);
 		const userDoc = await db.collection('users').doc(param).get();
 
 		if (!userDoc.exists) {
