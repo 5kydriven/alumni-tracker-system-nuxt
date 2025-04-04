@@ -1,9 +1,8 @@
 export default function useCalculator() {
-	function calculateDuration(
-		from: { month: number; year: number },
-		to: { month: number; year: number },
-	) {
-		let totalMonths = (to.year - from.year) * 12 + (to.month - from.month);
+	function calculateDuration(from: ExperienceDate, to: ExperienceDate) {
+		let totalMonths =
+			(Number(to.year) - Number(from.year)) * 12 +
+			(Number(to.month) - Number(from.month));
 		let years = Math.floor(totalMonths / 12);
 		let months = totalMonths % 12;
 

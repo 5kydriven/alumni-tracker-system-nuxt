@@ -4,6 +4,9 @@ export default defineAppConfig({
 	// Secondary: #F1F806
 	// neutral: #1f2d3d
 	ui: {
+		theme: {
+			default: 'light',
+		},
 		primary: 'zuccini',
 		yellow: 'goldenfizz',
 		modal: {
@@ -11,7 +14,14 @@ export default defineAppConfig({
 		},
 		verticalNavigation: {
 			ring: '',
-			base: 'group-hover:before:text-black',
+			base: 'group-hover:before:text-black ',
+			size: 'text-base',
+			icon: {
+				base: 'flex-shrink-0 w-5 h-5 relative',
+				active: 'text-black dark:text-gray-200',
+				inactive:
+					'text-white dark:text-gray-500 group-hover:text-black dark:group-hover:text-gray-200',
+			},
 			active:
 				'text-black dark:text-white before:bg-yellow-500 dark:before:bg-gray-800',
 			inactive:

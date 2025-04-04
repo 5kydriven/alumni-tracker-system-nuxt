@@ -6,9 +6,10 @@
 	<div class="flex flex-col gap-2">
 		<UFormGroup
 			label="Email"
+			description="Please don't use the default email"
 			required>
 			<UInput
-				placeholder="you@example.com"
+				placeholder="john@gmail.com"
 				type="email"
 				v-model="store.form.email" />
 		</UFormGroup>

@@ -31,6 +31,11 @@ declare global {
 		createdAt?: Timestamp;
 	}
 
+	interface ExperienceDate {
+		month?: any;
+		year?: any;
+	}
+
 	interface EducationalBackground {
 		uid?: string;
 		schoolName?: string;
@@ -39,6 +44,21 @@ declare global {
 		endDate?: any;
 		createdAt?: Timestamp;
 	}
+
+	type AlumniStatus =
+		| 'employed'
+		| 'unemployed'
+		| 'unknown'
+		| 'self-employed'
+		| 'freelancer'
+		| undefined;
+	type Gender = 'female' | 'male' | 'other';
+	type Course = 'BSIT' | 'BEED' | 'BSCRIM' | 'BSHM' | 'BSAB' | 'BSED';
 }
 
-export { AlumniCredentials, EducationalBackground, WorkExperience };
+export {
+	AlumniCredentials,
+	EducationalBackground,
+	WorkExperience,
+	ExperienceDate,
+};

@@ -11,7 +11,8 @@
 <template>
 	<div
 		class="p-4 dark:border-gray-800 border-b cursor-pointer flex gap-2 items-center">
-		<UAvatar :alt="!props.name ? 'Deleted Account' : props.name" />
+		<UAvatar
+			:alt="!props.name ? 'Deleted Account' : props.name.toUpperCase()" />
 		<div class="flex flex-col w-full">
 			<label class="capitalize truncate line-clamp-1 w-64 text-black z-0">
 				{{ !props.name ? 'Deleted Account' : props.name }}

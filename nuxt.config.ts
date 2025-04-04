@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
 	compatibilityDate: '2025-01-07',
 	devtools: { enabled: false },
@@ -9,13 +10,13 @@ export default defineNuxtConfig({
 		'nuxt-vuefire',
 		'@nuxt/image',
 		'nuxt-nodemailer',
-		'@vite-pwa/nuxt',
+		// '@vite-pwa/nuxt',
 	],
-	colorMode: {
-		preference: 'light',
-	},
 	future: {
 		compatibilityVersion: 4,
+	},
+	colorMode: {
+		preference: 'light',
 	},
 	pinia: {
 		storesDirs: ['./app/stores/**'],
@@ -30,7 +31,7 @@ export default defineNuxtConfig({
 		privateKey: process.env.NUXT_FIREBASE_PRIVATE_KEY,
 		clientEmail: process.env.NUXT_FIREBASE_CLIENT_EMAIL,
 		public: {
-			appUrl: 'https://cpsu-alumni-tracker.vercel.app',
+			appUrl: process.env.NUXT_API_URL,
 		},
 	},
 	// routeRules: {
@@ -140,6 +141,9 @@ export default defineNuxtConfig({
 	// 				purpose: 'maskable',
 	// 			},
 	// 		],
+	// 	},
+	// 	workbox: {
+	// 		globPatterns: ['**/*.{js,css,html,ico,png,svg,ts}'],
 	// 	},
 	// 	client: {
 	// 		installPrompt: true,

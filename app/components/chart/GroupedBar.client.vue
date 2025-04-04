@@ -4,15 +4,26 @@
 		VisGroupedBar,
 		VisAxis,
 		VisBulletLegend,
+		VisTooltip,
 	} from '@unovis/vue';
+	import { GroupedBar } from '@unovis/ts';
 
-	const props = defineProps<{ data: any }>();
-	const x = (d: any) => d.year;
+	interface BarData {
+		year: number;
+		employed: number;
+		unemployed: number;
+		unknown: number;
+	}
+
+	const props = defineProps<{ data: BarData[] }>();
+	const x = (d: BarData) => d.year;
 	const y = [
-		(d: any) => d.employed,
-		(d: any) => d.unemployed,
-		(d: any) => d.unknown,
+		(d: BarData) => d.employed,
+		(d: BarData) => d.unemployed,
+		(d: BarData) => d.unknown,
 	];
+
+	console.log(props.data);
 
 	const groups = [
 		{ key: 'employed', name: 'Employed' },
@@ -27,10 +38,29 @@
 		inactive: false,
 		color: colors[i],
 	}));
+
+	const triggers = {
+		[GroupedBar.selectors.barGroup]: (d: BarData) => `
+      <div class="w-40 flex flex-col gap-2">
+				<div class="flex justify-between border-l-4 border-[#22c55e] px-2">
+					<labe>Employed:</labe>
+					<span>${d.employed}</span>
+				</div>
+				<div class="w-40 flex justify-between border-l-4 border-[#ef4444] px-2">
+					<labe>Unemployed:</labe>
+					<span>${d.unemployed}</span>
+				</div>
+				<div class="w-40 flex justify-between border-l-4 border-[#d1d5db] px-2">
+					<labe>Unknown:</labe>
+					<span>${d.unknown}</span>
+				</div>
+			</div>
+    `,
+	};
 </script>
 
 <template>
-	<div class="border rounded shadow p-2 w-full flex flex-col">
+	<div class="border rounded-lg shadow p-2 flex flex-col w-full md:w-2/3">
 		<label>Alumni employability</label>
 		<VisBulletLegend
 			:items="items"
@@ -38,19 +68,18 @@
 		<VisXYContainer :data="props.data">
 			<VisGroupedBar
 				:color="colors"
-				roundedCorners
-				:barMinHeight="0"
+				:barMinHeight="1"
 				:x="x"
 				:y="y" />
 			<VisAxis
 				type="x"
 				label="Year"
 				:gridLine="false"
-				:numTicks="props.data.length" />
+				:numTicks="props.data.length - 1" />
 			<VisAxis
 				type="y"
 				label="Total" />
-			<!-- <VisTooltip :triggers="triggers" /> -->
+			<VisTooltip :triggers="triggers" />
 		</VisXYContainer>
 	</div>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	// import { signOut, type Auth } from 'firebase/auth';
+	import { signOut, type Auth } from 'firebase/auth';
 
 	const { toastResponse } = useToastComposables();
-	// const auth = useFirebaseAuth();
+	const auth = useFirebaseAuth();
 	const router = useRouter();
 	const store = useStepperStore();
 	const user = useCurrentUser();
@@ -37,8 +37,8 @@
 
 	async function onSubmit() {
 		if (stepper.isCurrent('alumni-done')) {
+			signOut(auth as Auth);
 			router.replace('/auth');
-			return;
 		}
 
 		if (stepper.isCurrent('alumni-survey')) {
@@ -77,10 +77,7 @@
 							icon="i-heroicons-user"
 							size="sm"
 							color="black"
-							:disabled="
-								!stepper.get('alumni-credential')?.isValid() ||
-								stepper.isLast.value
-							"
+							disabled
 							variant="link"
 							:padded="false"
 							class="!text-black"
@@ -94,10 +91,7 @@
 							size="sm"
 							color="black"
 							variant="link"
-							:disabled="
-								!stepper.get('alumni-credential')?.isValid() ||
-								stepper.isLast.value
-							"
+							disabled
 							:padded="false"
 							@click="
 								() => {
@@ -158,7 +152,7 @@
 
 					<UButton
 						:loading="isLoading"
-						:label="stepper.isLast.value ? 'Go to home' : 'Next'"
+						:label="stepper.isLast.value ? 'Go to sign In' : 'Next Step'"
 						type="submit"
 						size="lg"
 						:disabled="!stepper.current.value.isValid()"

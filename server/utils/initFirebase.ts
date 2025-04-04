@@ -7,6 +7,7 @@ export default function initFirebase(firebaseConfig: any) {
 	} catch {
 		return initializeApp({
 			credential: cert(firebaseConfig as ServiceAccount),
+			storageBucket: 'alumni-tracker-d7448.firebasestorage.app',
 		});
 	}
 }

@@ -7,6 +7,33 @@
 	});
 
 	const slideOver = useSlideover();
+
+	const employmentOptions = ['employed', 'unemployed', 'unknown'];
+
+	const selected = ref(employmentOptions[2]);
+	const query = computed(() => ({
+		status: selected.value,
+	}));
+
+	const { data: total, status: totalStatus } = useLazyFetch<
+		H3Response<{
+			alumni: number;
+			personnel: number;
+			job: number;
+			employer: number;
+		}>
+	>('/api/admin');
+
+	const { data: pie, status: pieLoading } = useLazyFetch<H3Response>(
+		'/api/admin/total-course',
+		{
+			query,
+		},
+	);
+
+	const { data: bar, status: barLoading } = useLazyFetch<H3Response>(
+		'/api/admin/employability-analytics',
+	);
 </script>
 
 <template>
@@ -19,54 +46,45 @@
 				variant="ghost"
 				color="white"
 				size="sm" />
-			<label class="text-lg font-bold">Home</label>
+			<label class="text-xl font-bold">Home</label>
 		</div>
 	</Navbar>
 	<div class="p-4 flex flex-col gap-4">
-		<div class="w-full flex gap-4">
-			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
-				<UIcon name="i-heroicons-user" />
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total alumni</label>
-					<span class="text-lg font-bold">5000</span>
-				</div>
-			</div>
-			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
-				<UIcon name="i-heroicons-user" />
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total employer</label>
-					<span class="text-lg font-bold">5000</span>
-				</div>
-			</div>
-			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
-				<UIcon name="i-heroicons-user" />
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total personel</label>
-					<span class="text-lg font-bold">5000</span>
-				</div>
-			</div>
-			<div class="border p-4 rounded-lg flex items-start gap-2 w-full">
-				<UIcon name="i-heroicons-user" />
-				<div class="flex flex-col gap-2">
-					<label class="text-sm text-gray-500">Total jobs</label>
-					<span class="text-lg font-bold">5000</span>
-				</div>
-			</div>
+		<label class="font-bold text-lg">Overview</label>
+		<AdminOverview
+			v-if="totalStatus == 'success'"
+			:total="total?.data" />
+		<div
+			v-else
+			class="w-full flex gap-4">
+			<USkeleton class="h-[90px] rounded-lg" />
+			<USkeleton class="h-[90px] rounded-lg" />
+			<USkeleton class="h-[90px] rounded-lg" />
+			<USkeleton class="h-[90px] rounded-lg" />
 		</div>
-		<div class="flex gap-4">
+		<div class="flex gap-4 h-full w-full flex-col md:flex-row">
 			<ChartGroupedBar
-				:data="[
-					{ year: 2022, employed: 10, unemployed: 1, unknown: 1 },
-					{ year: 2023, employed: 20, unemployed: 5, unknown: 2 },
-					{ year: 2024, employed: 1, unemployed: 2, unknown: 3 },
-					{ year: 2025, employed: 4, unemployed: 3, unknown: 1 },
-				]" />
+				v-if="barLoading == 'success' && bar?.data"
+				:data="bar?.data ?? []" />
+			<USkeleton
+				v-else
+				class="h-[382px] w-2/3" />
+
 			<ChartDonut
-				:data="[
-					{ label: 'BSIT', value: 2 },
-					{ label: 'CRIM', value: 5 },
-					{ label: 'EDUC', value: 7 },
-				]" />
+				class="md:w-1/3 w-full"
+				v-if="pieLoading == 'success'"
+				:data="pie?.data ?? []"
+				:status="selected as string">
+				<div class="flex justify-between">
+					<label>Course</label>
+					<USelectMenu
+						:options="employmentOptions"
+						v-model="selected" />
+				</div>
+			</ChartDonut>
+			<USkeleton
+				v-else
+				class="h-[382px] w-1/3" />
 		</div>
 	</div>
 </template>

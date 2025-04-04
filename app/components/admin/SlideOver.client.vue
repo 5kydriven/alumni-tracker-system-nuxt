@@ -6,11 +6,13 @@
 	const links = ref([
 		{
 			label: 'Dashboard',
+			icon: 'i-heroicons-chart-bar-solid',
 			to: '/admin',
 			click: () => emits('close'),
 		},
 		{
 			label: 'User',
+			icon: 'i-heroicons-users-solid',
 			to: '/admin/users',
 			click: () => emits('close'),
 		},

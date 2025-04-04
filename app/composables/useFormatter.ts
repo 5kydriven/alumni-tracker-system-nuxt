@@ -1,6 +1,6 @@
 export default function useFormatter() {
-	function formatMonthYear({ month, year }: { month: number; year: number }) {
-		const date = new Date(year, month);
+	function formatMonthYear({ month, year }: ExperienceDate) {
+		const date = new Date(Number(year), Number(month));
 		const formattedDate = date.toLocaleString('en-US', {
 			month: 'short',
 			year: 'numeric',
@@ -15,7 +15,14 @@ export default function useFormatter() {
 			: formattedDate;
 	}
 
+	function capitalCase(key: any) {
+		return key
+			.replace(/([A-Z])/g, ' $1')
+			.replace(/^./, (str: string) => str.toUpperCase());
+	}
+
 	return {
 		formatMonthYear,
+		capitalCase,
 	};
 }

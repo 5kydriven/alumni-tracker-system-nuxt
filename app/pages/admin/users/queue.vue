@@ -1,13 +1,13 @@
 <script setup lang="ts">
+	import AcceptModal from '~/components/admin/AcceptModal.vue';
 	import RejectModal from '~/components/admin/RejectModal.vue';
 
 	const { convertToDate } = useConverter();
+	const { capitalCase } = useFormatter();
 	const { q } = useSearch();
-	const { toastResponse } = useToastComposables();
 	const modal = useModal();
 	const page = ref(1);
 	const limit = ref(15);
-	const isLoading = ref(false);
 
 	const offset = computed(() => (page.value - 1) * limit.value);
 
@@ -42,16 +42,6 @@
 		openedRows: [employers.value],
 		row: {},
 	});
-
-	async function onApproved(uid: string) {
-		isLoading.value = true;
-		const res = await $fetch(`/api/admin/user/queue/${uid}`, {
-			method: 'PUT',
-		});
-		await refreshNuxtData('employer-queue');
-		toastResponse(res);
-		isLoading.value = false;
-	}
 
 	onUnmounted(() => {
 		q.value = '';
@@ -89,11 +79,15 @@
 			<div class="flex gap-2 items-center">
 				<UButton
 					:key="row.uid"
-					variant="solid"
+					variant="soft"
 					:ui="{ rounded: 'rounded-lg' }"
 					label="Approved"
-					:loading="isLoading"
-					@click="onApproved(row.uid)" />
+					@click="
+						modal.open(AcceptModal, {
+							onClose: modal.close,
+							uid: row.uid,
+						})
+					" />
 				<UButton
 					variant="solid"
 					color="red"
@@ -110,8 +104,34 @@
 			</div>
 		</template>
 		<template #expand="{ row }">
-			<div class="p-4">
-				<pre>{{ row.userCredentials }}</pre>
+			<div class="p-4 flex flex-col gap-2">
+				<div
+					v-for="(value, key) in row.userCredentials"
+					:key="key">
+					<div
+						v-if="String(key) != 'logo' && String(key) != 'businessPermit'"
+						class="flex gap-2">
+						<label class="font-bold">{{ capitalCase(key) }}:</label>
+						<span>{{ value }}</span>
+					</div>
+				</div>
+				<div class="flex gap-4">
+					<UButton
+						variant="link"
+						:to="row.userCredentials.logo"
+						target="_blank"
+						rel="noopener noreferrer"
+						>View Logo</UButton
+					>
+					<UButton
+						variant="link"
+						:to="row.userCredentials.businessPermit"
+						target="_blank"
+						rel="noopener noreferrer"
+						>View Business Permit</UButton
+					>
+				</div>
+				<!-- <pre>{{ row.userCredentials }}</pre> -->
 			</div>
 		</template>
 	</UTable>

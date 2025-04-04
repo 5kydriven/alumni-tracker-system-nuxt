@@ -7,21 +7,22 @@
 
 	const schema = z.object({
 		email: z.string().email('Invalid email'),
-		companyName: z.string(),
-		companyAddress: z.string(),
-		telephoneNumber: z.string().min(9, 'Must be at least 9 characters'),
+		companyName: z.string().min(1, 'Company name is required'),
+		companyAddress: z.string().min(1, 'Company address is required'),
 		numberBranches: z.number().optional(),
 		numberEmployees: z.number().optional(),
 		field: z.string(),
 		description: z.string(),
-		name: z.string(),
-		position: z.string(),
+		name: z.string().min(3, 'Name is required'),
+		position: z.string().min(2, 'Position is required'),
 		contactNumber: z
 			.string()
 			.min(10, 'Must be at least 10 characters')
 			.max(11, 'maximum is 9 characters'),
 		website: z.string().optional(),
 		password: z.string().min(6, 'Must be at least 6 characters'),
+		logo: z.any(),
+		businessPermit: z.any(),
 	});
 
 	type Schema = z.output<typeof schema>;
@@ -40,20 +41,62 @@
 		name: '',
 		email: '',
 		password: '',
+		logo: null as File | null,
+		businessPermit: null as File | null,
 	});
 
 	async function onSubmit(event: FormSubmitEvent<Schema>) {
 		isLoading.value = true;
+		const formData = new FormData();
+		const data: Schema = event.data;
+
+		Object.entries(employer).forEach(([key, value]) => {
+			if (
+				key !== 'logo' &&
+				key !== 'businessPermit' &&
+				value !== null &&
+				value !== undefined
+			) {
+				formData.append(key, String(value));
+			}
+		});
+
+		if (employer.logo) {
+			formData.append('logo', employer.logo);
+		}
+		if (employer.businessPermit) {
+			formData.append('businessPermit', employer.businessPermit);
+		}
 		const res = await $fetch<H3Response>('/api/employer', {
 			method: 'POST',
-			body: JSON.stringify(event.data),
+			body: formData,
 		});
 		toastResponse(res);
 		isLoading.value = false;
 		if (res.statusCode != 200) return;
 		emit('success');
 	}
+
+	const onInput = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const input = target.value;
+		target.value = input.replace(/\D/g, '');
+	};
+
+	function onLogoSelected(event: FileList) {
+		if (event && event.length > 0) {
+			employer.logo = event.item(0);
+		}
+	}
+
+	function onPermitSelected(event: FileList) {
+		if (event && event.length > 0) {
+			employer.businessPermit = event.item(0);
+		}
+	}
+
 	const emit = defineEmits(['success']);
+	watch(employer, () => console.log(employer));
 </script>
 
 <template>
@@ -104,9 +147,10 @@
 				</UFormGroup>
 				<UFormGroup
 					label="Telephone Number"
-					name="telephoneNumber"
-					required>
+					name="telephoneNumber">
 					<UInput
+						:maxlength="10"
+						@input="onInput"
 						type="text"
 						v-model="employer.telephoneNumber"
 						placeholder="+63 (XX) YYY ZZZZ"></UInput>
@@ -143,15 +187,17 @@
 						v-model="employer.field"
 						placeholder="Education"></UInput>
 				</UFormGroup>
-				<UFormGroup
-					label="logo"
-					name="logo">
-					<UInput type="file"></UInput>
+				<UFormGroup label="logo">
+					<UInput
+						@change="onLogoSelected"
+						type="file"
+						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
-				<UFormGroup
-					label="Bussiness permit"
-					name="bussinessPermit">
-					<UInput type="file"></UInput>
+				<UFormGroup label="Business permit">
+					<UInput
+						@change="onPermitSelected"
+						type="file"
+						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
 				<UFormGroup
 					class="md:col-span-2"
@@ -195,6 +241,8 @@
 					required>
 					<UInput
 						type="text"
+						maxlength="10"
+						@input="onInput"
 						v-model="employer.contactNumber"
 						placeholder="(XXX) YYY ZZZZ">
 						<template #leading>

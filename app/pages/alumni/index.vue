@@ -90,10 +90,13 @@
 						}}</label>
 						<span class="font-thin capitalize">{{ experience.jobTitle }}</span>
 						<span class="dark:text-gray-400 text-xs"
-							>{{ formatMonthYear(experience.startDate) }} -
-							{{ formatMonthYear(experience.endDate) }} .
+							>{{ formatMonthYear(experience.startDate as ExperienceDate) }} -
+							{{ formatMonthYear(experience.endDate as ExperienceDate) }} .
 							{{
-								calculateDuration(experience.startDate, experience.endDate)
+								calculateDuration(
+									experience.startDate as ExperienceDate,
+									experience.endDate as ExperienceDate,
+								)
 							}}</span
 						>
 					</div>

@@ -6,6 +6,7 @@
 	const user = useCurrentUser();
 	const { getParticipantName } = useConversation();
 	const isLoading = ref(false);
+	const headerLoading = ref(true);
 	const message = ref('');
 	const participant = ref('');
 
@@ -27,15 +28,17 @@
 				uid: doc.id,
 				...doc.data(),
 			}));
+			headerLoading.value = false;
 		},
 		(error) => {
 			console.error('Error listening to real-time updates:', error);
+			headerLoading.value = false;
 		},
 	);
 
 	async function handleSubmit() {
 		isLoading.value = true;
-		const res = await $fetch(`/api/conversation/message/${route.uid}`, {
+		await $fetch(`/api/conversation/message/${route.uid}`, {
 			method: 'POST',
 			body: JSON.stringify({
 				message: message.value,
@@ -45,7 +48,6 @@
 		});
 		message.value = '';
 		isLoading.value = false;
-		console.log(res);
 	}
 
 	const messagesContainer = ref<HTMLElement | null>(null);
@@ -55,8 +57,6 @@
 			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
 		}
 	}
-
-	watch(participant, () => console.log(participant.value));
 
 	watch(messages, async () => {
 		await nextTick();
@@ -74,8 +74,10 @@
 
 <template>
 	<div class="w-full flex flex-col">
-		{{ participant }}
-		<MessageHeader :participantName="participant" />
+		<MessageHeader
+			:participantName="participant"
+			:uid="route.uid?.toString()"
+			:isLoading="headerLoading" />
 
 		<div
 			class="dark:border-gray-800 dark:text-gray-200 overflow-auto bg-slate-100 flex flex-col justify-end flex-1">

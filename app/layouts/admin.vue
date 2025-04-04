@@ -5,10 +5,12 @@
 	const links = ref([
 		{
 			label: 'Dashboard',
+			icon: 'i-heroicons-chart-bar-solid',
 			to: '/admin',
 		},
 		{
 			label: 'User',
+			icon: 'i-heroicons-users-solid',
 			to: '/admin/users',
 		},
 	]);
@@ -18,13 +20,14 @@
 	<div class="flex h-screen">
 		<aside
 			class="hidden w-[250px] flex-col lg:flex bg-zuccini-500 h-screen px-4">
-			<div class="h-16 flex items-center gap-2">
+			<div class="h-16 flex items-center gap-2 py-4">
 				<NuxtImg
 					src="/cpsu-logo.png"
 					width="36"
 					height="36" />
-				<label class="font-bold text-white">CPSU</label>
+				<label class="font-bold text-white text-xl">CPSU</label>
 			</div>
+			<UDivider />
 			<UVerticalNavigation
 				:links="links"
 				class="grow py-2">

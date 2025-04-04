@@ -26,8 +26,8 @@
 		companyName: '',
 		title: '',
 		type: '',
-		email: user.value?.email ?? '',
-		contactPerson: user.value?.displayName ?? '',
+		email: '',
+		contactPerson: '',
 		salary: '',
 		desiredWeeklyHours: '',
 		description: '',
@@ -39,7 +39,6 @@
 		{ name: 'Internship', value: 'internship' },
 		{ name: 'Contract', value: 'contract' },
 		{ name: 'Freelance', value: 'freelance' },
-		// { name: 'Other', value: 'other' },
 	];
 
 	const emits = defineEmits<{
@@ -60,7 +59,7 @@
 </script>
 
 <template>
-	<UModal fullscreen>
+	<UModal>
 		<UForm
 			:schema="schema"
 			:state="form"
@@ -73,8 +72,6 @@
 					body: {
 						base: 'h-full flex flex-col gap-2 overflow-auto',
 					},
-					rounded: 'rounded-none',
-					shadow: 'shadow-none',
 				}">
 				<template #header>
 					<div class="flex items-center justify-between">
@@ -129,8 +126,6 @@
 						class="w-full"
 						required>
 						<UInput
-							color="primary"
-							disabled
 							placeholder="example@gmail.com"
 							v-model="form.email" />
 					</UFormGroup>
@@ -140,8 +135,6 @@
 						class="w-full"
 						required>
 						<UInput
-							color="primary"
-							disabled
 							placeholder="John Doe"
 							v-model="form.contactPerson" />
 					</UFormGroup>

@@ -27,7 +27,9 @@
 		</div>
 		<div class="mt-12 flex flex-col gap-4">
 			<div class="px-8 pb-0">
-				<div class="flex flex-col">
+				<div
+					class="flex flex-col"
+					v-if="!props.name">
 					<label class="lg:text-2xl font-bold text-lg capitalize">{{
 						props.name
 					}}</label>
@@ -36,6 +38,7 @@
 						{{ props.userCredentials?.province }}</span
 					>
 				</div>
+				<USkeleton class="h-16 w-40" />
 			</div>
 			<div class="px-8 flex flex-col gap-2">
 				<div class="flex items-center gap-2">
@@ -53,7 +56,7 @@
 						" />
 				</div>
 				<p
-					class="text-gray-400 text-sm"
+					class="text-gray-900 text-sm"
 					v-if="props.userCredentials?.description">
 					{{ props.userCredentials?.description }}
 				</p>

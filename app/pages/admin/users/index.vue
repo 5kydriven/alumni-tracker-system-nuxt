@@ -1,11 +1,11 @@
 <script setup lang="ts">
-	import { AdminUserDelete } from '#components';
+	import { AdminUserDelete, AdminUserEdit } from '#components';
 
 	const { q } = useSearch();
 	const store = useUserStore();
 	const modal = useModal();
 	const page = ref(1);
-	const limit = ref(20);
+	const limit = ref(10);
 
 	const offset = computed(() => (page.value - 1) * limit.value);
 
@@ -55,9 +55,6 @@
 			th: {
 				base: 'sticky z-10 top-0 bg-gray-100',
 			},
-			td: {
-				padding: 'p-2',
-			},
 			wrapper: 'flex-1',
 		}"
 		:rows="users.data || []"
@@ -77,6 +74,12 @@
 						{
 							label: 'Edit',
 							icon: 'i-heroicons-pencil-square-20-solid',
+							click: () => {
+								modal.open(AdminUserEdit, {
+									userData: row,
+									onClose: modal.close,
+								});
+							},
 						},
 						{
 							label: 'Delete',
@@ -98,7 +101,7 @@
 		</template>
 	</UTable>
 	<div
-		:class="(users.data?.length ?? 0) > 12 ? 'flex' : 'hidden'"
+		:class="(users.data?.length ?? 0) == 10 ? 'flex' : 'hidden'"
 		class="py-2 px-4 items-center border-t justify-between">
 		<div>
 			<span class="text-sm leading-5">

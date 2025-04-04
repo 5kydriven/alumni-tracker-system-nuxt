@@ -28,6 +28,9 @@ export default function useAuth() {
 				// case 'auth/user-disabled':
 				// 	error.value = 'Incorrect password. Please try again.';
 				// 	break;
+				case 'auth/network-request-failed':
+					error.value = 'Please check your internet connection';
+					break;
 				default:
 					error.value = 'An error occurred. Please try again later.';
 			}
