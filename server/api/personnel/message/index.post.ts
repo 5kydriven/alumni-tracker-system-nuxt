@@ -32,8 +32,9 @@ export default defineEventHandler(async (event: H3Event) => {
 			const snapShot = await db
 				.collection('users')
 				.where('role', '==', 'alumni')
-				.where('batch', '==', batch)
+				.where('userCredentials.batch', '==', batch)
 				.get();
+
 			const participants = snapShot.docs
 				.map((item) => item.id)
 				.concat(currentUid);
