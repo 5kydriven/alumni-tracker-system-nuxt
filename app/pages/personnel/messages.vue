@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { PersonnelSlideOver } from '#components';
+
 	definePageMeta({
 		middleware: ['personnel'],
 		layout: 'personnel',
