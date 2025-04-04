@@ -46,7 +46,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="9090909090"
+					placeholder="9385254044"
 					type="text"
 					trim
 					minLength="10"
@@ -63,7 +63,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="you@example.com"
+					placeholder="Negros Occidental"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).province" />
 			</UFormGroup>
@@ -72,16 +72,16 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="you@example.com"
+					placeholder="6127"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).zipCode" />
 			</UFormGroup>
 			<UFormGroup
-				label="City"
+				label="City/Municipal"
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="you@example.com"
+					placeholder="San Carlos City"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).city" />
 			</UFormGroup>
@@ -103,7 +103,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="you@example.com"
+					placeholder="San Carlos City"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).birthPlace" />
 			</UFormGroup>
@@ -114,7 +114,7 @@
 				<USelectMenu
 					placeholder="Select gender"
 					v-model="(store.form.userCredentials as AlumniCredentials).gender"
-					:options="['male', 'female', 'other']" />
+					:options="['male', 'female']" />
 			</UFormGroup>
 			<UFormGroup
 				label="Marital status"

@@ -21,7 +21,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		});
 
 		await db
-			.collection('alumni')
+			.collection('users')
 			.doc(body.uid)
 			.set(
 				{
