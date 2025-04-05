@@ -6,6 +6,7 @@
 	const router = useRouter();
 	const store = useStepperStore();
 	const user = useCurrentUser();
+		
 
 	const isLoading = ref(false);
 
@@ -39,6 +40,7 @@
 		if (stepper.isCurrent('alumni-done')) {
 			signOut(auth as Auth);
 			router.replace('/auth');
+			reloadNuxtApp()
 		}
 
 		if (stepper.isCurrent('alumni-survey')) {

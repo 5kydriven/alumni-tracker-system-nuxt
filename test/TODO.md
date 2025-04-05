@@ -8,7 +8,7 @@
 - [x] personnel: finish edit modal in alumni table
 - [x] employer: finish edit modal in jobs
 - [x] employer: upload documents in registering
-- [ ] admin: when rejecting employer delete also the files
+- [x] admin: when rejecting employer delete also the files
 - [ ] employer: add view information for jobs
 - [ ] employer: add employer profile
 - [ ] alumni: add update employment status for alumni

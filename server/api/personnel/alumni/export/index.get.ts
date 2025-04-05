@@ -45,13 +45,25 @@ export default eventHandler(async (event: H3Event) => {
 
 		const snapshot = await queryRef.get();
 
-		const alumni = snapshot.docs.map((doc, index) => ({
-			id: index + 1,
-			name: doc.data().name,
-			course: doc.data().userCredentials?.course,
-			batch: doc.data().userCredentials?.batch,
-			status: doc.data().userCredentials?.status,
-		}));
+		const alumni = snapshot.docs.map((doc, index) => {
+			const survey = doc.data().userCredentials?.survey || {};
+
+			return {
+				id: index + 1,
+				name: doc.data().name,
+				course: doc.data().userCredentials?.course,
+				batch: doc.data().userCredentials?.batch,
+				status: doc.data().userCredentials?.status,
+				employmentType: survey.employmentType || '',
+				companyName: survey.companyName || '',
+				companyAddress: survey.companyAddress || '',
+				yearsInJob: survey.yearsInJob || '',
+				workNature: survey.workNature || '',
+				urlLink: survey.urlLink || '',
+				bussinessName: survey.bussinessName || '',
+				isRegistered: survey.isRegistered || '',
+			};
+		});
 
 		setHeader(event, 'Content-Type', 'text/csv');
 		const safeFilename =
@@ -66,7 +78,21 @@ export default eventHandler(async (event: H3Event) => {
 
 		const csvStringifier = stringify({
 			header: true,
-			columns: ['id', 'name', 'course', 'batch', 'status'],
+			columns: [
+				'id',
+				'name',
+				'course',
+				'batch',
+				'status',
+				'employmentType',
+				'companyName',
+				'companyAddress',
+				'yearsInJob',
+				'workNature',
+				'urlLink',
+				'bussinessName',
+				'isRegistered',
+			],
 		});
 
 		event.node.res.writeHead(200);

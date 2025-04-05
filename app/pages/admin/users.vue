@@ -43,7 +43,7 @@
 		</div>
 		<div class="flex items-center gap-4">
 			<UInput
-				v-show="isUser"
+				v-if="isUser"
 				icon="i-heroicons-magnifying-glass-20-solid"
 				size="sm"
 				color="white"
@@ -51,7 +51,7 @@
 				placeholder="Search..."
 				v-model="q" />
 			<UButton
-				v-show="isUser"
+				v-if="isUser"
 				icon="i-heroicons-pencil-square"
 				size="sm"
 				color="gray"

@@ -19,7 +19,10 @@
 	});
 
 	const isApplicable = computed(() => {
-		return props.alumni?.userCredentials?.description != null;
+		return (
+			props.alumni?.userCredentials?.description != null &&
+			props.alumni?.userCredentials?.educationalBackground != null
+		);
 	});
 
 	async function onApplied() {
@@ -46,8 +49,8 @@
 	<div class="flex flex-col gap-4">
 		<div
 			v-if="!isApplicable"
-			class="border-red-300 border-2 bg-red-500/20 p-2 text-center text-red-500 rounded-lg">
-			<span>Complete all your information to apply a job</span>
+			class="border-red-300 border-2 bg-red-500/20 p-2 text-center font-bold text-red-500 rounded-lg">
+			<span>About Me and Educational Attainment are required to apply</span>
 		</div>
 		<div
 			class="flex-1 flex flex-col bg-white border border-gray-300 shadow-lg p-4 rounded-lg">

@@ -3,22 +3,6 @@
 	const isLoading = ref(false);
 	const message = ref<string>();
 
-	async function onDelete(uid: string) {
-		isLoading.value = true;
-		const res = await $fetch<H3Response<any>>(`/api/admin/user/queue/${uid}`, {
-			method: 'DELETE',
-			body: JSON.stringify({
-				email: props.email,
-				dispalyName: props.displayName,
-				message: message.value,
-			}),
-		});
-		await refreshNuxtData('employer-queue');
-		isLoading.value = false;
-		toastResponse(res);
-		emits('close');
-	}
-
 	const emits = defineEmits<{
 		close: [];
 	}>();
@@ -28,6 +12,22 @@
 		displayName?: string;
 		email?: string;
 	}>();
+
+	async function onDelete(uid: string) {
+		isLoading.value = true;
+		const res = await $fetch<H3Response<any>>(`/api/admin/user/queue/${uid}`, {
+			method: 'DELETE',
+			body: JSON.stringify({
+				email: props.email,
+				displayName: props.displayName,
+				message: message.value,
+			}),
+		});
+		await refreshNuxtData('employer-queue');
+		isLoading.value = false;
+		toastResponse(res);
+		emits('close');
+	}
 </script>
 
 <template>
