@@ -61,6 +61,7 @@ export default defineEventHandler(async (event: H3Event) => {
 					description: null,
 					workExperience: null,
 					educationalBackground: null,
+					survey,
 				},
 			},
 			{ merge: true },

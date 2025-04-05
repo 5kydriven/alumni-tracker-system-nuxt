@@ -57,8 +57,8 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		const { logo, businessPermit } = queues.userCredentials || {};
 
-		if (logo) await deleteFileFromStorage(app, logo);
-		if (businessPermit) await deleteFileFromStorage(app, businessPermit);
+		if (logo != '') await deleteFileFromStorage(app, logo);
+		if (businessPermit != '') await deleteFileFromStorage(app, businessPermit);
 
 		// Delete the Firestore document
 		await queuesRef.delete();
@@ -67,6 +67,7 @@ export default defineEventHandler(async (event: H3Event) => {
 			message: 'Successfully rejected employer',
 		});
 	} catch (error: any) {
+		console.log(error);
 		return errorResponse(error);
 	}
 });

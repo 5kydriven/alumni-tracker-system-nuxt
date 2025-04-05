@@ -4,6 +4,7 @@
 
 	const auth = useFirebaseAuth();
 	const slideover = useSlideover();
+	const route = useRoute();
 
 	const navLinks = [
 		{
@@ -17,6 +18,7 @@
 		{
 			label: 'Job Board',
 			to: '/alumni/jobs',
+			active: route.path.startsWith('/alumni/jobs'),
 		},
 	];
 </script>

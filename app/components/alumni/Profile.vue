@@ -28,8 +28,8 @@
 		<div class="mt-12 flex flex-col gap-4">
 			<div class="px-8 pb-0">
 				<div
-					class="flex flex-col"
-					v-if="!props.name">
+					class="flex flex-col pt-4"
+					v-if="props.name">
 					<label class="lg:text-2xl font-bold text-lg capitalize">{{
 						props.name
 					}}</label>
@@ -38,7 +38,12 @@
 						{{ props.userCredentials?.province }}</span
 					>
 				</div>
-				<USkeleton class="h-16 w-40" />
+				<div
+					class="flex flex-col gap-2 pt-4"
+					v-else>
+					<USkeleton class="h-8 w-64" />
+					<USkeleton class="h-8 w-40" />
+				</div>
 			</div>
 			<div class="px-8 flex flex-col gap-2">
 				<div class="flex items-center gap-2">

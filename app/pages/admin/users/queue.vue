@@ -117,6 +117,7 @@
 				</div>
 				<div class="flex gap-4">
 					<UButton
+						v-if="row.userCredentials.logo != ''"
 						variant="link"
 						:to="row.userCredentials.logo"
 						target="_blank"
@@ -124,11 +125,21 @@
 						>View Logo</UButton
 					>
 					<UButton
+						v-if="row.userCredentials.businessPermit != ''"
 						variant="link"
 						:to="row.userCredentials.businessPermit"
 						target="_blank"
 						rel="noopener noreferrer"
 						>View Business Permit</UButton
+					>
+
+					<span
+						class="text-lg font-semibold text-red-500"
+						v-if="
+							row.userCredentials.logo == '' &&
+							row.userCredentials.businessPermit == ''
+						"
+						>No logo and bussiness permit</span
 					>
 				</div>
 				<!-- <pre>{{ row.userCredentials }}</pre> -->
