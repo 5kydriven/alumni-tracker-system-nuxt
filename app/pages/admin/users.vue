@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { AdminUserAdd, AdminSlideOver } from '#components';
+	import { collection, getCountFromServer, query } from 'firebase/firestore';
 
 	definePageMeta({
 		middleware: ['admin'],
@@ -11,10 +12,22 @@
 	const slideOver = useSlideover();
 	const route = useRoute();
 	const store = useUserStore();
+	const db = useFirestore();
 
 	const isUser = computed(() => route.path == '/admin/users');
 
-	const links = [
+	const queueCount = ref(0);
+
+	async function getQueueCount() {
+		const queueCollection = collection(db, 'queues');
+		const queueQuery = query(queueCollection);
+
+		const snapshot = await getCountFromServer(queueQuery);
+		queueCount.value = snapshot.data().count;
+		console.log(queueCount.value);
+	}
+
+	const links = computed(() => [
 		{
 			label: 'Users',
 			icon: 'i-heroicons-users',
@@ -25,8 +38,13 @@
 			label: 'Approval Queue',
 			icon: 'i-heroicons-chart-bar',
 			to: '/admin/users/queue',
+			badge: queueCount.value,
 		},
-	];
+	]);
+
+	onMounted(() => {
+		getQueueCount();
+	});
 </script>
 
 <template>
