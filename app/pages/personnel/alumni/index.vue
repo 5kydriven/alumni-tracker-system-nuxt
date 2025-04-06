@@ -130,8 +130,8 @@
 			filenameParts.push(selectedBatch.value[0]?.toLowerCase() as string);
 		const filename =
 			filenameParts.length > 0
-				? `${filenameParts.join('-')}.csv`
-				: 'alumni_export.csv';
+				? `${filenameParts.join('-')}.xlsx`
+				: 'alumni_export.xlsx';
 
 		const queryParams = new URLSearchParams(
 			Object.entries(filters).reduce(
@@ -216,7 +216,7 @@
 				variant="solid"
 				trailing
 				@click="exportToCSV">
-				<span class="hidden md:block">Export CSV</span>
+				<span class="hidden md:block">Export</span>
 			</UButton>
 			<UButton
 				v-if="personnel?.data?.permission == 'editor'"
@@ -287,9 +287,11 @@
 		v-model="selected"
 		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
-		<template #name-data="{ row }"
-			><span class="capitalize">{{ row.name }}</span></template
-		>
+		<template #name-data="{ row }">
+			<span class="capitalize">
+				{{ row.lastname }}, {{ row.firstname }} {{ row.middlename }}
+			</span>
+		</template>
 		<template #course-data="{ row }">{{ row.userCredentials.course }}</template>
 		<template #batch-data="{ row }">{{ row.userCredentials.batch }}</template>
 		<template #status-data="{ row }">
@@ -351,9 +353,11 @@
 		:columns="columns"
 		:ui="{ th: { base: 'sticky z-10 top-0 bg-gray-100' }, wrapper: 'flex-1' }">
 		<template #uid-data="{ row }">{{ row.id + 1 }}</template>
-		<template #name-data="{ row }"
-			><span class="capitalize">{{ row.name }}</span></template
-		>
+		<template #name-data="{ row }">
+			<span class="capitalize">
+				{{ row.lastname }}, {{ row.firstname }} {{ row.middlename }}
+			</span>
+		</template>
 		<template #course-data="{ row }">{{ row.userCredentials.course }}</template>
 		<template #batch-data="{ row }">{{ row.userCredentials.batch }}</template>
 		<template #status-data="{ row }">
