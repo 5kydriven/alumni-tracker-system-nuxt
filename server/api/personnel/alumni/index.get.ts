@@ -10,7 +10,7 @@ export default eventHandler(async (event: H3Event) => {
 			.collection('users')
 			.where('role', '==', 'alumni')
 			.orderBy('userCredentials.course', 'asc')
-			.orderBy('name', 'asc');
+			.orderBy('lastname', 'asc');
 
 		let countQueryRef: Query = db
 			.collection('users')

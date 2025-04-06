@@ -3,6 +3,11 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2025-01-07',
 	devtools: { enabled: false },
+	nitro: {
+		externals: {
+			inline: ['iconv-lite'],
+		},
+	},
 	modules: [
 		'@nuxt/ui',
 		'@vueuse/nuxt',
