@@ -18,6 +18,7 @@ declare global {
 		workExperience?: WorkExperience[];
 		educationalBackground?: EducationalBackground[];
 		currentWork?: WorkExperience;
+		survey?: Survey;
 	}
 
 	interface WorkExperience {

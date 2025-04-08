@@ -7,7 +7,15 @@ export default defineEventHandler(async (event: H3Event) => {
 	const { status } = getQuery(event);
 
 	try {
-		const courses = ['BSIT', 'BSCRIM', 'BSHM', 'BSAB', 'BEED'];
+		const courses = [
+			'BSIT',
+			'BSCRIM',
+			'BSHM',
+			'BSAB',
+			'BEED',
+			'BSED-SCI',
+			'BSED-MATH',
+		];
 		const results: any[] = [];
 
 		for (const course of courses) {

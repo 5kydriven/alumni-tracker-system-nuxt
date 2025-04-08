@@ -13,5 +13,7 @@ export declare global {
 		urlLink?: string;
 		bussinessName?: string;
 		isRegistered?: string;
+		createdAt?: any;
+		updatedAt?: any;
 	}
 }

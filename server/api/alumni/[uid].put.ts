@@ -24,15 +24,11 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		const { email, password, userCredentials } = form;
 
-		if (userCredentials?.phoneNumber?.startsWith('0')) {
-			throw createError({
-				statusCode: 400,
-				statusMessage: 'bad request',
-				message: 'Phone number cannot start with 0',
-			});
-		}
-
-		const formattedPhoneNumber = `+63${userCredentials?.phoneNumber}`;
+		const rawPhoneNumber = userCredentials?.phoneNumber || '';
+		const cleanedPhoneNumber = rawPhoneNumber.startsWith('0')
+			? rawPhoneNumber.slice(1)
+			: rawPhoneNumber;
+		const formattedPhoneNumber = `+63${cleanedPhoneNumber}`;
 
 		const user = await getAuth().updateUser(param, {
 			email,
@@ -65,6 +61,7 @@ export default defineEventHandler(async (event: H3Event) => {
 					description: null,
 					workExperience: null,
 					educationalBackground: null,
+					survey,
 				},
 			},
 			{ merge: true },

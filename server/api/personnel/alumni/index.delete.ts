@@ -24,11 +24,9 @@ export default defineEventHandler(async (event: H3Event) => {
 
 		for (const alumni of alumnis) {
 			const userDocRef = db.collection('users').doc(alumni.uid as string);
-			const alumniDocRef = db.collection('alumni').doc(alumni.uid as string);
 			const analyticsRef = db.collection('analytics').doc(alumni.batch);
 
 			batch.delete(userDocRef);
-			batch.delete(alumniDocRef);
 			switch (alumni.status?.toLowerCase()) {
 				case 'employed':
 					batch.set(
