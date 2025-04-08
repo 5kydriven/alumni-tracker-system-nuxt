@@ -17,15 +17,25 @@ export default defineEventHandler(async (event: H3Event) => {
 			'BSED-MATH',
 		];
 		const results: any[] = [];
-
+		let countSnap;
 		for (const course of courses) {
-			const countSnap = await db
-				.collection('users')
-				.where('role', '==', 'alumni')
-				.where('userCredentials.course', '==', course)
-				.where('userCredentials.status', '==', status)
-				.count()
-				.get();
+			if (status != 'employed') {
+				countSnap = await db
+					.collection('users')
+					.where('role', '==', 'alumni')
+					.where('userCredentials.course', '==', course)
+					.where('userCredentials.status', '==', status)
+					.count()
+					.get();
+			} else {
+				countSnap = await db
+					.collection('users')
+					.where('role', '==', 'alumni')
+					.where('userCredentials.course', '==', course)
+					.where('userCredentials.status', 'in', ['employed', 'self-employed'])
+					.count()
+					.get();
+			}
 
 			results.push({ label: course, value: countSnap.data().count });
 		}

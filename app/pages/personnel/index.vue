@@ -125,12 +125,9 @@
 				v-if="pieLoading == 'success'"
 				:data="pie?.data ?? []"
 				:status="selected as string">
-				<div class="flex justify-between">
-					<label>Course</label>
-					<USelectMenu
-						:options="employmentOptions"
-						v-model="selected" />
-				</div>
+				<USelectMenu
+					:options="employmentOptions"
+					v-model="selected" />
 			</ChartDonut>
 			<USkeleton
 				v-else
