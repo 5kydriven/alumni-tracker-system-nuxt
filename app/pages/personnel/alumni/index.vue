@@ -235,18 +235,18 @@
 			<USelectMenu
 				multiple
 				v-model="selectedStatuses"
-				placeholder="Select Status"
+				placeholder="Status"
 				:options="statuses" />
 			<USelectMenu
 				:options="courses"
 				v-model="selectedCourses"
 				multiple
-				placeholder="Select Course" />
+				placeholder="Course" />
 			<USelectMenu
 				:options="batchsOptions"
 				v-model="selectedBatch"
 				multiple
-				placeholder="Select Batch" />
+				placeholder="Batch" />
 		</div>
 		<div class="flex gap-2 items-center">
 			<UButton
