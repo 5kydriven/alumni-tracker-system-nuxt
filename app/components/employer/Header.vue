@@ -22,7 +22,7 @@
 			size="xl" />
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-col">
-				<label class="text-xl font-bold">{{ employer?.name }}</label>
+				<label class="text-xl font-bold capitalize">{{ employer?.name }}</label>
 				<div class="flex gap-2 items-center">
 					<UIcon name="i-heroicons-building-office" />
 					<p class="text-sm">{{ employer?.userCredentials?.companyName }}</p>
