@@ -20,3 +20,13 @@
 - [x] alumni: analytics update
 - [x] alumni: fix search in jobs
 - [x] alumni: add pagination in jobs
+
+### minutes's
+
+- [] alumni should be not unknown
+- [] add seminars, trainings and skills
+- [] add ched form registration
+- [] add accept privacy terms and conditions
+- [] add dti and other credentials
+- [] pdf format when exporting ched format
+- [] have default cpsu in educational attainment
