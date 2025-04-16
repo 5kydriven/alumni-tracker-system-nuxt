@@ -9,9 +9,6 @@
 - [x] employer: finish edit modal in jobs
 - [x] employer: upload documents in registering
 - [x] admin: when rejecting employer delete also the files
-- [ ] employer: add view information for jobs
-- [ ] employer: add employer profile
-- [ ] alumni: add update employment status for alumni
 - [x] personnel: add export alumni data
 - [x] personnel: add alumni filter batch
 - [x] personnel: remove view resume in messages
@@ -20,13 +17,16 @@
 - [x] alumni: analytics update
 - [x] alumni: fix search in jobs
 - [x] alumni: add pagination in jobs
+- [ ] employer: add view information for jobs
+- [ ] employer: add employer profile
+- [ ] alumni: add update employment status for alumni
 
 ### minutes's
 
 - [] alumni should be not unknown
 - [] add seminars, trainings and skills
+- [x] have default cpsu in educational attainment
 - [] add ched form registration
 - [] add accept privacy terms and conditions
-- [] add dti and other credentials
+- [x] add dti and other credentials
 - [] pdf format when exporting ched format
-- [] have default cpsu in educational attainment

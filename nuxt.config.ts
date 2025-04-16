@@ -37,6 +37,7 @@ export default defineNuxtConfig({
 		clientEmail: process.env.NUXT_FIREBASE_CLIENT_EMAIL,
 		public: {
 			appUrl: process.env.NUXT_API_URL,
+			psgcApi: process.env.NUXT_PSGC_API,
 		},
 	},
 	// routeRules: {

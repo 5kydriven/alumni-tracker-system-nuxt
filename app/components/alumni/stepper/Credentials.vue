@@ -22,13 +22,35 @@
 			store.form.userCredentials.phoneNumber = target.value;
 		}
 	};
+
+	const selectedProvince: any = computed(
+		() => (store.form.userCredentials as AlumniCredentials).province,
+	);
+
+	const { data: provinces, status: provinceStatus } =
+		useLazyFetch<any>('/api/provinces');
+
+	const cities = ref<any[]>([]);
+
+	watch(
+		selectedProvince,
+		async (province) => {
+			if (province?.code) {
+				const data = await $fetch<any>(`/api/provinces/${province.code}`);
+				cities.value = data;
+				console.log(province?.code);
+			}
+		},
+		{
+			immediate: true,
+			deep: true,
+		},
+	);
 </script>
 
 <template>
 	<div class="flex flex-col gap-2">
 		<div class="flex gap-2 items-center">
-			<!-- <UAvatar size="3xl" src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar"
-	:ui="{ rounded: 'rounded' }" /> -->
 			<div class="flex flex-col gap-2 w-full">
 				<UFormGroup label="Full Name">
 					<UInput
@@ -62,10 +84,12 @@
 				label="Province"
 				class="col-span-6"
 				required>
-				<UInput
-					placeholder="Negros Occidental"
-					type="text"
-					v-model="(store.form.userCredentials as AlumniCredentials).province" />
+				<USelectMenu
+					:loading="provinceStatus != 'success'"
+					v-model="(store.form.userCredentials as AlumniCredentials).province"
+					:options="provinces"
+					optionAttribute="name"
+					placeholder="Select province" />
 			</UFormGroup>
 			<UFormGroup
 				label="Zip Code"
@@ -77,13 +101,15 @@
 					v-model="(store.form.userCredentials as AlumniCredentials).zipCode" />
 			</UFormGroup>
 			<UFormGroup
-				label="City/Municipal"
+				label="City"
 				class="col-span-6"
 				required>
-				<UInput
-					placeholder="San Carlos City"
-					type="text"
-					v-model="(store.form.userCredentials as AlumniCredentials).city" />
+				<USelectMenu
+					:disabled="!selectedProvince"
+					:options="cities"
+					optionAttribute="name"
+					v-model="(store.form.userCredentials as AlumniCredentials).city"
+					placeholder="Select city" />
 			</UFormGroup>
 			<UFormGroup
 				label="Date of birth"

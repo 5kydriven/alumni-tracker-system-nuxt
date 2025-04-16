@@ -41,6 +41,7 @@
 		name: '',
 		email: '',
 		password: '',
+		dti: null as File | null,
 		logo: null as File | null,
 		businessPermit: null as File | null,
 	});
@@ -92,6 +93,12 @@
 	function onPermitSelected(event: FileList) {
 		if (event && event.length > 0) {
 			employer.businessPermit = event.item(0);
+		}
+	}
+
+	function onDtiSelected(event: FileList) {
+		if (event && event.length > 0) {
+			employer.dti = event.item(0);
 		}
 	}
 
@@ -196,6 +203,12 @@
 				<UFormGroup label="Business permit">
 					<UInput
 						@change="onPermitSelected"
+						type="file"
+						accept=".png, .jpeg, .jpg" />
+				</UFormGroup>
+				<UFormGroup label="Department of Trade and Industry (DTI)">
+					<UInput
+						@change="onDtiSelected"
 						type="file"
 						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
