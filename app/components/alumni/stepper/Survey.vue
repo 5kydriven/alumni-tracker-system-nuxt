@@ -1,5 +1,8 @@
 <script setup lang="ts">
+	import { AlumniPrivacyModal } from '#components';
+
 	const store = useStepperStore();
+	const modal = useModal();
 
 	const employmentStatus = [
 		{ name: 'Employed', value: 'employed' },
@@ -174,6 +177,30 @@
 					placeholder="Enter url of your website or social media"
 					v-model="store.survey.urlLink" />
 			</UFormGroup>
+		</div>
+
+		<div>
+			<UCheckbox
+				v-model="store.form.isAgree"
+				:ui="{
+					wrapper: 'items-center',
+				}">
+				<template #label>
+					<p class="flex items-center gap-1">
+						I agree to the
+						<UButton
+							@click="
+								modal.open(AlumniPrivacyModal, {
+									onClose: modal.close,
+								})
+							"
+							class="px-0"
+							color="blue"
+							label="Privacy Policy"
+							variant="link" />
+					</p>
+				</template>
+			</UCheckbox>
 		</div>
 	</div>
 </template>

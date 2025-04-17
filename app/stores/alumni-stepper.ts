@@ -15,6 +15,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 	const form = ref<User<AlumniCredentials>>({
 		email: '',
 		password: '',
+		isAgree: false,
 		userCredentials: {
 			phoneNumber: '',
 			province: '',
@@ -26,7 +27,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 			birthDate: '',
 		},
 	});
-	
+
 	const survey = ref<Survey>({
 		employmentStatus: undefined,
 		employmentType: undefined,

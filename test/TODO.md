@@ -27,6 +27,6 @@
 - [] add seminars, trainings and skills
 - [x] have default cpsu in educational attainment
 - [] add ched form registration
-- [] add accept privacy terms and conditions
+- [x] add accept privacy terms and conditions
 - [x] add dti and other credentials
 - [] pdf format when exporting ched format

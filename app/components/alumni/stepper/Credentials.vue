@@ -68,11 +68,12 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="9385254044"
+					placeholder="09385254044"
 					type="text"
 					trim
 					minLength="11"
 					maxLength="11"
+					required
 					v-model="(store.form.userCredentials as AlumniCredentials).phoneNumber"
 					@input="onInput">
 					<template #leading>
@@ -129,7 +130,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="San Carlos City"
+					placeholder="ex. San Carlos City"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).birthPlace" />
 			</UFormGroup>

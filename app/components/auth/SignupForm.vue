@@ -1,9 +1,11 @@
 <script setup lang="ts">
 	import { z } from 'zod';
 	import type { FormSubmitEvent } from '#ui/types';
+	import { EmployerPrivacyModal } from '#components';
 
 	const isLoading = ref(false);
 	const { toastResponse } = useToastComposables();
+	const modal = useModal();
 
 	const schema = z.object({
 		email: z.string().email('Invalid email'),
@@ -23,11 +25,16 @@
 		password: z.string().min(6, 'Must be at least 6 characters'),
 		logo: z.any(),
 		businessPermit: z.any(),
+		dti: z.any(),
+		isAgree: z
+			.boolean()
+			.refine((value) => value == true, 'You must agree to the privacy policy'),
 	});
 
 	type Schema = z.output<typeof schema>;
 
 	const employer = reactive({
+		isAgree: undefined,
 		companyName: '',
 		companyAddress: '',
 		website: '',
@@ -55,6 +62,7 @@
 			if (
 				key !== 'logo' &&
 				key !== 'businessPermit' &&
+				key !== 'dti' &&
 				value !== null &&
 				value !== undefined
 			) {
@@ -67,6 +75,9 @@
 		}
 		if (employer.businessPermit) {
 			formData.append('businessPermit', employer.businessPermit);
+		}
+		if (employer.dti) {
+			formData.append('dti', employer.dti);
 		}
 		const res = await $fetch<H3Response>('/api/employer', {
 			method: 'POST',
@@ -200,13 +211,17 @@
 						type="file"
 						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
-				<UFormGroup label="Business permit">
+				<UFormGroup
+					label="Business permit"
+					required>
 					<UInput
 						@change="onPermitSelected"
 						type="file"
 						accept=".png, .jpeg, .jpg" />
 				</UFormGroup>
-				<UFormGroup label="Department of Trade and Industry (DTI)">
+				<UFormGroup
+					label="Department of Trade and Industry (DTI)"
+					required>
 					<UInput
 						@change="onDtiSelected"
 						type="file"
@@ -289,6 +304,30 @@
 				</UFormGroup>
 			</div>
 		</div>
+		<UFormGroup name="isAgree">
+			<UCheckbox
+				v-model="employer.isAgree"
+				:ui="{
+					wrapper: 'items-center',
+					label: 'flex gap-2',
+				}">
+				<template #label>
+					<p class="flex items-center gap-1">
+						I agree to the
+						<UButton
+							@click="
+								modal.open(EmployerPrivacyModal, {
+									onClose: modal.close,
+								})
+							"
+							class="px-0"
+							color="blue"
+							label="Privacy Policy"
+							variant="link" />
+					</p>
+				</template>
+			</UCheckbox>
+		</UFormGroup>
 		<UButton
 			block
 			class="mt-4"
@@ -296,10 +335,5 @@
 			:loading="isLoading"
 			>Submit
 		</UButton>
-		<!-- <UButton
-			variant="link"
-			to="/auth/finish"
-			>Finish</UButton
-		> -->
 	</UForm>
 </template>
