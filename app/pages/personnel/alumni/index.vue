@@ -5,6 +5,7 @@
 		PersonnelAlumniDeleteMultiple,
 		PersonnelAlumniEdit,
 		PersonnelSlideOver,
+		PersonnelAlumniExport,
 		UButton,
 	} from '#components';
 
@@ -112,66 +113,6 @@
 		return batchs.value?.data.map((batch: any) => batch.uid);
 	});
 
-	// CSV Export Function
-	async function exportToCSV() {
-		const filters = {
-			courses: selectedCourses.value,
-			statuses: selectedStatuses.value,
-			batch: selectedBatch.value,
-		};
-
-		// Construct dynamic filename with null/undefined checks
-		const filenameParts: string[] = [];
-		if (selectedCourses.value?.length)
-			filenameParts.push(selectedCourses.value[0]?.toLowerCase() as string);
-		if (selectedStatuses.value?.length)
-			filenameParts.push(selectedStatuses.value[0]?.toLowerCase() as string);
-		if (selectedBatch.value?.length)
-			filenameParts.push(selectedBatch.value[0]?.toLowerCase() as string);
-		const filename =
-			filenameParts.length > 0
-				? `${filenameParts.join('-')}.xlsx`
-				: 'alumni_export.xlsx';
-
-		const queryParams = new URLSearchParams(
-			Object.entries(filters).reduce(
-				(acc, [key, value]) => {
-					if (Array.isArray(value) && value.length > 0) {
-						acc[key] = value.join(',');
-					}
-					return acc;
-				},
-				{ filename } as Record<string, string>,
-			),
-		).toString();
-
-		try {
-			const response = await fetch(
-				`/api/personnel/alumni/export?${queryParams}`,
-				{
-					method: 'GET',
-				},
-			);
-
-			if (!response.ok) {
-				const errorText = await response.text();
-				throw new Error(`Export failed: ${response.status} - ${errorText}`);
-			}
-
-			const blob = await response.blob();
-			const url = window.URL.createObjectURL(blob);
-			const link = document.createElement('a');
-			link.href = url;
-			link.download = filename;
-			link.click();
-			window.URL.revokeObjectURL(url);
-		} catch (error) {
-			console.error('CSV Export Error:', error);
-			// Optionally, show a notification
-			// e.g., useToast().error('Failed to export CSV. Please try again.');
-		}
-	}
-
 	function onClosed() {
 		modal.close();
 		selected.value = [];
@@ -215,7 +156,14 @@
 				color="gray"
 				variant="solid"
 				trailing
-				@click="exportToCSV">
+				@click="
+					modal.open(PersonnelAlumniExport, {
+						onClose: modal.close,
+						selectedCourses,
+						selectedBatch,
+						selectedStatuses,
+					})
+				">
 				<span class="hidden md:block">Export</span>
 			</UButton>
 			<UButton
