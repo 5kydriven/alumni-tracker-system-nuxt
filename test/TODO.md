@@ -20,3 +20,15 @@
 - [x] alumni: analytics update
 - [x] alumni: fix search in jobs
 - [x] alumni: add pagination in jobs
+
+### minutes
+
+- [x] Data Privacy Terms and Conditions.
+- [x] Verification for employer, business permit and DTI and other credentials.
+- [x] Add work experience, seminars, trainings. - [] information
+- [x] No unknown
+- [x] School Name by default
+- [x] CHED form for registration.
+
+- [] Add pdf format in generated reports based on the reports required by school/CHED
+- [] Generated Format reports.

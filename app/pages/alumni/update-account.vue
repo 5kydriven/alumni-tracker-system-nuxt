@@ -6,7 +6,6 @@
 	const router = useRouter();
 	const store = useStepperStore();
 	const user = useCurrentUser();
-		
 
 	const isLoading = ref(false);
 
@@ -40,7 +39,7 @@
 		if (stepper.isCurrent('alumni-done')) {
 			signOut(auth as Auth);
 			router.replace('/auth');
-			reloadNuxtApp()
+			reloadNuxtApp();
 		}
 
 		if (stepper.isCurrent('alumni-survey')) {
@@ -62,8 +61,8 @@
 			return;
 		}
 
-		stepper.goToNext();
 		store.progress++;
+		stepper.goToNext();
 	}
 </script>
 
@@ -75,57 +74,40 @@
 			<div>
 				<div class="flex justify-between w-full items-center p-4 relative">
 					<div class="flex rounded-full p-1 z-10 bg-green-400">
-						<UButton
-							icon="i-heroicons-user"
-							size="sm"
+						<UIcon
+							name="i-heroicons-user"
+							class="w-6 h-6"
 							color="black"
-							disabled
-							variant="link"
-							:padded="false"
-							class="!text-black"
-							@click="stepper.goTo('alumni-account')" />
+							variant="link" />
 					</div>
 					<div
 						class="flex rounded-full p-1 z-10"
 						:class="store.progress >= 1 ? 'bg-green-400' : 'bg-gray-500'">
-						<UButton
-							icon="i-heroicons-document-text"
-							size="sm"
+						<UIcon
+							name="i-heroicons-document-text"
 							color="black"
 							variant="link"
-							disabled
-							:padded="false"
-							@click="
-								() => {
-									stepper.goTo('alumni-credential');
-									store.progress = 1;
-								}
-							"
-							:class="store.progress >= 1 ? '!text-black' : ''" />
+							class="w-6 h-6" />
 					</div>
 					<div
 						class="flex rounded-full p-1 z-10"
 						:class="store.progress >= 2 ? 'bg-green-400' : 'bg-gray-500'">
-						<UButton
-							icon="i-heroicons-document-text"
+						<UIcon
+							name="i-heroicons-document-text"
 							size="sm"
 							color="black"
 							variant="link"
-							:padded="false"
-							disabled
-							:class="store.progress >= 2 ? '!text-black' : ''" />
+							class="w-6 h-6" />
 					</div>
 					<div
 						class="flex rounded-full p-1 z-10"
 						:class="store.progress >= 3 ? 'bg-green-400' : 'bg-gray-500'">
-						<UButton
-							icon="i-heroicons-document-check"
+						<UIcon
+							name="i-heroicons-document-check"
 							size="sm"
 							color="black"
 							variant="link"
-							:padded="false"
-							disabled
-							:class="store.progress >= 3 ? '!text-black' : ''" />
+							class="w-6 h-6" />
 					</div>
 					<UProgress
 						:value="store.progress"
@@ -162,9 +144,22 @@
 						class="mt-4" />
 				</form>
 			</div>
-			<!-- <UButton
-				@click="signOut(auth as Auth)"
-				label="sign out(debugging)" /> -->
+			<UButton
+				label="Go Back"
+				size="lg"
+				block
+				@click="
+					() => {
+						store.progress--;
+						stepper.goToPrevious();
+					}
+				"
+				v-show="!stepper.isCurrent('alumni-account')" />
+			<UButton
+				label="sign out"
+				size="lg"
+				block
+				@click="signOut(auth as Auth)" />
 		</div>
 	</main>
 </template>

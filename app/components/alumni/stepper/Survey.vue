@@ -2,16 +2,13 @@
 	const store = useStepperStore();
 
 	const employmentStatus = [
-		{ name: 'Employed', value: 'employed' },
-		{ name: 'Self-Employed', value: 'self-employed' },
-		{ name: 'Unemployed', value: 'unemployed' },
+		{ name: 'Yes, I have been employed', value: 'employed' },
+		{ name: 'No, I was never employed. ', value: 'unemployed' },
 	];
 
 	const employmentType = [
-		{ name: 'Full-Time', value: 'full-time' },
-		{ name: 'Part-Time', value: 'part-time' },
-		{ name: 'Contractual', value: 'contractual' },
-		{ name: 'Probationary', value: 'probationary' },
+		{ name: 'Formally Employed', value: 'employed' },
+		{ name: 'Self Employed', value: 'self-employed' },
 	];
 
 	const yearsInJob = [
@@ -27,7 +24,7 @@
 <template>
 	<div class="flex flex-col gap-2">
 		<UFormGroup
-			label="What is your current employment status"
+			label=" Have you ever been employed anytime after graduation?"
 			required
 			class="col-span-6">
 			<USelectMenu
@@ -42,8 +39,27 @@
 			class="grid grid-cols-12 gap-2"
 			v-if="store.survey.employmentStatus == 'employed'">
 			<UFormGroup
-				label="Company Name"
-				class="col-span-6"
+				label="Type of employment"
+				required
+				class="col-span-12">
+				<USelectMenu
+					value-attribute="value"
+					option-attribute="name"
+					v-model="store.survey.employmentType"
+					:options="employmentType"
+					placeholder="Select status" />
+			</UFormGroup>
+		</div>
+
+		<div
+			class="grid grid-cols-12 gap-2"
+			v-if="
+				store.survey.employmentType == 'employed' &&
+				store.survey.employmentStatus == 'employed'
+			">
+			<UFormGroup
+				label="Company Name (latest employer if employed several times) "
+				class="col-span-12"
 				required>
 				<UInput
 					type="text"
@@ -52,8 +68,8 @@
 					v-model="store.survey.companyName" />
 			</UFormGroup>
 			<UFormGroup
-				label="Company Address"
-				class="col-span-6"
+				label="Please upload any form of proof such as I.D. if available. Thank you"
+				class="col-span-12"
 				required>
 				<UInput
 					type="text"
@@ -61,79 +77,17 @@
 					placeholder="Enter company address"
 					v-model="store.survey.companyAddress" />
 			</UFormGroup>
-			<UFormGroup
-				label="Employment Type"
-				class="col-span-6"
-				required>
-				<USelectMenu
-					placeholder="Select type of employemet"
-					required
-					:options="employmentType"
-					valueAttribute="value"
-					optionAttribute="name"
-					v-model="store.survey.employmentType" />
-			</UFormGroup>
-			<UFormGroup
-				label="Years in current job"
-				class="col-span-6"
-				required>
-				<USelectMenu
-					placeholder="Select years"
-					required
-					:options="yearsInJob"
-					v-model="store.survey.yearsInJob" />
-			</UFormGroup>
 		</div>
 
 		<div
 			class="grid grid-cols-12 gap-2"
-			v-if="store.survey.employmentStatus == 'freelancer'">
+			v-if="
+				store.survey.employmentType == 'self-employed' &&
+				store.survey.employmentStatus == 'employed'
+			">
 			<UFormGroup
-				label="Job Title/Profession"
-				class="col-span-6"
-				required>
-				<UInput
-					type="text"
-					required
-					placeholder="e.g., Freelance Graphic Designer"
-					v-model="store.survey.jobTitle" />
-			</UFormGroup>
-			<UFormGroup
-				label="Nature of Work / Services Offered"
-				class="col-span-6"
-				required>
-				<UInput
-					type="text"
-					required
-					placeholder="e.g., Logo Design, Web Development"
-					v-model="store.survey.workNature" />
-			</UFormGroup>
-			<UFormGroup
-				label="Portfolio / Website "
-				class="col-span-6">
-				<UInput
-					type="text"
-					placeholder="Enter website url or social media"
-					v-model="store.survey.urlLink" />
-			</UFormGroup>
-		</div>
-
-		<div
-			class="grid grid-cols-12 gap-2"
-			v-if="store.survey.employmentStatus == 'self-employed'">
-			<UFormGroup
-				label="Bussiness Name"
-				class="col-span-6"
-				required>
-				<UInput
-					type="text"
-					required
-					placeholder="Enter business name"
-					v-model="store.survey.bussinessName" />
-			</UFormGroup>
-			<UFormGroup
-				label="Nature of Bussiness"
-				class="col-span-6"
+				label="Type of Bussiness"
+				class="col-span-12"
 				required>
 				<UInput
 					type="text"
@@ -142,33 +96,8 @@
 					v-model="store.survey.workNature" />
 			</UFormGroup>
 			<UFormGroup
-				label="Is your Business registered?"
-				class="col-span-6"
-				required>
-				<USelectMenu
-					placeholder="Select the following options"
-					optionAttribute="name"
-					required
-					valueAttribute="value"
-					:options="[
-						{ name: 'Yes', value: 'yes' },
-						{ name: 'No', value: 'no' },
-					]"
-					v-model="store.survey.isRegistered" />
-			</UFormGroup>
-			<UFormGroup
-				label="Years in business"
-				class="col-span-6"
-				required>
-				<USelectMenu
-					placeholder="Select years"
-					required
-					:options="yearsInJob"
-					v-model="store.survey.yearsInJob" />
-			</UFormGroup>
-			<UFormGroup
-				label="Business Website / Social Media"
-				class="col-span-6">
+				label="Please upload any form of proof such as business permit if available. If none, it's alright."
+				class="col-span-12">
 				<UInput
 					type="text"
 					placeholder="Enter url of your website or social media"

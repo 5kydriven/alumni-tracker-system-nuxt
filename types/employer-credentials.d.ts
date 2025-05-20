@@ -12,5 +12,6 @@ export declare global {
 		businessPermit?: any;
 		position?: string;
 		contactNumber?: string;
+		dti?: string;
 	}
 }

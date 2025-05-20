@@ -26,7 +26,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 			birthDate: '',
 		},
 	});
-	
+
 	const survey = ref<Survey>({
 		employmentStatus: undefined,
 		employmentType: undefined,
@@ -38,6 +38,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 		urlLink: undefined,
 		bussinessName: undefined,
 		isRegistered: undefined,
+		fileUrl: undefined,
 	});
 	const progress = ref(0);
 

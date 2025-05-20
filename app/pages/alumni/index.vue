@@ -188,5 +188,75 @@
 					variant="soft" />
 			</div>
 		</div>
+
+		<div
+			class="flex flex-col gap-4 w-full bg-white border border-gray-300 py-4 px-8 rounded-lg shadow-lg dark:border-gray-800">
+			<div class="flex gap-2 items-center">
+				<label class="font-bold text-lg">Seminar/Trainings</label>
+				<UButton
+					v-show="
+						(alumni?.userCredentials.educationalBackground?.length ?? 0) > 0
+					"
+					icon="i-heroicons-plus"
+					size="2xs"
+					@click="
+						modal.open(AlumniAddEducation, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					" />
+			</div>
+			<div
+				class="flex flex-col gap-2"
+				v-if="(alumni?.userCredentials.educationalBackground?.length ?? 0) > 0">
+				<div
+					class="flex items-center gap-2"
+					v-for="education in alumni?.userCredentials.educationalBackground">
+					<UButton
+						icon="i-heroicons-trash-solid"
+						size="2xs"
+						color="red"
+						class="mr-2"
+						variant="soft"
+						@click="
+							modal.open(AlumniDeleteEducation, {
+								onClose: modal.close,
+								userUid: user?.uid,
+								educationUid: education.uid,
+							})
+						" />
+					<UAvatar
+						:alt="education.schoolName?.toUpperCase()"
+						class="!rounded"
+						size="lg" />
+					<div class="flex flex-col text-base/5">
+						<label class="font-bold capitalize">{{
+							education.schoolName
+						}}</label>
+						<span class="font-thin capitalize">{{
+							education.schoolAddress
+						}}</span>
+						<span class="dark:text-gray-400 text-xs"
+							>{{ education.startDate }} - {{ education.endDate }}</span
+						>
+					</div>
+				</div>
+			</div>
+			<div
+				class="flex justify-center items-center p-8"
+				v-else>
+				<UButton
+					icon="i-heroicons-plus"
+					size="sm"
+					@click="
+						modal.open(AlumniAddEducation, {
+							onClose: modal.close,
+							uid: alumni?.uid,
+						})
+					"
+					label="Add education"
+					variant="soft" />
+			</div>
+		</div>
 	</div>
 </template>
