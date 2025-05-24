@@ -4,6 +4,8 @@
 		AlumniAddExperience,
 		AlumniDeleteExperience,
 		AlumniDeleteEducation,
+		AlumniAddSeminar,
+		AlumniDeleteSeminar,
 	} from '#components';
 
 	definePageMeta({
@@ -19,7 +21,7 @@
 	const { data: alumni } = useAsyncData('alumni-profile', async () => {
 		if (!user.value?.uid) return null;
 
-		const [data, experience, education] = await Promise.all([
+		const [data, experience, education, seminar] = await Promise.all([
 			$fetch<H3Response<User<AlumniCredentials>>>(
 				`/api/alumni/${user.value.uid}`,
 			),
@@ -29,6 +31,7 @@
 			$fetch<H3Response<EducationalBackground[]>>(
 				`/api/alumni/education/${user.value.uid}`,
 			),
+			$fetch<H3Response<Seminar[]>>(`/api/alumni/seminar/${user.value.uid}`),
 		]);
 
 		return {
@@ -37,6 +40,7 @@
 				...data.data?.userCredentials,
 				workExperience: experience.data,
 				educationalBackground: education.data,
+				seminars: seminar.data,
 			},
 		};
 	});
@@ -200,7 +204,7 @@
 					icon="i-heroicons-plus"
 					size="2xs"
 					@click="
-						modal.open(AlumniAddEducation, {
+						modal.open(AlumniAddSeminar, {
 							onClose: modal.close,
 							uid: alumni?.uid,
 						})
@@ -208,10 +212,10 @@
 			</div>
 			<div
 				class="flex flex-col gap-2"
-				v-if="(alumni?.userCredentials.educationalBackground?.length ?? 0) > 0">
+				v-if="(alumni?.userCredentials.seminars?.length ?? 0) > 0">
 				<div
 					class="flex items-center gap-2"
-					v-for="education in alumni?.userCredentials.educationalBackground">
+					v-for="seminar in alumni?.userCredentials.seminars">
 					<UButton
 						icon="i-heroicons-trash-solid"
 						size="2xs"
@@ -219,26 +223,19 @@
 						class="mr-2"
 						variant="soft"
 						@click="
-							modal.open(AlumniDeleteEducation, {
+							modal.open(AlumniDeleteSeminar, {
 								onClose: modal.close,
 								userUid: user?.uid,
-								educationUid: education.uid,
+								educationUid: seminar.uid,
 							})
 						" />
 					<UAvatar
-						:alt="education.schoolName?.toUpperCase()"
+						:alt="seminar.name?.toUpperCase()"
 						class="!rounded"
 						size="lg" />
 					<div class="flex flex-col text-base/5">
-						<label class="font-bold capitalize">{{
-							education.schoolName
-						}}</label>
-						<span class="font-thin capitalize">{{
-							education.schoolAddress
-						}}</span>
-						<span class="dark:text-gray-400 text-xs"
-							>{{ education.startDate }} - {{ education.endDate }}</span
-						>
+						<label class="font-bold capitalize">{{ seminar.name }}</label>
+						<span class="dark:text-gray-400 text-xs">{{ formatMonthYear(seminar.date as ExperienceDate) }}</span>
 					</div>
 				</div>
 			</div>
@@ -249,12 +246,12 @@
 					icon="i-heroicons-plus"
 					size="sm"
 					@click="
-						modal.open(AlumniAddEducation, {
+						modal.open(AlumniAddSeminar, {
 							onClose: modal.close,
 							uid: alumni?.uid,
 						})
 					"
-					label="Add education"
+					label="Add seminar/training"
 					variant="soft" />
 			</div>
 		</div>
