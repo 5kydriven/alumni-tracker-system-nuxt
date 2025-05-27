@@ -142,7 +142,7 @@
 				<div class="flex items-center justify-between">
 					<h3
 						class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-						Import Alumni's
+						Export Alumni
 					</h3>
 					<UButton
 						color="gray"

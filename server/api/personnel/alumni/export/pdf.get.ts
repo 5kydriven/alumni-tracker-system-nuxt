@@ -1,6 +1,6 @@
 import { getFirestore, Query } from 'firebase-admin/firestore';
 import { H3Event } from 'h3';
-import PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit-table';
 import { Readable } from 'stream';
 import drawHeader from '~~/server/utils/drawHeader';
 
@@ -47,44 +47,61 @@ export default eventHandler(async (event: H3Event) => {
 		const snapshot = await queryRef.get();
 		const alumni = snapshot.docs.map((doc) => doc.data());
 
-		const doc = new PDFDocument({ margin: 50, size: 'A4' });
+		const tableData = alumni.map((alumni: User<AlumniCredentials>) => [
+			alumni.name || 'N/A',
+			alumni.userCredentials?.course || 'N/A',
+			alumni.userCredentials?.batch || 'N/A',
+			alumni.userCredentials?.status || 'N/A',
+		]);
 
-		// Convert PDFKit to stream for Nitro response
+		const tableHeaders = ['Name', 'Course', 'Batch', 'Status'];
+
+		const doc = new PDFDocument({ margin: 72, size: 'LETTER' }); // Reduced margin to 30
 		const stream = Readable.from(doc as any);
 
-		// Apply header on first page
+		// Calculate table width to use more page space
+		const pageWidth = doc.page.width; // 612 for LETTER
+		const margin = doc.page.margins.left; // 30
+		const tableWidth = pageWidth - 2 * margin; // 612 - 2 * 30 = 552
+		const x = margin; // Start table at left margin
+		console.log('Table width:', tableWidth);
+
+		// Constants for pagination
+		const startY = 120; // Y position where table starts (below header)
+		const rowHeight = 20; // Reduced row height for more rows per page
+		const pageHeight = doc.page.height - doc.page.margins.bottom; // 792 - 30 = 762
+		const rowsPerPage = Math.floor((pageHeight - startY - 20) / rowHeight); // Extra 20 for buffer
+
+		// Draw header for first page
 		drawHeader(doc);
 
-		// Apply header on every new page
-		doc.on('pageAdded', () => {
-			drawHeader(doc);
-		});
+		// Manual pagination
+		for (let i = 0; i < tableData.length; i += rowsPerPage) {
+			const currentPageRows = tableData.slice(i, i + rowsPerPage);
 
-		// Table headers
-		doc.moveDown(1.5);
-		doc.fontSize(12).font('Helvetica-Bold');
-		doc.text('Name', 50, doc.y, { continued: true });
-		doc.text('Course', 200, doc.y, { continued: true });
-		doc.text('Batch', 350, doc.y);
-		doc.moveDown(0.5);
+			// Render table for current page
+			doc.table(
+				{
+					headers: tableHeaders,
+					rows: currentPageRows,
+				},
+				{
+					x,
+					y: startY,
+					columnsSize: [240, 70, 60, 98],
+					width: tableWidth,
+				},
+			);
 
-		// Table body
-		doc.font('Helvetica');
-		alumni.forEach((alumni: User<AlumniCredentials>) => {
-			doc.text(alumni.name || 'N/A', 50, doc.y, { continued: true });
-			doc.text(alumni.userCredentials?.course || 'N/A', 200, doc.y, {
-				continued: true,
-			});
-			doc.text(alumni.userCredentials?.batch || 'N/A', 350, doc.y);
-			doc.moveDown();
-
-			// Add page if near bottom
-			if (doc.y > 700) doc.addPage();
-		});
+			// Add new page if there are more rows
+			if (i + rowsPerPage < tableData.length) {
+				doc.addPage();
+				drawHeader(doc);
+			}
+		}
 
 		doc.end();
 
-		// Set headers
 		setResponseHeaders(event, {
 			'Content-Type': 'application/pdf',
 			'Content-Disposition': `attachment; filename="${filename}"`,
