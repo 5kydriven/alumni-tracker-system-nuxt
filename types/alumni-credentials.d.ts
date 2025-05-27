@@ -17,6 +17,7 @@ declare global {
 		description?: string;
 		workExperience?: WorkExperience[];
 		educationalBackground?: EducationalBackground[];
+		seminars?: Seminar[];
 		currentWork?: WorkExperience;
 		survey?: Survey;
 	}
@@ -44,6 +45,14 @@ declare global {
 		startDate?: any;
 		endDate?: any;
 		createdAt?: Timestamp;
+	}
+
+	interface Seminar {
+		uid?: string;
+		name?: string;
+		certificateUrl?: string;
+		createdAt?: any;
+		date?: any;
 	}
 
 	type AlumniStatus =

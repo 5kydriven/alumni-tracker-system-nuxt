@@ -25,10 +25,10 @@
 
 - [x] Data Privacy Terms and Conditions.
 - [x] Verification for employer, business permit and DTI and other credentials.
-- [x] Add work experience, seminars, trainings. - [] information
+- [x] Add work experience, seminars, trainings. - [x] information
 - [x] No unknown
 - [x] School Name by default
 - [x] CHED form for registration.
+- [x] Generated Format reports.
 
 - [] Add pdf format in generated reports based on the reports required by school/CHED
-- [] Generated Format reports.

@@ -6,6 +6,7 @@ export declare global {
 		employmentStatus?: string;
 		employmentType?: string;
 		companyName?: string;
+		bussinessType?: string;
 		companyAddress?: string;
 		yearsInJob?: string;
 		jobTitle?: string;
