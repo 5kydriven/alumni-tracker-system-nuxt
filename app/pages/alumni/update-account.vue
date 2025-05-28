@@ -145,6 +145,7 @@
 				</form>
 			</div>
 			<UButton
+				v-if="!stepper.isCurrent('alumni-done')"
 				label="Go Back"
 				size="lg"
 				block
@@ -155,11 +156,11 @@
 					}
 				"
 				v-show="!stepper.isCurrent('alumni-account')" />
-			<UButton
+			<!-- <UButton
 				label="sign out"
 				size="lg"
 				block
-				@click="signOut(auth as Auth)" />
+				@click="signOut(auth as Auth)" /> -->
 		</div>
 	</main>
 </template>

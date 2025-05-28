@@ -30,5 +30,4 @@
 - [x] School Name by default
 - [x] CHED form for registration.
 - [x] Generated Format reports.
-
-- [] Add pdf format in generated reports based on the reports required by school/CHED
+- [x] Add pdf format in generated reports based on the reports required by school/CHED

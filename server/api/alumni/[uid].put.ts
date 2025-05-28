@@ -90,14 +90,14 @@ export default defineEventHandler(async (event: H3Event) => {
 		await batch.commit();
 
 		const alumniBatch = userDoc.data()?.userCredentials.batch;
-		const from = alumniBatch - 1;
+		const startDate = alumniBatch - 1;
 
 		await db.collection('users').doc(param).collection('education').add({
 			schoolName: 'Central Philippines State University',
 			schoolAddress: 'San Carlos City',
 			createdAt: Timestamp.now(),
-			from,
-			to: alumniBatch,
+			startDate: startDate.toString(),
+			endDate: alumniBatch,
 		});
 
 		return successResponse({
