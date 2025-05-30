@@ -120,10 +120,6 @@
 					:enable-time-picker="false"
 					auto-apply
 					v-model="(store.form.userCredentials as AlumniCredentials).birthDate" />
-				<!-- <UInput
-					placeholder="you@example.com"
-					type="text"
-					v-model="(store.form.userCredentials as AlumniCredentials).birthDate" /> -->
 			</UFormGroup>
 			<UFormGroup
 				label="Place of birth"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { AlumniPrivacyModal } from '#components';
+	import PrivacyModal from '../PrivacyModal.vue';
 
 	const store = useStepperStore();
 	const modal = useModal();
@@ -119,7 +119,7 @@
 						I agree to the
 						<UButton
 							@click="
-								modal.open(AlumniPrivacyModal, {
+								modal.open(PrivacyModal, {
 									onClose: modal.close,
 								})
 							"
