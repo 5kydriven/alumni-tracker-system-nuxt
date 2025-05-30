@@ -138,6 +138,10 @@ async function processBatch(chunk: AlumniData[], db: any, auth: any) {
 		const userCreds = userCredsResults[index];
 		if (userCreds?.uid) {
 			const docRef = db.collection('users').doc(userCreds.uid);
+			const educRef = db
+				.collection('users')
+				.doc(userCreds.uid)
+				.collection('education');
 			batch.set(
 				docRef,
 				{
@@ -153,7 +157,7 @@ async function processBatch(chunk: AlumniData[], db: any, auth: any) {
 					updatedAt: Timestamp.now(),
 					isUpdated: false,
 					userCredentials: {
-						status: 'unknown',
+						status: 'unemployed',
 						course: item.course?.toUpperCase(),
 						batch: item.batch,
 						description: null,
@@ -161,6 +165,13 @@ async function processBatch(chunk: AlumniData[], db: any, auth: any) {
 				},
 				{ merge: true },
 			);
+			batch.add(educRef, {
+				createdAt: Timestamp.now(),
+				schoolName: 'Central Philippines State University',
+				schoolAddress: 'San Carlos City',
+				endDate: item.batch,
+				startDate: 'unknown',
+			});
 		}
 	});
 

@@ -34,8 +34,8 @@
 						props.name
 					}}</label>
 					<span class="text-gray-400 text-sm"
-						>{{ props.userCredentials?.city }},
-						{{ props.userCredentials?.province }}</span
+						>{{ props.userCredentials?.city?.name }},
+						{{ props.userCredentials?.province?.name }}</span
 					>
 				</div>
 				<div

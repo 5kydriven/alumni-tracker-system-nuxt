@@ -146,6 +146,7 @@
 				</form>
 			</div>
 			<UButton
+				v-if="!stepper.isCurrent('alumni-done')"
 				label="Go Back"
 				size="lg"
 				block

@@ -39,6 +39,7 @@ export const useStepperStore = defineStore('stepper-store', () => {
 		urlLink: undefined,
 		bussinessName: undefined,
 		isRegistered: undefined,
+		fileUrl: undefined,
 	});
 	const progress = ref(0);
 

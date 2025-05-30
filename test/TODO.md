@@ -9,6 +9,9 @@
 - [x] employer: finish edit modal in jobs
 - [x] employer: upload documents in registering
 - [x] admin: when rejecting employer delete also the files
+- [ ] employer: add view information for jobs
+- [ ] employer: add employer profile
+- [ ] alumni: add update employment status for alumni
 - [x] personnel: add export alumni data
 - [x] personnel: add alumni filter batch
 - [x] personnel: remove view resume in messages
@@ -17,16 +20,14 @@
 - [x] alumni: analytics update
 - [x] alumni: fix search in jobs
 - [x] alumni: add pagination in jobs
-- [ ] employer: add view information for jobs
-- [ ] employer: add employer profile
-- [ ] alumni: add update employment status for alumni
 
-### minutes's
+### minutes
 
-- [] alumni should be not unknown
-- [] add seminars, trainings and skills
-- [x] have default cpsu in educational attainment
-- [] add ched form registration
-- [x] add accept privacy terms and conditions
-- [x] add dti and other credentials
-- [] pdf format when exporting ched format
+- [x] Data Privacy Terms and Conditions.
+- [x] Verification for employer, business permit and DTI and other credentials.
+- [x] Add work experience, seminars, trainings. - [x] information
+- [x] No unknown
+- [x] School Name by default
+- [x] CHED form for registration.
+- [x] Generated Format reports.
+- [x] Add pdf format in generated reports based on the reports required by school/CHED
