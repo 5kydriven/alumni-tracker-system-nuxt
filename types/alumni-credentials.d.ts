@@ -7,8 +7,8 @@ declare global {
 		course?: string;
 		batch?: string;
 		phoneNumber?: string;
-		province?: string;
-		city?: string;
+		province?: any;
+		city?: any;
 		zipCode?: string;
 		gender?: string;
 		maritalStatus?: string;

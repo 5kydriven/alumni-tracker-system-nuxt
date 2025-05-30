@@ -44,6 +44,12 @@
 			},
 		};
 	});
+
+	watchEffect(() => {
+		if (alumni.value) {
+			console.log(alumni.value.userCredentials);
+		}
+	});
 </script>
 
 <template>
@@ -235,7 +241,9 @@
 						size="lg" />
 					<div class="flex flex-col text-base/5">
 						<label class="font-bold capitalize">{{ seminar.name }}</label>
-						<span class="dark:text-gray-400 text-xs">{{ formatMonthYear(seminar.date as ExperienceDate) }}</span>
+						<span class="dark:text-gray-400 text-xs">{{
+							formatMonthYear(seminar.date as ExperienceDate)
+						}}</span>
 					</div>
 				</div>
 			</div>

@@ -68,7 +68,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="9385254044"
+					placeholder="ex. 09385254044"
 					type="text"
 					trim
 					minLength="11"
@@ -96,7 +96,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="6127"
+					placeholder="ex. 6127"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).zipCode" />
 			</UFormGroup>
@@ -129,7 +129,7 @@
 				class="col-span-6"
 				required>
 				<UInput
-					placeholder="San Carlos City"
+					placeholder="ex. San Carlos City"
 					type="text"
 					v-model="(store.form.userCredentials as AlumniCredentials).birthPlace" />
 			</UFormGroup>
