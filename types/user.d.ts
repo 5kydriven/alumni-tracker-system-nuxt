@@ -15,6 +15,7 @@ export declare global {
 		updatedAt?: any;
 		isUpdated?: boolean;
 		permission?: Permission;
+		isAgree?: boolean;
 	}
 
 	type Permission = 'viewer' | 'editor' | undefined;

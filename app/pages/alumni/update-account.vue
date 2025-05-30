@@ -23,11 +23,12 @@
 				(
 					(store.form.userCredentials as AlumniCredentials)
 						.phoneNumber as string
-				).length >= 10,
+				).length > 10,
 		},
 		'alumni-survey': {
 			title: 'Survey Form',
-			isValid: () => store.survey.employmentStatus != undefined,
+			isValid: () =>
+				store.survey.employmentStatus != undefined && store.form.isAgree,
 		},
 		'alumni-done': {
 			title: 'Account Updated',
