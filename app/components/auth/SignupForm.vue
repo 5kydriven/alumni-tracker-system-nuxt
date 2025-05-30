@@ -55,6 +55,7 @@
 			if (
 				key !== 'logo' &&
 				key !== 'businessPermit' &&
+				key !== 'dti' &&
 				value !== null &&
 				value !== undefined
 			) {
@@ -67,6 +68,9 @@
 		}
 		if (employer.businessPermit) {
 			formData.append('businessPermit', employer.businessPermit);
+		}
+		if (employer.dti) {
+			formData.append('dti', employer.dti);
 		}
 		const res = await $fetch<H3Response>('/api/employer', {
 			method: 'POST',

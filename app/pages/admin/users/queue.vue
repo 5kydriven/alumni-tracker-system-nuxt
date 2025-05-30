@@ -132,6 +132,14 @@
 						rel="noopener noreferrer"
 						>View Business Permit</UButton
 					>
+					<UButton
+						v-if="row.userCredentials.dti != ''"
+						variant="link"
+						:to="row.userCredentials.dti"
+						target="_blank"
+						rel="noopener noreferrer"
+						>View DTI Permit</UButton
+					>
 
 					<span
 						class="text-lg font-semibold text-red-500"

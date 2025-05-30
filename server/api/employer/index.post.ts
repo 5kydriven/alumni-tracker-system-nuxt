@@ -28,6 +28,7 @@ export default defineEventHandler(async (event: H3Event) => {
 		const fields: Record<string, string> = {};
 		let logoUrl = '';
 		let businessPermitUrl = '';
+		let dtiUrl = '';
 
 		for (const item of formData) {
 			if (item.type && item.data) {
@@ -44,6 +45,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 				if (item.name === 'logo') logoUrl = permanentUrl;
 				if (item.name === 'businessPermit') businessPermitUrl = permanentUrl;
+				if (item.name === 'dti') dtiUrl = permanentUrl;
 			} else {
 				// Text field
 				fields[item.name as string] = item.data.toString('utf8');
@@ -97,6 +99,7 @@ export default defineEventHandler(async (event: H3Event) => {
 					field: fields.field ?? '',
 					logo: logoUrl || '',
 					businessPermit: businessPermitUrl || '',
+					dti: dtiUrl || '',
 					description: fields.description ?? '',
 					position: fields.position ?? '',
 					contactNumber: fields.contactNumber ?? '',
